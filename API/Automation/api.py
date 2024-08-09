@@ -87,12 +87,15 @@ def get_api_url():
         modelAPI = f"{model_to_use}_API"
         cursor = conn.cursor()
         # Execute query to fetch job details where status is 'queued'
-        query = f"SELECT * FROM `config` WHERE `type` = '{modelAPI}'"
+        query = f"SELECT `value` FROM `config` WHERE `type` = '{modelAPI}'"
         print(query)
+
         cursor.execute(query)
         result = cursor.fetchone
         cursor.close()
         conn.close()
+        print(result)
+        os._exit(1)
         if result:
             print(result)
             return result[2]  # Return the ID and prompt
@@ -100,6 +103,7 @@ def get_api_url():
             raise Exception(f"No value found for id = {model}.")
     except mysql.connector.Error as err:
         print(f"Error: {err}")
+        os._exit(1)
         return None
 
 # Function to fetch job details from the MySQL database
@@ -202,7 +206,7 @@ def insert_prompt_code_data(data):
 
 # Read the input CSV file and send API requests
 input_file = "EvaluationMatrix-StringSearching-DataSets_v2.csv"
-output_folder = "output"
+output_folder = "../output"
 
 # Create the output folder if it doesn't exist
 os.makedirs(output_folder, exist_ok=True)
