@@ -14,10 +14,10 @@ def execute_script(file_path, output_folder):
         with open(output_file_path, "w") as output_file:
             if file_path.endswith(".py"):
                 # Execute Python script
-                result = subprocess.run(["/root/miniconda3/envs/dfllm_eval/bin/python3", file_path], stdout=output_file, stderr=subprocess.PIPE, text=True, timeout=120)
+                result = subprocess.run(["/root/miniconda3/envs/dfllm_eval/bin/python3", file_path], stdout=output_file, stderr=subprocess.PIPE, text=True, timeout=300)
             elif file_path.endswith(".sh"):
                 # Execute Shell script
-                result = subprocess.run(["/usr/bin/sh", file_path], stdout=output_file, stderr=subprocess.PIPE, text=True, timeout=120)
+                result = subprocess.run(["/usr/bin/sh", file_path], stdout=output_file, stderr=subprocess.PIPE, text=True, timeout=300)
             else:
                 return "", "Unsupported script type"
         

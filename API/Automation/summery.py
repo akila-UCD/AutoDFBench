@@ -82,7 +82,7 @@ def get_db_connection():
 def process_test_results(cursor, job_id, base_test_case):
     try:
         query = """
-            SELECT job_id, base_test_case, results, error
+            SELECT job_id, base_test_case, results, error, model
             FROM test_results
             WHERE job_id = %s AND base_test_case = %s
         """
@@ -92,7 +92,7 @@ def process_test_results(cursor, job_id, base_test_case):
         summary_dict = {}
 
         for row in rows:
-            _, _, results, error = row
+            _, _, results, error, model = row
             print(row)
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
@@ -115,7 +115,7 @@ def process_test_results(cursor, job_id, base_test_case):
                     summary_dict[(job_id, base_test_case)]['errors_count'] += 1
 
                 summary_dict[(job_id, base_test_case)]['total_code_executions'] += 1
-
+                summary_dict[(job_id, base_test_case)]['model'] = model
 
         return summary_dict
 
@@ -124,7 +124,7 @@ def process_test_results(cursor, job_id, base_test_case):
         return None
 
 # Function to upsert summary results into the summery_results table
-def upsert_summary_results(cursor, summary_dict):
+def upsert_summary_results(cursor, summary_dict,model):
     try:
         upsert_query = """
             INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions)
@@ -162,9 +162,9 @@ def main(job_id):
     cursor = conn.cursor()
 
     for base_test_case in base_test_cases:
-        summary_dict = process_test_results(cursor, job_id, base_test_case)
+        summary_dict = process_test_results(cursor, job_id, base_test_case, model)
         if summary_dict:
-            upsert_summary_results(cursor, summary_dict)
+            upsert_summary_results(cursor, summary_dict, model)
 
     conn.commit()
     cursor.close()
