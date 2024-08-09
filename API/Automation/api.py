@@ -77,22 +77,23 @@ def fetch_base_prompt(base_prompt_id):
     
 
 def get_api_url():
+
     conn = get_db_connection()
 
     if conn is None:
         return None
     try:
 
-        model = f"{model_to_use}_API"
+        modelAPI = f"{model_to_use}_API"
         cursor = conn.cursor()
         # Execute query to fetch job details where status is 'queued'
-        query = f"SELECT CAST(value AS CHAR) as string_value FROM config WHERE type = {model}"
+        query = f"SELECT * FROM config WHERE type = {modelAPI}"
         cursor.execute(query)
         result = cursor.fetchone
         cursor.close()
         conn.close()
         if result:
-            return result  # Return the ID and prompt
+            return result[2]  # Return the ID and prompt
         else:
             raise Exception(f"No value found for id = {model}.")
     except mysql.connector.Error as err:
