@@ -133,7 +133,7 @@ def upsert_summary_results(cursor, summary_dict):
                 deleted_count = VALUES(deleted_count),
                 unallocated_count = VALUES(unallocated_count),
                 code_execution_count = VALUES(code_execution_count),
-                errors_count = VALUES(errors_count)
+                errors_count = VALUES(errors_count),
                 total_code_executions = VALUES(total_code_executions)
         """
 
