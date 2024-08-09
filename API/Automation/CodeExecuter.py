@@ -64,7 +64,7 @@ def process_scripts(conn, base_folder, output_folder):
             result, error = execute_script(file_path, output_folder)
             
             # Construct the testcase name
-            relative_path = os.path.relpath(file_path, start="output_code_files")
+            relative_path = os.path.relpath(file_path, start="../output_code_files")
             testcase = os.path.splitext(relative_path.replace(os.sep, '_'))[0]
             
             # Extract base_test_case from testcase
@@ -121,8 +121,8 @@ def insert_result_to_db(conn, testcase, base_test_case, model, script_type, resu
 
 # Main function
 def main():
-    base_folder = "output_code_files"
-    output_folder = "outputfiles"
+    base_folder = "../output_code_files"
+    output_folder = "../outputfiles"
     
     # Create output folder if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)

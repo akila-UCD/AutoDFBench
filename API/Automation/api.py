@@ -74,6 +74,29 @@ def fetch_base_prompt(base_prompt_id):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
+    
+
+def get_api_url():
+    conn = get_db_connection
+    if conn is None:
+        return None
+    try:
+
+        model = jobs[model_to_use]+"_API"
+        cursor = conn.cursor()
+        # Execute query to fetch job details where status is 'queued'
+        query = f"SELECT value FROM config WHERE type = {model}"
+        cursor.execute(query)
+        result = cursor.fetchone
+        cursor.close()
+        conn.close()
+        if result:
+            return result  # Return the ID and prompt
+        else:
+            raise Exception(f"No value found for id = {model}.")
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
 
 # Function to fetch job details from the MySQL database
 def fetch_job_details():
@@ -126,7 +149,8 @@ def update_job_status(job_id, status):
 def send_api_request(prompt, base_prompt, disk_image_path, script_type_prompt, model_to_use):
     final_prompt = base_prompt.replace("{prompt}", prompt).replace("{DISK_IMAGE_PATH}", disk_image_path) + script_type_prompt
 
-    url = "http://192.168.1.12:11434/api/generate"  # Replace with the actual API URL
+    # url = "http://192.168.1.12:11434/api/generate"  # Replace with the actual API URL
+    url = get_api_url()
     headers = {"Content-Type": "application/json"}
     data = {
         "model": model_to_use,

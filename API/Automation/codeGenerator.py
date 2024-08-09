@@ -138,7 +138,7 @@ def process_db_records(records, output_folder):
 
 # Main function
 def main():
-    output_base_folder = "output_code_files"
+    output_base_folder = "../output_code_files"
     output_csv_path = os.path.join(output_base_folder, "output_paths.csv")
     
     # Create the output base folder if it doesn't exist
