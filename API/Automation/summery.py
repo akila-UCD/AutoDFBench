@@ -127,7 +127,7 @@ def upsert_summary_results(cursor, summary_dict):
     try:
         upsert_query = """
             INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE 
                 active_count = VALUES(active_count),
                 deleted_count = VALUES(deleted_count),
