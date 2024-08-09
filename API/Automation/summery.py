@@ -113,6 +113,9 @@ def process_test_results(cursor, job_id, base_test_case):
             if error:
                 summary_dict[(job_id, base_test_case)]['errors_count'] += 1
 
+            summary_dict[(job_id, base_test_case)]['total_code_executions'] += 1
+
+
         return summary_dict
 
     except mysql.connector.Error as err:
