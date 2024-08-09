@@ -1,5 +1,4 @@
 import sys
-import os
 import mysql.connector
 from collections import Counter
 
@@ -83,20 +82,17 @@ def get_db_connection():
 def process_test_results(cursor, job_id, base_test_case):
     try:
         query = """
-            SELECT job_id, base_test_case, results
+            SELECT job_id, base_test_case, results, errors
             FROM test_results
-            WHERE job_id = %s AND base_test_case like %s
-        
+            WHERE job_id = %s AND base_test_case = %s
         """
-
-        cursor.execute(query, (job_id, f"%{base_test_case}"))
+        cursor.execute(query, (job_id, base_test_case))
         rows = cursor.fetchall()
 
         summary_dict = {}
 
         for row in rows:
-            _, _, results = row
-            model = 'your_model'  # Replace 'your_model' with actual model name
+            _, _, results, errors = row
 
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
@@ -108,8 +104,15 @@ def process_test_results(cursor, job_id, base_test_case):
                     summary_dict[(job_id, base_test_case)]['active_count'] += 1
                 elif line.endswith('unallocated'):
                     summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
-        print(base_test_case)
-        print(summary_dict)
+
+            # Count the code execution attempts
+            if errors == '': 
+                summary_dict[(job_id, base_test_case)]['code_execution_count'] += 1
+
+            # Count the errors
+            if errors:
+                summary_dict[(job_id, base_test_case)]['errors_count'] += 1
+
         return summary_dict
 
     except mysql.connector.Error as err:
@@ -120,12 +123,14 @@ def process_test_results(cursor, job_id, base_test_case):
 def upsert_summary_results(cursor, summary_dict):
     try:
         upsert_query = """
-            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE 
                 active_count = VALUES(active_count),
                 deleted_count = VALUES(deleted_count),
-                unallocated_count = VALUES(unallocated_count)
+                unallocated_count = VALUES(unalocated_count),
+                code_execution_count = VALUES(code_execution_count),
+                errors_count = VALUES(errors_count)
         """
 
         for key, counts in summary_dict.items():
@@ -133,8 +138,10 @@ def upsert_summary_results(cursor, summary_dict):
             active_count = counts['active_count']
             deleted_count = counts['deleted_count']
             unallocated_count = counts['unallocated_count']
+            code_execution_count = counts['code_execution_count']
+            errors_count = counts['errors_count']
 
-            cursor.execute(upsert_query, (job_id, 'your_model', base_test_case, active_count, deleted_count, unallocated_count))
+            cursor.execute(upsert_query, (job_id, 'your_model', base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count))
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
