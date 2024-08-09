@@ -82,7 +82,7 @@ def get_db_connection():
 def process_test_results(cursor, job_id, base_test_case):
     try:
         query = """
-            SELECT job_id, base_test_case, results, errors
+            SELECT job_id, base_test_case, results, error
             FROM test_results
             WHERE job_id = %s AND base_test_case = %s
         """
@@ -92,7 +92,7 @@ def process_test_results(cursor, job_id, base_test_case):
         summary_dict = {}
 
         for row in rows:
-            _, _, results, errors = row
+            _, _, results, error = row
 
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
@@ -106,11 +106,11 @@ def process_test_results(cursor, job_id, base_test_case):
                     summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
             # Count the code execution attempts
-            if errors == '': 
+            if error == '': 
                 summary_dict[(job_id, base_test_case)]['code_execution_count'] += 1
 
             # Count the errors
-            if errors:
+            if error:
                 summary_dict[(job_id, base_test_case)]['errors_count'] += 1
 
         return summary_dict
