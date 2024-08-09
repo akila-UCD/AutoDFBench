@@ -77,7 +77,8 @@ def fetch_base_prompt(base_prompt_id):
     
 
 def get_api_url():
-    conn = get_db_connection
+    conn = get_db_connection()
+
     if conn is None:
         return None
     try:
