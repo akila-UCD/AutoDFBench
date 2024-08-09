@@ -85,7 +85,7 @@ def get_api_url():
     try:
 
         modelAPI = f"{model_to_use}_API"
-        cursor = conn.cursor()
+        cursor = conn.cursor(buffered=True)
         # Execute query to fetch job details where status is 'queued'
         query = f"SELECT `value` FROM `config` WHERE `type` = '{modelAPI}'"
         print(query)
