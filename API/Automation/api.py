@@ -94,16 +94,14 @@ def get_api_url():
         result = cursor.fetchone
         cursor.close()
         conn.close()
-        print(result)
-        os._exit(1)
+
         if result:
-            print(result)
-            return result[2]  # Return the ID and prompt
+            print(result[0])
+            return result[0]  # Return the ID and prompt
         else:
             raise Exception(f"No value found for id = {model}.")
     except mysql.connector.Error as err:
         print(f"Error: {err}")
-        os._exit(1)
         return None
 
 # Function to fetch job details from the MySQL database
