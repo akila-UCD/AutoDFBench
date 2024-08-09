@@ -126,7 +126,7 @@ def process_test_results(cursor, job_id, base_test_case):
 def upsert_summary_results(cursor, summary_dict):
     try:
         upsert_query = """
-            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count)
+            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE 
                 active_count = VALUES(active_count),
@@ -134,6 +134,7 @@ def upsert_summary_results(cursor, summary_dict):
                 unallocated_count = VALUES(unallocated_count),
                 code_execution_count = VALUES(code_execution_count),
                 errors_count = VALUES(errors_count)
+                total_code_executions = VALUES(total_code_executions)
         """
 
         for key, counts in summary_dict.items():
@@ -143,8 +144,9 @@ def upsert_summary_results(cursor, summary_dict):
             unallocated_count = counts['unallocated_count']
             code_execution_count = counts['code_execution_count']
             errors_count = counts['errors_count']
+            total_code_executions = counts['total_code_executions']
 
-            cursor.execute(upsert_query, (job_id, 'your_model', base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count))
+            cursor.execute(upsert_query, (job_id, 'your_model', base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions))
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
