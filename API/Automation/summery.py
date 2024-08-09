@@ -128,7 +128,7 @@ def upsert_summary_results(cursor, summary_dict):
             ON DUPLICATE KEY UPDATE 
                 active_count = VALUES(active_count),
                 deleted_count = VALUES(deleted_count),
-                unallocated_count = VALUES(unalocated_count),
+                unallocated_count = VALUES(unallocated_count),
                 code_execution_count = VALUES(code_execution_count),
                 errors_count = VALUES(errors_count)
         """
