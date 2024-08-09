@@ -93,17 +93,17 @@ def process_test_results(cursor, job_id, base_test_case):
 
         for row in rows:
             _, _, results, error = row
-
+            print(row)
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
 
             for line in results.split('\n'):
-                
-                if line.endswith('deleted'):
+                print(line)
+                if line.find('deleted') != -1:
                     summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
-                elif line.endswith('active'):
+                elif line.find('active') != -1:
                     summary_dict[(job_id, base_test_case)]['active_count'] += 1
-                elif line.endswith('unallocated'):
+                elif line.find('unallocated') != -1:
                     summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
                 # Count the code execution attempts
