@@ -91,15 +91,14 @@ def get_api_url():
         print(query)
 
         cursor.execute(query)
-        result = cursor.fetchone
+        result = cursor.fetchone() 
         cursor.close()
         conn.close()
-
+        print(result)
         if result:
-            print(result[0])
             return result[0]  # Return the ID and prompt
         else:
-            raise Exception(f"No value found for id = {model}.")
+            raise Exception(f"No settings found for  = {modelAPI}.")
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
