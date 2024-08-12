@@ -131,12 +131,16 @@ def process_test_results(cursor, job_id, base_test_case):
 def checkGroundTruth(cursor, base_test):
     try:
         query = """
-            SELECT * FROM `autopsy_results` where base_test_case like %s
+            SELECT file_line, CAST(type AS CHAR) as string_value FROM `autopsy_results` where base_test_case like %s
         """
-        print(query)
         cursor.execute(query, (f'%{base_test}',))
         rows = cursor.fetchall()
-        return rows
+        newAry = []
+        for row in rows:
+             file_line, type = row
+             newAry[type] = file_line
+
+        return newAry
     
     except mysql.connector.Error as err:
         print(f"checkGroundTruth - Error : {err}")
