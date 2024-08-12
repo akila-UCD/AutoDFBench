@@ -142,6 +142,7 @@ def upsert_summary_results(cursor, summary_dict,model):
 
         for key, counts in summary_dict.items():
             job_id, base_test_case = key
+            model = model
             active_count = counts['active_count']
             deleted_count = counts['deleted_count']
             unallocated_count = counts['unallocated_count']
@@ -149,7 +150,7 @@ def upsert_summary_results(cursor, summary_dict,model):
             errors_count = counts['errors_count']
             total_code_executions = counts['total_code_executions']
 
-            cursor.execute(upsert_query, (job_id, 'your_model', base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions))
+            cursor.execute(upsert_query, (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions))
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
