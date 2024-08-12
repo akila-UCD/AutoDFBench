@@ -84,17 +84,17 @@ def get_db_connection():
 def process_test_results(cursor, job_id, base_test_case):
     try:
         query = """
-            SELECT job_id, base_test_case, results, error, model
+            SELECT job_id, base_test_case,DISTINCT(`testCase`), results, error, model
             FROM test_results
             WHERE job_id = %s AND base_test_case like %s
         """
         cursor.execute(query, (job_id, f'%{base_test_case}'))
         rows = cursor.fetchall()
-
+        print(len(rows))
         summary_dict = {}
 
         for row in rows:
-            _, _, results, error, model = row
+            _, _, _, results, error, model = row
 
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
