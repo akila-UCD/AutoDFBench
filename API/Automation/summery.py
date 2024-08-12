@@ -1,6 +1,7 @@
 import sys
 import mysql.connector
 from collections import Counter
+import os
 
 # Database configuration (replace with your actual database credentials)
 DB_HOST = '192.168.1.100'
@@ -97,6 +98,9 @@ def process_test_results(cursor, job_id, base_test_case):
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
 
+            autopsy_results = checkGroundTruth(base_test_case)
+            print(autopsy_results) 
+            os._exit(1)
             for line in results.split('\n'):
                 print(line)
 
@@ -123,7 +127,19 @@ def process_test_results(cursor, job_id, base_test_case):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
-
+    
+def checkGroundTruth(cursor,base_test):
+    try:
+        query = """
+            SELECT * FROM `autopsy_results` where base_test_case like '%s'
+        """
+        cursor.execute(query, (f'%{base_test}'))
+        rows = cursor.fetchall()
+        return rows
+    
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+    
 # Function to upsert summary results into the summery_results table
 def upsert_summary_results(cursor, summary_dict, model):
     try:
