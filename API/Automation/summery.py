@@ -98,12 +98,12 @@ def process_test_results(cursor, job_id, base_test_case):
                 summary_dict[(job_id, base_test_case)] = Counter()
 
             for line in results.split('\n'):
-                print(line)
-                if line.find('deleted') != -1:
+
+                if line.find('deleted') != -1 and line.find('=>') != -1:
                     summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
-                elif line.find('active') != -1:
+                elif line.find('active') != -1 and line.find('=>') != -1:
                     summary_dict[(job_id, base_test_case)]['active_count'] += 1
-                elif line.find('unallocated') != -1:
+                elif line.find('unallocated') != -1 and line.find('=>') != -1:
                     summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
                 # Count the code execution attempts
