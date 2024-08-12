@@ -135,12 +135,14 @@ def checkGroundTruth(cursor, base_test):
         """
         cursor.execute(query, (f'%{base_test}',))
         rows = cursor.fetchall()
-        newDict = {}
+        result_dict = {}
         for row in rows:
-             file_line, type_str = row
-             newDict[type_str] = file_line
+            file_line, type_str = row
+            if type_str not in result_dict:
+                result_dict[type_str] = []  # Initialize a list if the key does not exist
+            result_dict[type_str].append(file_line)  # Append the file_line to the list
 
-        return newDict
+        return result_dict
     
     except mysql.connector.Error as err:
         print(f"checkGroundTruth - Error : {err}")
