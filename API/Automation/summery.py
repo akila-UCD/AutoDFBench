@@ -103,25 +103,25 @@ def process_test_results(cursor, job_id, base_test_case):
           
             for line in results.split('\n'):
 
-                line = line.split(",")[1] if len(line.split(",")) > 2 else ''
-                print(line)
+                line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
+                print(line2)
                 if line.find('deleted') != -1 and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
                         print('deleted')
                         print(string_similarity(str_line,line))
-                        if string_similarity(str_line,line) > 80:
+                        if string_similarity(str_line,line2) > 80:
                             summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
                 elif line.find('active') != -1 and 'active' in autopsy_results:
                     for str_line in autopsy_results['active']:
                         print('active')
                         print(string_similarity(str_line,line))
-                        if string_similarity(str_line,line) > 80:
+                        if string_similarity(str_line,line2) > 80:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
                 elif line.find('unallocated') != -1 and 'unallocated' in autopsy_results:
                     for str_line in autopsy_results['unallocated']:
                         print('unallocated')
                         print(string_similarity(str_line,line))
-                        if string_similarity(str_line,line) > 80:
+                        if string_similarity(str_line,line2) > 80:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
                 # Count the code execution attempts
