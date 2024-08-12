@@ -2,6 +2,7 @@ import sys
 import mysql.connector
 from collections import Counter
 import os
+from difflib import SequenceMatcher
 
 # Database configuration (replace with your actual database credentials)
 DB_HOST = '192.168.1.100'
@@ -99,17 +100,28 @@ def process_test_results(cursor, job_id, base_test_case):
                 summary_dict[(job_id, base_test_case)] = Counter()
 
             autopsy_results = checkGroundTruth(cursor, base_test_case)
-            print(autopsy_results) 
-            os._exit(1)
+          
             for line in results.split('\n'):
                 print(line)
 
-                if line.find('deleted') != -1 and line.find('=>') != -1:
-                    summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
-                elif line.find('active') != -1 and line.find('=>') != -1:
-                    summary_dict[(job_id, base_test_case)]['active_count'] += 1
-                elif line.find('unallocated') != -1 and line.find('=>') != -1:
-                    summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
+                if line.find('deleted') != -1:
+                    for str_line in autopsy_results['deleted']:
+                        print('deleted')
+                        print(string_similarity(str_line,line))
+                        if string_similarity(str_line,line) > 80:
+                            summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
+                elif line.find('active') != -1 :
+                    for str_line in autopsy_results['active']:
+                        print('active')
+                        print(string_similarity(str_line,line))
+                        if string_similarity(str_line,line) > 80:
+                            summary_dict[(job_id, base_test_case)]['active_count'] += 1
+                elif line.find('unallocated') != -1:
+                    for str_line in autopsy_results['unallocated']:
+                        print('unallocated')
+                        print(string_similarity(str_line,line))
+                        if string_similarity(str_line,line) > 80:
+                            summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
                 # Count the code execution attempts
                 if error == '': 
@@ -176,6 +188,18 @@ def upsert_summary_results(cursor, summary_dict, model):
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
+
+def string_similarity(str1, str2):
+    # Create a SequenceMatcher object with the two strings
+    matcher = SequenceMatcher(None, str1, str2)
+    
+    # Calculate the similarity ratio
+    similarity_ratio = matcher.ratio()
+    
+    # Convert the similarity ratio to a percentage
+    similarity_percentage = similarity_ratio * 100
+    
+    return similarity_percentage
 
 # Main function
 def main(job_id):
