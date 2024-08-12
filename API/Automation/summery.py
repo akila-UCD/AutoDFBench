@@ -102,8 +102,8 @@ def process_test_results(cursor, job_id, base_test_case):
             autopsy_results = checkGroundTruth(cursor, base_test_case)
           
             for line in results.split('\n'):
-                
-                line = line.split(",")[1] if line.split(",") else ''
+                print(line.split(","))
+                line = line.split(",")[1] if len(line.split(",")) > 1 else ''
                 print(line)
                 if line.find('deleted') != -1 and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
