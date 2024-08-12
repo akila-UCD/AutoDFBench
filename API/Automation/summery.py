@@ -88,7 +88,7 @@ def process_test_results(cursor, job_id, base_test_case):
         """
         cursor.execute(query, (job_id, base_test_case))
         rows = cursor.fetchall()
-
+        print(rows)
         summary_dict = {}
 
         for row in rows:
@@ -98,7 +98,9 @@ def process_test_results(cursor, job_id, base_test_case):
                 summary_dict[(job_id, base_test_case)] = Counter()
 
             for line in results.split('\n'):
-
+                print(line)
+                print(line.find('deleted'))
+                print(line.find('=>'))
                 if line.find('deleted') != -1 and line.find('=>') != -1:
                     summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
                 elif line.find('active') != -1 and line.find('=>') != -1:
