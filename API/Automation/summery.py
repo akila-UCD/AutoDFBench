@@ -88,19 +88,18 @@ def process_test_results(cursor, job_id, base_test_case):
         """
         cursor.execute(query, (job_id, f'%{base_test_case}'))
         rows = cursor.fetchall()
-        print(rows)
+
         summary_dict = {}
 
         for row in rows:
             _, _, results, error, model = row
-            print(row)
+
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
 
             for line in results.split('\n'):
                 print(line)
-                print(line.find('deleted'))
-                print(line.find('=>'))
+
                 if line.find('deleted') != -1 and line.find('=>') != -1:
                     summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
                 elif line.find('active') != -1 and line.find('=>') != -1:
@@ -118,15 +117,15 @@ def process_test_results(cursor, job_id, base_test_case):
 
                 summary_dict[(job_id, base_test_case)]['total_code_executions'] += 1
                 summary_dict[(job_id, base_test_case)]['model'] = model
-
-        return summary_dict
+        print(summary_dict)
+        return summary_dict, model
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
 
 # Function to upsert summary results into the summery_results table
-def upsert_summary_results(cursor, summary_dict,model):
+def upsert_summary_results(cursor, summary_dict, model):
     try:
         upsert_query = """
             INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions)
@@ -165,9 +164,9 @@ def main(job_id):
     cursor = conn.cursor()
 
     for base_test_case in base_test_cases:
-        summary_dict = process_test_results(cursor, job_id, base_test_case)
+        summary_dict, model = process_test_results(cursor, job_id, base_test_case)
         if summary_dict:
-            upsert_summary_results(cursor, summary_dict)
+            upsert_summary_results(cursor, summary_dict, model)
 
     conn.commit()
     cursor.close()
