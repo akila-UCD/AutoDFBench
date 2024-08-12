@@ -134,7 +134,7 @@ def checkGroundTruth(cursor, base_test):
             SELECT * FROM `autopsy_results` where base_test_case like %s
         """
         print(query)
-        cursor.execute(query, (f'%{base_test}'))
+        cursor.execute(query, f'%{base_test}')
         rows = cursor.fetchall()
         return rows
     
