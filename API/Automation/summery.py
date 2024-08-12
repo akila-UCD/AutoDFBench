@@ -131,9 +131,9 @@ def process_test_results(cursor, job_id, base_test_case):
 def checkGroundTruth(cursor,base_test):
     try:
         query = """
-            SELECT * FROM `autopsy_results` where base_test_case like '%s'
+            SELECT * FROM `autopsy_results` where base_test_case = %s
         """
-        cursor.execute(query, (f'%{base_test}'))
+        cursor.execute(query, (base_test))
         rows = cursor.fetchall()
         return rows
     
