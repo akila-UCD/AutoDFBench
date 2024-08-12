@@ -83,12 +83,6 @@ def get_db_connection():
 # Function to fetch and process results for a given job_id and base_test_case
 def process_test_results(cursor, job_id, base_test_case):
     try:
-        
-        deldupQuery = """DELETE S1 FROM test_results AS S1  
-                        INNER JOIN test_results AS S2   
-                        WHERE S1.id < S2.id AND S1.testCase = S2.testCase; """
-
-        cursor.execute(deldupQuery)
 
         query = """
             SELECT job_id, base_test_case, testCase, results, error, model
@@ -218,6 +212,12 @@ def main(job_id):
 
     cursor = conn.cursor()
 
+    deldupQuery = """DELETE S1 FROM test_results AS S1  
+                        INNER JOIN test_results AS S2   
+                        WHERE S1.id < S2.id AND S1.testCase = S2.testCase; """
+
+    cursor.execute(deldupQuery)
+    
     for base_test_case in base_test_cases:
         summary_dict, model = process_test_results(cursor, job_id, base_test_case)
         if summary_dict:
