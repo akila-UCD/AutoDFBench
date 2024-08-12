@@ -102,7 +102,7 @@ def process_test_results(cursor, job_id, base_test_case):
             autopsy_results = checkGroundTruth(cursor, base_test_case)
           
             for line in results.split('\n'):
-                print(line.split(","))
+
                 line = line.split(",")[1] if len(line.split(",")) > 2 else ''
                 print(line)
                 if line.find('deleted') != -1 and 'deleted' in autopsy_results:
@@ -111,7 +111,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         print(string_similarity(str_line,line))
                         if string_similarity(str_line,line) > 80:
                             summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
-                elif line[1].find('active') != -1 and 'active' in autopsy_results:
+                elif line.find('active') != -1 and 'active' in autopsy_results:
                     for str_line in autopsy_results['active']:
                         print('active')
                         print(string_similarity(str_line,line))
