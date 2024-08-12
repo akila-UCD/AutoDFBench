@@ -135,12 +135,12 @@ def checkGroundTruth(cursor, base_test):
         """
         cursor.execute(query, (f'%{base_test}',))
         rows = cursor.fetchall()
-        newAry = []
+        newDict = {}
         for row in rows:
-             file_line, type = row
-             newAry[type] = file_line
+             file_line, type_str = row
+             newDict[type_str] = file_line
 
-        return newAry
+        return newDict
     
     except mysql.connector.Error as err:
         print(f"checkGroundTruth - Error : {err}")
