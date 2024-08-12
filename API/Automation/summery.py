@@ -93,7 +93,8 @@ def process_test_results(cursor, job_id, base_test_case):
                                 WHERE job_id = %s AND base_test_case like %s AND results != '';"""
         cursor.execute(query_code_exec_count, (job_id, f'%{base_test_case}'))
         code_exec_count = cursor.fetchone()
-        print(f"code_execution_count {code_exec_count['code_execution_count']}")
+        print(code_exec_count)
+        os._exit(1)
 
         query_error_count = """SELECT count(*) as error_count FROM `test_results` 
                                 WHERE job_id = %s AND base_test_case like %s AND error != '';"""
