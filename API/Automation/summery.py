@@ -128,17 +128,18 @@ def process_test_results(cursor, job_id, base_test_case):
         print(f"Error: {err}")
         return None
     
-def checkGroundTruth(cursor,base_test):
+def checkGroundTruth(cursor, base_test):
     try:
         query = """
-            SELECT * FROM `autopsy_results` where base_test_case = %s
+            SELECT * FROM `autopsy_results` where base_test_case like %s
         """
-        cursor.execute(query, (base_test))
+        print(query)
+        cursor.execute(query, (f'%{base_test}'))
         rows = cursor.fetchall()
         return rows
     
     except mysql.connector.Error as err:
-        print(f"Error: {err}")
+        print(f"checkGroundTruth - Error : {err}")
     
 # Function to upsert summary results into the summery_results table
 def upsert_summary_results(cursor, summary_dict, model):
