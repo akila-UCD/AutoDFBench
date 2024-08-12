@@ -84,9 +84,9 @@ def process_test_results(cursor, job_id, base_test_case):
         query = """
             SELECT job_id, base_test_case, results, error, model
             FROM test_results
-            WHERE job_id = %s AND base_test_case = %s
+            WHERE job_id = %s AND base_test_case like %s
         """
-        cursor.execute(query, (job_id, base_test_case))
+        cursor.execute(query, (job_id, f'%{base_test_case}'))
         rows = cursor.fetchall()
         print(rows)
         summary_dict = {}
