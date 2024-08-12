@@ -103,7 +103,7 @@ def process_test_results(cursor, job_id, base_test_case):
           
             for line in results.split('\n'):
                 print(line.split(","))
-                line = line.split(",")[1] if len(line.split(",")) > 1 else ''
+                line = line.split(",")[1] if len(line.split(",")) > 2 else ''
                 print(line)
                 if line.find('deleted') != -1 and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
