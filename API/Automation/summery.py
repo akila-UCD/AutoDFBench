@@ -98,7 +98,7 @@ def process_test_results(cursor, job_id, base_test_case):
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
 
-            autopsy_results = checkGroundTruth(base_test_case)
+            autopsy_results = checkGroundTruth(cursor, base_test_case)
             print(autopsy_results) 
             os._exit(1)
             for line in results.split('\n'):
