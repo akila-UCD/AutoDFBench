@@ -162,9 +162,9 @@ def main(job_id):
     cursor = conn.cursor()
 
     for base_test_case in base_test_cases:
-        summary_dict = process_test_results(cursor, job_id, base_test_case, model)
+        summary_dict = process_test_results(cursor, job_id, base_test_case)
         if summary_dict:
-            upsert_summary_results(cursor, summary_dict, model)
+            upsert_summary_results(cursor, summary_dict)
 
     conn.commit()
     cursor.close()
