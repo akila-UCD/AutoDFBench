@@ -83,8 +83,15 @@ def get_db_connection():
 # Function to fetch and process results for a given job_id and base_test_case
 def process_test_results(cursor, job_id, base_test_case):
     try:
+        
+        deldupQuery = """DELETE S1 FROM test_results AS S1  
+                        INNER JOIN test_results AS S2   
+                        WHERE S1.id < S2.id AND S1.testCase = S2.testCase; """
+
+        cursor.execute(deldupQuery)
+
         query = """
-            SELECT job_id, base_test_case,DISTINCT(`testCase`), results, error, model
+            SELECT job_id, base_test_case, testCase, results, error, model
             FROM test_results
             WHERE job_id = %s AND base_test_case like %s
         """
