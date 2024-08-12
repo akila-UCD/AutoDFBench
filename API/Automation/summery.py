@@ -94,21 +94,20 @@ def process_test_results(cursor, job_id, base_test_case):
         cursor.execute(query_code_exec_count, (job_id, f'%{base_test_case}'))
         code_exec_count = cursor.fetchone()
         code_exec_count = code_exec_count[0]
-        print(code_exec_count)
-        os._exit(1)
 
         query_error_count = """SELECT count(*) as error_count FROM `test_results` 
                                 WHERE job_id = %s AND base_test_case like %s AND error != '';"""
         cursor.execute(query_error_count, (job_id, f'%{base_test_case}'))
         code_error_count = cursor.fetchone()
-        print(f"code_execution_count {code_error_count['error_count']}")
+        code_error_count = code_error_count[0]
+        print(f"code_execution_count {code_error_count}")
 
         cursor.execute(query, (job_id, f'%{base_test_case}'))
         rows = cursor.fetchall()
         print(len(rows))
         summary_dict = {}
-        summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count['code_execution_count']
-        summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count['error_count']
+        summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
+        summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
 
         for row in rows:
             _, _, _, results, error, model = row
