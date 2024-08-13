@@ -344,6 +344,8 @@ for job_details in jobs:
                     # Write the extracted data to the output CSV file
                     csvData = [prompt, model, created_at, response_text, done, total_duration, prompt_eval_count, prompt_eval_duration, eval_count, eval_duration, code]
                     csv_writer.writerow(csvData)
+                    if model_to_use == 'claude-3.5-sonnet':
+                        time.sleep(15)
                     
                 print(f"Completed processing for column: {col_name}")
                 
