@@ -229,9 +229,11 @@ def insert_prompt_code_data(data):
 def externalAPI(prompt, base_prompt, disk_image_path, script_type_prompt, model_to_use):
 
     final_prompt = base_prompt.replace("{prompt}", prompt).replace("{DISK_IMAGE_PATH}", disk_image_path) + script_type_prompt
+    print(final_prompt)
     model = llm.get_model(model_to_use)
     model.key = getConfigValues('Claude_API_KEY')
     response = model.prompt(final_prompt)
+    print(f"RES:{response}")
     return response
 
 
