@@ -229,11 +229,11 @@ def insert_prompt_code_data(data):
 def externalAPI(prompt, base_prompt, disk_image_path, script_type_prompt, model_to_use):
 
     final_prompt = base_prompt.replace("{prompt}", prompt).replace("{DISK_IMAGE_PATH}", disk_image_path) + script_type_prompt
-    print(final_prompt)
+    # print(final_prompt)
     model = llm.get_model(model_to_use)
     model.key = getConfigValues('Claude_API_KEY')
     response = model.prompt(final_prompt)
-    print(f"RES:{response}")
+    # print(f"RES:{response}")
     return response
 
 
@@ -339,6 +339,7 @@ for job_details in jobs:
                         prompt_eval_duration, eval_count, eval_duration, code, model,
                         job_details['disk_image'], script_type, base_prompt_id, job_details['id']
                     )
+                    print(f"DB Inset for prompt=> {prompt}")
                     insert_prompt_code_data(db_data)
                     
                     # Write the extracted data to the output CSV file
