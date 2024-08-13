@@ -143,18 +143,18 @@ def process_test_results(cursor, job_id, base_test_case):
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
                 # # Count the code execution attempts
-                # if error == '': 
-                #     summary_dict[(job_id, base_test_case)]['code_execution_count'] += 1
+                if error == '': 
+                    summary_dict[(job_id, base_test_case)]['code_execution_count'] += 1
 
                 # # Count the errors
-                # if error:
-                #     summary_dict[(job_id, base_test_case)]['errors_count'] += 1
+                if error:
+                    summary_dict[(job_id, base_test_case)]['errors_count'] += 1
 
-                # summary_dict[(job_id, base_test_case)]['total_code_executions'] += 1
+                summary_dict[(job_id, base_test_case)]['total_code_executions'] += 1
                 summary_dict[(job_id, base_test_case)]['model'] = model
-        summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
-        summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
-        summary_dict[(job_id, base_test_case)]['total_code_executions'] = len(rows)
+        # summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
+        # summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
+        # summary_dict[(job_id, base_test_case)]['total_code_executions'] = len(rows)
         print(summary_dict)
         return summary_dict, model
 
