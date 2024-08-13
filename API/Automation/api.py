@@ -5,6 +5,8 @@ import re
 import requests
 import mysql.connector
 import subprocess
+import llm
+import time
 
 # Database configuration (replace with your actual database credentials)
 DB_HOST = '192.168.1.100'
@@ -74,7 +76,29 @@ def fetch_base_prompt(base_prompt_id):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
-    
+
+def getConfigValues(VALUE_TYPE):
+    conn = get_db_connection()
+
+    if conn is None:
+        return None
+    try:
+        cursor = conn.cursor(buffered=True)
+        # Execute query to fetch job details where status is 'queued'
+        query = f"SELECT `value` FROM `config` WHERE `type` = '{VALUE_TYPE}'"
+
+        cursor.execute(query)
+        result = cursor.fetchone() 
+        cursor.close()
+        conn.close()
+
+        if result:
+            return result[0]  # Return the ID and prompt
+        else:
+            raise Exception(f"No settings found for  = {VALUE_TYPE}.")
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return None
 
 def get_api_url():
 
@@ -201,6 +225,16 @@ def insert_prompt_code_data(data):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
 
+#External API USE for Claude and GPT 
+def externalAPI(prompt, base_prompt, disk_image_path, script_type_prompt, model_to_use):
+
+    final_prompt = base_prompt.replace("{prompt}", prompt).replace("{DISK_IMAGE_PATH}", disk_image_path) + script_type_prompt
+    model = llm.get_model(model_to_use)
+    model.key = getConfigValues('Claude_API_KEY')
+    response = model.prompt(final_prompt)
+    return response
+
+
 # Read the input CSV file and send API requests
 input_file = "EvaluationMatrix-StringSearching-DataSets_v2.csv"
 output_folder = "../output"
@@ -269,20 +303,33 @@ for job_details in jobs:
                     csv_line_content = row[col_index]
                     
                     # Send API request
-                    api_response = send_api_request(csv_line_content, BASE_PROMPT, DISK_IMAGE_PATH, script_type_prompt, model_to_use)
+                    if model_to_use == 'claude-3.5-sonnet':
+                        api_response =  externalAPI(csv_line_content, BASE_PROMPT, DISK_IMAGE_PATH, script_type_prompt, model_to_use)
+                        created_at = time.time()
+                        response_text = api_response.text()
+                        done = 1
+                        total_duration = 0
+                        prompt_eval_count = 0
+                        prompt_eval_duration = 0
+                        eval_count = 0
+                        eval_duration = 0
+                    else:
+                        api_response = send_api_request(csv_line_content, BASE_PROMPT, DISK_IMAGE_PATH, script_type_prompt, model_to_use)
+                        created_at = api_response.get("created_at")
+                        response_text = api_response.get("response")
+                        done = api_response.get("done")
+                        total_duration = api_response.get("total_duration")
+                        prompt_eval_count = api_response.get("prompt_eval_count")
+                        prompt_eval_duration = api_response.get("prompt_eval_duration")
+                        eval_count = api_response.get("eval_count")
+                        eval_duration = api_response.get("eval_duration")
                     
                     # Extract required fields from the response
                     prompt = csv_line_content
                     base_test_case = col_name
-                    model = api_response.get("model")
-                    created_at = api_response.get("created_at")
-                    response_text = api_response.get("response")
-                    done = api_response.get("done")
-                    total_duration = api_response.get("total_duration")
-                    prompt_eval_count = api_response.get("prompt_eval_count")
-                    prompt_eval_duration = api_response.get("prompt_eval_duration")
-                    eval_count = api_response.get("eval_count")
-                    eval_duration = api_response.get("eval_duration")
+                    model = model_to_use
+                    
+                    
                     code, code_type = extract_code(response_text)
 
                     db_data = (
