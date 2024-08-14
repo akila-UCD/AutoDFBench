@@ -183,7 +183,7 @@ def checkGroundTruth(cursor, base_test):
 def upsert_summary_results(cursor, summary_dict, model):
     try:
         upsert_query = """
-            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, active_similarity_avg_percentage, deleted_similarity_avg_percentage, unalocated_similarity_avg_percentage)
+            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, active_similaraty_avg_percentage, 	deleted_similaraty_avg_percentage, unalocated_similaraty_avg_percentage)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE 
                 active_count = VALUES(active_count),
@@ -194,9 +194,9 @@ def upsert_summary_results(cursor, summary_dict, model):
                 total_code_executions = VALUES(total_code_executions),
                 code_execution_avg_percentage = VALUES(code_execution_avg_percentage),
                 code_error_avg_percentage = VALUES(code_error_avg_percentage),
-                active_similarity_avg_percentage = VALUES(active_similarity_avg_percentage),
-                deleted_similarity_avg_percentage = VALUES(deleted_similarity_avg_percentage),
-                unalocated_similarity_avg_percentage = VALUES(unalocated_similarity_avg_percentage)
+                active_similaraty_avg_percentage = VALUES(active_similarity_avg_percentage),
+                deleted_similaraty_avg_percentage = VALUES(deleted_similarity_avg_percentage),
+                unalocated_similaraty_avg_percentage = VALUES(unalocated_similarity_avg_percentage)
         """
 
         for key, counts in summary_dict.items():
