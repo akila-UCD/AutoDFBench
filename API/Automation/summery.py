@@ -83,7 +83,6 @@ def get_db_connection():
 # Function to fetch and process results for a given job_id and base_test_case
 def process_test_results(cursor, job_id, base_test_case):
     try:
-
         query = """
             SELECT job_id, base_test_case, testCase, results, error, model
             FROM test_results
@@ -92,24 +91,22 @@ def process_test_results(cursor, job_id, base_test_case):
         query_code_exec_count = """SELECT count(*) as code_execution_count FROM `test_results` 
                                 WHERE job_id = %s AND base_test_case like %s AND error = '';"""
         cursor.execute(query_code_exec_count, (job_id, f'%{base_test_case}'))
-        code_exec_count = cursor.fetchone()
-        code_exec_count = code_exec_count[0]
+        code_exec_count = cursor.fetchone()[0]
 
         query_error_count = """SELECT count(*) as error_count FROM `test_results` 
                                 WHERE job_id = %s AND base_test_case like %s AND error != '';"""
         cursor.execute(query_error_count, (job_id, f'%{base_test_case}'))
-        code_error_count = cursor.fetchone()
-        code_error_count = code_error_count[0]
-        print(f"code_execution_count {code_error_count}")
+        code_error_count = cursor.fetchone()[0]
 
         cursor.execute(query, (job_id, f'%{base_test_case}'))
         rows = cursor.fetchall()
-        print(len(rows))
-        summary_dict = {}
 
+        summary_dict = {}
+        active_similarity_scores = []
+        deleted_similarity_scores = []
+        unallocated_similarity_scores = []
 
         for index, row in enumerate(rows):
-
             if index >= 10:  # Stop after processing 10 rows
                 break
             _, _, _, results, error, model = row
@@ -120,48 +117,49 @@ def process_test_results(cursor, job_id, base_test_case):
             autopsy_results = checkGroundTruth(cursor, base_test_case)
 
             for line in results.split('\n'):
-
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
-                print(line2)
-                if line.find('deleted') != -1 and 'deleted' in autopsy_results:
+
+                if 'deleted' in line and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
-                        print('deleted')
-                        print(string_similarity(str_line,line))
-                        if string_similarity(str_line,line2) > 80:
+                        similarity = string_similarity(str_line, line2)
+                        deleted_similarity_scores.append(similarity)
+                        if similarity > 80:
                             summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
-                elif line.find('active') != -1 and 'active' in autopsy_results:
+
+                elif 'active' in line and 'active' in autopsy_results:
                     for str_line in autopsy_results['active']:
-                        print('active')
-                        print(string_similarity(str_line,line))
-                        if string_similarity(str_line,line2) > 80:
+                        similarity = string_similarity(str_line, line2)
+                        active_similarity_scores.append(similarity)
+                        if similarity > 80:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
-                elif line.find('unallocated') != -1 and 'unallocated' in autopsy_results:
+
+                elif 'unallocated' in line and 'unallocated' in autopsy_results:
                     for str_line in autopsy_results['unallocated']:
-                        print('unallocated')
-                        print(string_similarity(str_line,line))
-                        if string_similarity(str_line,line2) > 80:
+                        similarity = string_similarity(str_line, line2)
+                        unallocated_similarity_scores.append(similarity)
+                        if similarity > 80:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
-                # # Count the code execution attempts
-                if error == '': 
-                    summary_dict[(job_id, base_test_case)]['code_execution_count'] += 1
+            summary_dict[(job_id, base_test_case)]['model'] = model
 
-                # # Count the errors
-                if error:
-                    summary_dict[(job_id, base_test_case)]['errors_count'] += 1
+        summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
+        summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
+        summary_dict[(job_id, base_test_case)]['total_code_executions'] = len(rows)
 
-                summary_dict[(job_id, base_test_case)]['total_code_executions'] += 1
-                summary_dict[(job_id, base_test_case)]['model'] = model
-        # summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
-        # summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
-        # summary_dict[(job_id, base_test_case)]['total_code_executions'] = len(rows)
-        print(summary_dict)
+        # Calculate average percentages
+        summary_dict[(job_id, base_test_case)]['code_execution_avg_percentage'] = (code_exec_count / len(rows)) * 100 if len(rows) > 0 else 0
+        summary_dict[(job_id, base_test_case)]['code_error_avg_percentage'] = (code_error_count / len(rows)) * 100 if len(rows) > 0 else 0
+
+        summary_dict[(job_id, base_test_case)]['active_similarity_avg_percentage'] = sum(active_similarity_scores) / len(active_similarity_scores) if active_similarity_scores else 0
+        summary_dict[(job_id, base_test_case)]['deleted_similarity_avg_percentage'] = sum(deleted_similarity_scores) / len(deleted_similarity_scores) if deleted_similarity_scores else 0
+        summary_dict[(job_id, base_test_case)]['unalocated_similarity_avg_percentage'] = sum(unallocated_similarity_scores) / len(unallocated_similarity_scores) if unallocated_similarity_scores else 0
+
         return summary_dict, model
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
-    
+
 def checkGroundTruth(cursor, base_test):
     try:
         query = """
@@ -185,28 +183,37 @@ def checkGroundTruth(cursor, base_test):
 def upsert_summary_results(cursor, summary_dict, model):
     try:
         upsert_query = """
-            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, active_similarity_avg_percentage, deleted_similarity_avg_percentage, unalocated_similarity_avg_percentage)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE 
                 active_count = VALUES(active_count),
                 deleted_count = VALUES(deleted_count),
                 unallocated_count = VALUES(unallocated_count),
                 code_execution_count = VALUES(code_execution_count),
                 errors_count = VALUES(errors_count),
-                total_code_executions = VALUES(total_code_executions)
+                total_code_executions = VALUES(total_code_executions),
+                code_execution_avg_percentage = VALUES(code_execution_avg_percentage),
+                code_error_avg_percentage = VALUES(code_error_avg_percentage),
+                active_similarity_avg_percentage = VALUES(active_similarity_avg_percentage),
+                deleted_similarity_avg_percentage = VALUES(deleted_similarity_avg_percentage),
+                unalocated_similarity_avg_percentage = VALUES(unalocated_similarity_avg_percentage)
         """
 
         for key, counts in summary_dict.items():
             job_id, base_test_case = key
-            model = model
             active_count = counts['active_count']
             deleted_count = counts['deleted_count']
             unallocated_count = counts['unallocated_count']
             code_execution_count = counts['code_execution_count']
             errors_count = counts['errors_count']
             total_code_executions = counts['total_code_executions']
+            code_execution_avg_percentage = counts['code_execution_avg_percentage']
+            code_error_avg_percentage = counts['code_error_avg_percentage']
+            active_similarity_avg_percentage = counts['active_similarity_avg_percentage']
+            deleted_similarity_avg_percentage = counts['deleted_similarity_avg_percentage']
+            unalocated_similarity_avg_percentage = counts['unalocated_similarity_avg_percentage']
 
-            cursor.execute(upsert_query, (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions))
+            cursor.execute(upsert_query, (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, active_similarity_avg_percentage, deleted_similarity_avg_percentage, unalocated_similarity_avg_percentage))
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
