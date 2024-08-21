@@ -76,7 +76,7 @@ def process_scripts(conn, base_folder, output_folder):
     try:
         conn.reconnect()
         cursor = conn.cursor(dictionary=True)
-        if base_test_case_arg is 0:
+        if base_test_case_arg == 0:
             query = "SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s"
         else:
             query = f"SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}'"
