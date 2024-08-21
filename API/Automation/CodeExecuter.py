@@ -79,7 +79,7 @@ def process_scripts(conn, base_folder, output_folder):
         if base_test_case_arg is None:
             query = "SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s"
         else:
-            query = f"SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case}'"
+            query = f"SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}'"
         
         cursor.execute(query, (job_id,))
         rows = cursor.fetchall()
