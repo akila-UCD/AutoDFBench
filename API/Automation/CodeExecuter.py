@@ -6,7 +6,7 @@ import sys
 from mysql.connector import Error
 
 job_id = sys.argv[1]
-base_test_case = sys.argv[2]
+base_test_case_arg = sys.argv[2]
 
 # Function to check and copy necessary disk image files
 def check_and_copy_disk_images():
@@ -76,10 +76,10 @@ def process_scripts(conn, base_folder, output_folder):
     try:
         conn.reconnect()
         cursor = conn.cursor(dictionary=True)
-        if(base_test_case is None):
+        if base_test_case_arg is None:
             query = "SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s"
         else:
-            query = f"SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s and base_test_case = {base_test_case}"
+            query = f"SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case}'"
         
         cursor.execute(query, (job_id,))
         rows = cursor.fetchall()
