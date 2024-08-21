@@ -1,13 +1,41 @@
 import subprocess
 import os
+import shutil  # Import shutil to copy files
 import mysql.connector
 import sys
 from mysql.connector import Error
 
 job_id = sys.argv[1]
 
+# Function to check and copy necessary disk image files
+def check_and_copy_disk_images():
+    required_files = ["ss-unix-07-25-18.dd", "ss-win-07-25-18.dd"]
+    source_folder = "/home/ubuntu/API/"
+    destination_folder = "/home/ubuntu/API/DISKIMAGES"
+
+    os.makedirs(destination_folder, exist_ok=True)
+
+    for file_name in required_files:
+        source_path = os.path.join(source_folder, file_name)
+        dest_path = os.path.join(destination_folder, file_name)
+
+        if not os.path.exists(dest_path):
+            print(f"{file_name} not found in {destination_folder}. Copying from {source_folder}.")
+            try:
+                shutil.copy(source_path, dest_path)
+                print(f"Copied {file_name} to {destination_folder}.")
+            except Exception as e:
+                print(f"Failed to copy {file_name}: {e}")
+                return False
+        else:
+            print(f"{file_name} already exists in {destination_folder}.")
+    return True
+
 # Function to execute a script and capture its output with a timeout
 def execute_script(file_path, output_folder):
+    if not check_and_copy_disk_images():
+        return "", "Error: Failed to ensure disk images are available."
+
     try:
         print(f"Executing script: {file_path}")
         output_file_path = os.path.join(output_folder, os.path.basename(file_path) + ".out")
