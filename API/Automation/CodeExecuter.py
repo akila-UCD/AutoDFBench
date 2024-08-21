@@ -73,6 +73,7 @@ def create_subfolder(file_path, base_folder):
 # Function to process the paths from the database and execute scripts
 def process_scripts(conn, base_folder, output_folder):
     try:
+        conn.reconnect()
         cursor = conn.cursor(dictionary=True)
         query = "SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s"
         cursor.execute(query, (job_id,))
@@ -137,6 +138,7 @@ def count_hits(result):
 # Function to insert the result into the database
 def insert_result_to_db(conn, testcase, base_test_case, model, script_type, results, active_file_hits, deleted_files_hits, unallocated_file_hits, error):
     try:
+        conn.reconnect()
         cursor = conn.cursor()
         insert_query = """
             INSERT INTO test_results ( testCase, base_test_case, model, script_type, results, active_file_hits, deleted_files_hits, unallocated_file_hits, error, job_id)
