@@ -102,9 +102,9 @@ def process_test_results(cursor, job_id, base_test_case):
         rows = cursor.fetchall()
 
         summary_dict = {}
-        active_similarity_scores = []
-        deleted_similarity_scores = []
-        unallocated_similarity_scores = []
+        # active_similarity_scores = []
+        # deleted_similarity_scores = []
+        # unallocated_similarity_scores = []
 
         for index, row in enumerate(rows):
             if index >= 10:  # Stop after processing 10 rows
@@ -122,22 +122,22 @@ def process_test_results(cursor, job_id, base_test_case):
                 if 'deleted' in line and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
                         similarity = string_similarity(str_line, line2)
-                        deleted_similarity_scores.append(similarity)
-                        if similarity > 80:
+                        # deleted_similarity_scores.append(similarity)
+                        if similarity == True:
                             summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
 
                 elif 'active' in line and 'active' in autopsy_results:
                     for str_line in autopsy_results['active']:
                         similarity = string_similarity(str_line, line2)
-                        active_similarity_scores.append(similarity)
-                        if similarity > 80:
+                        # active_similarity_scores.append(similarity)
+                        if similarity == True:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
 
                 elif 'unallocated' in line and 'unallocated' in autopsy_results:
                     for str_line in autopsy_results['unallocated']:
                         similarity = string_similarity(str_line, line2)
-                        unallocated_similarity_scores.append(similarity)
-                        if similarity > 80:
+                        # unallocated_similarity_scores.append(similarity)
+                        if similarity == True:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
         summary_dict[(job_id, base_test_case)]['model'] = model
@@ -150,10 +150,10 @@ def process_test_results(cursor, job_id, base_test_case):
         summary_dict[(job_id, base_test_case)]['code_execution_avg_percentage'] = (code_exec_count / len(rows)) * 100 if len(rows) > 0 else 0
         summary_dict[(job_id, base_test_case)]['code_error_avg_percentage'] = (code_error_count / len(rows)) * 100 if len(rows) > 0 else 0
 
-        summary_dict[(job_id, base_test_case)]['active_similaraty_avg_percentage'] = sum(active_similarity_scores) / len(active_similarity_scores) if active_similarity_scores else 0
-        summary_dict[(job_id, base_test_case)]['deleted_similaraty_avg_percentage'] = sum(deleted_similarity_scores) / len(deleted_similarity_scores) if deleted_similarity_scores else 0
-        summary_dict[(job_id, base_test_case)]['unalocated_similaraty_avg_percentage'] = sum(unallocated_similarity_scores) / len(unallocated_similarity_scores) if unallocated_similarity_scores else 0
-        print(summary_dict)
+        # summary_dict[(job_id, base_test_case)]['active_similaraty_avg_percentage'] = sum(active_similarity_scores) / len(active_similarity_scores) if active_similarity_scores else 0
+        # summary_dict[(job_id, base_test_case)]['deleted_similaraty_avg_percentage'] = sum(deleted_similarity_scores) / len(deleted_similarity_scores) if deleted_similarity_scores else 0
+        # summary_dict[(job_id, base_test_case)]['unalocated_similaraty_avg_percentage'] = sum(unallocated_similarity_scores) / len(unallocated_similarity_scores) if unallocated_similarity_scores else 0
+        # print(summary_dict)
         return summary_dict, model
 
     except mysql.connector.Error as err:
@@ -218,17 +218,21 @@ def upsert_summary_results(cursor, summary_dict, model):
     except mysql.connector.Error as err:
         print(f"Error: {err}")
 
+import re
+
 def string_similarity(str1, str2):
-    # Create a SequenceMatcher object with the two strings
-    matcher = SequenceMatcher(None, str1, str2)
+    # Define the regex pattern to find the 4-digit number followed by '<'
+    pattern = r'\b\d{4} <'
     
-    # Calculate the similarity ratio
-    similarity_ratio = matcher.ratio()
+    # Search for the pattern in both strings
+    match1 = re.search(pattern, str1)
+    match2 = re.search(pattern, str2)
     
-    # Convert the similarity ratio to a percentage
-    similarity_percentage = similarity_ratio * 100
-    
-    return similarity_percentage
+    # Check if both strings have a match and the matches are identical
+    if match1 and match2 and match1.group() == match2.group():
+        return True
+    else:
+        return False
 
 # Main function
 def main(job_id):
