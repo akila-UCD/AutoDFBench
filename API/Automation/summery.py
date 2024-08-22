@@ -117,7 +117,7 @@ def process_test_results(cursor, job_id, base_test_case):
             autopsy_results = checkGroundTruth(cursor, base_test_case)
 
             for line in results.split('\n'):
-                print(f"RESULTS:{results}")
+                # print(f"RESULTS:{results}")
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
                 print(f"LINE:{line}")
                 print(f"SPLITS:{line2}")
@@ -155,7 +155,8 @@ def process_test_results(cursor, job_id, base_test_case):
         # summary_dict[(job_id, base_test_case)]['active_similaraty_avg_percentage'] = sum(active_similarity_scores) / len(active_similarity_scores) if active_similarity_scores else 0
         # summary_dict[(job_id, base_test_case)]['deleted_similaraty_avg_percentage'] = sum(deleted_similarity_scores) / len(deleted_similarity_scores) if deleted_similarity_scores else 0
         # summary_dict[(job_id, base_test_case)]['unalocated_similaraty_avg_percentage'] = sum(unallocated_similarity_scores) / len(unallocated_similarity_scores) if unallocated_similarity_scores else 0
-        # print(summary_dict)
+        print(summary_dict)
+
         return summary_dict, model
 
     except mysql.connector.Error as err:
