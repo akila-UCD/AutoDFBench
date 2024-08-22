@@ -174,7 +174,7 @@ def checkGroundTruth(cursor, base_test):
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
 
-        print(result_dict)
+        # print(result_dict)
         return result_dict
     
     except mysql.connector.Error as err:
@@ -229,11 +229,13 @@ def string_similarity(str1, str2):
     match1 = re.search(pattern, str1)
     print(match1)
     match2 = re.search(pattern, str2)
-    print(match1)
+    print(match2)
     # Check if both strings have a match and the matches are identical
     if match1 and match2 and match1.group() == match2.group():
+        print("match True")
         return True
     else:
+        print("match False")
         return False
 
 # Main function
