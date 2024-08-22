@@ -230,9 +230,13 @@ def string_similarity(str1, str2):
     
     # Search for the pattern in both strings
     match1 = re.search(pattern, str1)
-    print(f"{str1, match1}")
+    # print(f"{str1, match1}")
     match2 = re.search(pattern, str2)
-    print(f"{str2, match2}")
+    
+    print(f"{str1 , str2}")
+
+    print(match1.group())
+    print(match2.group())
     # Check if both strings have a match and the matches are identical
     if match1 and match2 and match1.group() == match2.group():
         print("match True")
