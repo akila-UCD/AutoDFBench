@@ -117,9 +117,10 @@ def process_test_results(cursor, job_id, base_test_case):
             autopsy_results = checkGroundTruth(cursor, base_test_case)
 
             for line in results.split('\n'):
+                print(f"RESULTS:{results}")
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
-                print(line)
-                print(line2)
+                print(f"LINE:{line}")
+                print(f"SPLITS:{line2}")
                 if 'deleted' in line and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
                         similarity = string_similarity(str_line, line2)
