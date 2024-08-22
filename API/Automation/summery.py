@@ -118,6 +118,7 @@ def process_test_results(cursor, job_id, base_test_case):
 
             for line in results.split('\n'):
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
+                print(line)
                 print(line2)
                 if 'deleted' in line and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
@@ -227,9 +228,9 @@ def string_similarity(str1, str2):
     
     # Search for the pattern in both strings
     match1 = re.search(pattern, str1)
-    print(match1)
+    print(f"{str1, match1}")
     match2 = re.search(pattern, str2)
-    print(match2)
+    print(f"{str2, match2}")
     # Check if both strings have a match and the matches are identical
     if match1 and match2 and match1.group() == match2.group():
         print("match True")
