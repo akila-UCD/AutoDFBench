@@ -7,12 +7,13 @@ from mysql.connector import Error
 
 job_id = sys.argv[1]
 
-# Function to extract code from the response text
 def extract_code(response_text):
-    # Pattern to match code blocks with language specified
+    # Pattern to match code blocks with language specified or just generic blocks
     code_block_pattern = re.compile(r"```(python|bash|sh)?(.*?)```", re.DOTALL)
-    matches = code_block_pattern.findall(response_text)
+    generic_code_pattern = re.compile(r"```(.*?)```", re.DOTALL)
     
+    # First, check for language-specific code blocks
+    matches = code_block_pattern.findall(response_text)
     if matches:
         for match in matches:
             language, code = match
@@ -20,17 +21,22 @@ def extract_code(response_text):
                 return code.strip(), "python"
             elif language in ('bash', 'sh'):
                 return code.strip(), "bash"
-
+    
+    # If no language-specific block is found, check for generic code blocks
+    generic_match = generic_code_pattern.search(response_text)
+    if generic_match:
+        return generic_match.group(1).strip(), "generic"
+    
     # Fallback: Look for common patterns indicating code
     python_pattern = re.compile(r"(?:def |import |class )")
     bash_pattern = re.compile(r"(?:#!/bin/bash|echo |sudo |apt-get )")
     
-    # Search for python code
+    # Search for Python code based on common patterns
     python_code_match = python_pattern.search(response_text)
     if python_code_match:
         return python_code_match.group().strip(), "python"
     
-    # Search for bash code
+    # Search for Bash code based on common patterns
     bash_code_match = bash_pattern.search(response_text)
     if bash_code_match:
         return bash_code_match.group().strip(), "bash"

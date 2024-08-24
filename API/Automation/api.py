@@ -194,13 +194,18 @@ def send_api_request(prompt, base_prompt, disk_image_path, script_type_prompt, m
 def extract_code(response_text):
     python_pattern = re.compile(r"```python(.*?)```", re.DOTALL)
     bash_pattern = re.compile(r"```bash(.*?)```", re.DOTALL)
+    generic_pattern = re.compile(r"```(.*?)```", re.DOTALL)
+    
     python_match = python_pattern.search(response_text)
     bash_match = bash_pattern.search(response_text)
+    generic_match = generic_pattern.search(response_text)
     
     if python_match:
         return python_match.group(1).strip(), "python"
     elif bash_match:
         return bash_match.group(1).strip(), "bash"
+    elif generic_match:
+        return generic_match.group(1).strip(), "generic"
     else:
         return "", ""
 
