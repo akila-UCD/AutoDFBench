@@ -128,7 +128,7 @@ def process_test_results(cursor, job_id, base_test_case):
                     print(f"string_line_from_result{combined_string.strip()}")
                     any_similarity = string_similarity(any_str_line, combined_string.strip())
                     if any_similarity == True:
-                        summary_dict[(job_id, base_test_case)]['keyword_found_any_location'] += 1
+                        summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
 
                 print(f"SPLITS:{line2}")
                 if 'deleted' in line and 'deleted' in autopsy_results:
@@ -199,7 +199,7 @@ def checkGroundTruth(cursor, base_test):
 def upsert_summary_results(cursor, summary_dict, model):
     try:
         upsert_query = """
-            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, keyword_found_any_location)
+            INSERT INTO summery_results (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, keywords_found_any_location)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON DUPLICATE KEY UPDATE 
                 active_count = VALUES(active_count),
@@ -224,9 +224,9 @@ def upsert_summary_results(cursor, summary_dict, model):
             total_code_executions = counts['total_code_executions']
             code_execution_avg_percentage = counts['code_execution_avg_percentage']
             code_error_avg_percentage = counts['code_error_avg_percentage']
-            keyword_found_any_location = counts['keyword_found_any_location']
+            keywords_found_any_location = counts['keywords_found_any_location']
 
-            cursor.execute(upsert_query, (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, keyword_found_any_location))
+            cursor.execute(upsert_query, (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, keywords_found_any_location))
 
     except mysql.connector.Error as err:
         print(f"Error: {err}")
