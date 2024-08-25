@@ -118,9 +118,11 @@ def process_test_results(cursor, job_id, base_test_case):
                 # print(f"RESULTS:{results}")
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
                 print(f"LINE:{line}")
+                print(f"LINE0:{line[0]}")
+                print(f"any_str_line:{any_str_line}")
                 
                 for any_str_line in all_autopsy_rows:
-                    any_similarity = string_similarity(any_str_line, line)
+                    any_similarity = string_similarity(any_str_line, line[0])
                     if any_similarity == True:
                         summary_dict[(job_id, base_test_case)]['keyword_found_any_location'] += 1
 
@@ -178,7 +180,7 @@ def checkGroundTruth(cursor, base_test):
         lines = []
         for row in rows:
             file_line, type_str = row
-            lines.append(file_line)
+            lines.append(file_line) 
             if type_str not in result_dict:
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
