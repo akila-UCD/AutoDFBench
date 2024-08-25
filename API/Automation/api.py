@@ -196,6 +196,9 @@ def send_api_request(prompt, base_prompt, disk_image_path, script_type_prompt, m
 
 # Function to extract code from the response text
 def extract_code(response_text):
+    if response_text is None:
+        return "", ""  # Return empty strings if the response_text is None
+
     python_pattern = re.compile(r"```python(.*?)```", re.DOTALL)
     bash_pattern = re.compile(r"```bash(.*?)```", re.DOTALL)
     generic_pattern = re.compile(r"```(.*?)```", re.DOTALL)
