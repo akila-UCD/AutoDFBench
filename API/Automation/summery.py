@@ -108,7 +108,7 @@ def process_test_results(cursor, job_id, base_test_case):
                 break
             _, _, _, results, error, model = row
             print(f"results:{results}")
-            
+
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
 
@@ -122,13 +122,13 @@ def process_test_results(cursor, job_id, base_test_case):
                 print(f"LINE2:{line2}")
                 # os._exit(1)
                
-                # for any_str_line in all_autopsy_rows:
-                #     print(f"any_str_line:{any_str_line}")
-                #     combined_string = ' '.join(line)
-                #     print(f"string_line_from_result{combined_string.strip()}")
-                #     any_similarity = string_similarity(any_str_line, combined_string.strip())
-                #     if any_similarity == True:
-                #         summary_dict[(job_id, base_test_case)]['keyword_found_any_location'] += 1
+                for any_str_line in all_autopsy_rows:
+                    print(f"any_str_line:{any_str_line}")
+                    combined_string = ' '.join(line)
+                    print(f"string_line_from_result{combined_string.strip()}")
+                    any_similarity = string_similarity(any_str_line, combined_string.strip())
+                    if any_similarity == True:
+                        summary_dict[(job_id, base_test_case)]['keyword_found_any_location'] += 1
 
                 print(f"SPLITS:{line2}")
                 if 'deleted' in line and 'deleted' in autopsy_results:
@@ -242,10 +242,10 @@ def string_similarity(str1, str2):
     # print(f"{str1, match1}")
     match2 = re.search(pattern, str2)
     
-    print(f"{str1 , str2}")
+    # print(f"{str1 , str2}")
 
-    print(match1.group())
-    print(match2.group())
+    # print(match1.group())
+    # print(match2.group())
     # Check if both strings have a match and the matches are identical
     if match1 and match2 and match1.group() == match2.group():
         print("match True")
