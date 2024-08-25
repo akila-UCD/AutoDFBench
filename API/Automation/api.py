@@ -378,27 +378,27 @@ for job_details in jobs:
                     time.sleep(30)
 
     # Run the codeGenerator.py script
-    try:
-        result = subprocess.run(["python", "codeGenerator.py", str(job_details['id'])], check=True, text=True, capture_output=True)
-        if result.returncode == 0:
-            print("codeGenerator.py executed successfully.")
-            # Update the job status to 'code_execution'
-            update_job_status(job_details['id'], 'code_execution')
-            result_recheck = subprocess.run(["python", "recheckCodes.py", str(job_details['id'])], check=True, text=True, capture_output=True)
+    # try:
+    #     result = subprocess.run(["python", "codeGenerator.py", str(job_details['id'])], check=True, text=True, capture_output=True)
+    #     if result.returncode == 0:
+    #         print("codeGenerator.py executed successfully.")
+    #         # Update the job status to 'code_execution'
+    #         update_job_status(job_details['id'], 'code_execution')
+    #         result_recheck = subprocess.run(["python", "recheckCodes.py", str(job_details['id'])], check=True, text=True, capture_output=True)
 
-            result_executer = subprocess.run(
-                        ["python", "CodeExecuter.py", str(job_details['id'])], 
-                        check=True, text=True, capture_output=True
-                    )
-            if result.returncode == 0:
-                print("CodeExecuter.py executed successfully.")
-                update_job_status(job_details['id'], 'ended')
-            else:
-                print("codeGenerator.py did not complete successfully or did not return True.")
-        else:
-            print("codeGenerator.py did not complete successfully or did not return True.")
-    except subprocess.CalledProcessError as e:
-        print(f"An error occurred while running codeGenerator.py: {e}")
+    #         result_executer = subprocess.run(
+    #                     ["python", "CodeExecuter.py", str(job_details['id'])], 
+    #                     check=True, text=True, capture_output=True
+    #                 )
+    #         if result.returncode == 0:
+    #             print("CodeExecuter.py executed successfully.")
+    #             update_job_status(job_details['id'], 'ended')
+    #         else:
+    #             print("codeGenerator.py did not complete successfully or did not return True.")
+    #     else:
+    #         print("codeGenerator.py did not complete successfully or did not return True.")
+    # except subprocess.CalledProcessError as e:
+    #     print(f"An error occurred while running codeGenerator.py: {e}")
     
     update_job_status(job_details['id'], 'ended')
 
