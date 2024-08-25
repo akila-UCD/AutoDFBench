@@ -119,9 +119,8 @@ def process_test_results(cursor, job_id, base_test_case):
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
                 print(f"LINE:{line}")
                
-                print(f"any_str_line:{any_str_line}")
-                
                 for any_str_line in all_autopsy_rows:
+                    print(f"any_str_line:{any_str_line}")
                     combined_string = ' '.join(line)
                     print(f"string_line_from_result{combined_string.strip()}")
                     any_similarity = string_similarity(any_str_line, combined_string.strip())
