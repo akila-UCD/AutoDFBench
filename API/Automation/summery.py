@@ -102,9 +102,6 @@ def process_test_results(cursor, job_id, base_test_case):
         rows = cursor.fetchall()
 
         summary_dict = {}
-        # active_similarity_scores = []
-        # deleted_similarity_scores = []
-        # unallocated_similarity_scores = []
 
         for index, row in enumerate(rows):
             if index >= 10:  # Stop after processing 10 rows
@@ -178,14 +175,16 @@ def checkGroundTruth(cursor, base_test):
         cursor.execute(query, (f'%{base_test}',))
         rows = cursor.fetchall()
         result_dict = {}
+        lines = []
         for row in rows:
+            lines.append(file_line)
             file_line, type_str = row
             if type_str not in result_dict:
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
 
         # print(result_dict)
-        return result_dict, rows
+        return result_dict, lines
     
     except mysql.connector.Error as err:
         print(f"checkGroundTruth - Error : {err}")
