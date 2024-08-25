@@ -107,7 +107,8 @@ def process_test_results(cursor, job_id, base_test_case):
             if index >= 10:  # Stop after processing 10 rows
                 break
             _, _, _, results, error, model = row
-
+            print(f"results:{results}")
+            
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = Counter()
 
@@ -118,7 +119,7 @@ def process_test_results(cursor, job_id, base_test_case):
                 # print(f"RESULTS:{results}")
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
                 print(f"LINE:{line}")
-                print(f"LINE:{line2}")
+                print(f"LINE2:{line2}")
                 # os._exit(1)
                
                 # for any_str_line in all_autopsy_rows:
