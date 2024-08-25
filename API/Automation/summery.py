@@ -107,6 +107,7 @@ def process_test_results(cursor, job_id, base_test_case):
             if index >= 10:  # Stop after processing 10 rows
                 break
             _, _, _, results, error, model = row
+            print(f"model:{model}")
             print(f"results:{results}")
 
             if (job_id, base_test_case) not in summary_dict:
