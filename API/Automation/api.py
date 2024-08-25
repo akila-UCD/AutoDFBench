@@ -9,7 +9,8 @@ import llm
 import time
 import sys
 
-specified_column = sys.argv[1] if len(sys.argv) > 1 else None
+specified_column = sys.argv[2] if len(sys.argv) > 2 else None
+job_id = sys.argv[1] if len(sys.argv) > 1 else None
 
 # Database configuration (replace with your actual database credentials)
 DB_HOST = '192.168.1.100'
@@ -139,7 +140,7 @@ def fetch_job_details():
     try:
         cursor = conn.cursor()
         # Execute query to fetch job details where status is 'queued'
-        query = "SELECT id, take_in_test_count, CAST(model_to_use AS CHAR) as string_value, disk_image, CAST(script_type_need AS CHAR) as string_value, base_prompt_id FROM job WHERE status = 'queued'"
+        query = f"SELECT id, take_in_test_count, CAST(model_to_use AS CHAR) as string_value, disk_image, CAST(script_type_need AS CHAR) as string_value, base_prompt_id FROM job WHERE id = '{job_id}'"
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
@@ -254,9 +255,9 @@ os.makedirs(output_folder, exist_ok=True)
 
 # Fetch all queued jobs
 jobs = fetch_job_details()
-# if not jobs:
-#     print("No queued jobs to process.")
-#     exit(0)  # Exit if no job to process
+if not jobs:
+    print("No queued jobs to process.")
+    exit(0)  # Exit if no job to process
 
 # Process each queued job
 for job_details in jobs:
