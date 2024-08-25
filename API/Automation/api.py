@@ -7,6 +7,9 @@ import mysql.connector
 import subprocess
 import llm
 import time
+import sys
+
+specified_column = sys.argv[1] if len(sys.argv) > 1 else None
 
 # Database configuration (replace with your actual database credentials)
 DB_HOST = '192.168.1.100'
@@ -284,9 +287,18 @@ for job_details in jobs:
         
         # Get the header from the input file
         header = next(csv_reader)
-        
-        # Process each column in the input file
-        for col_index, col_name in enumerate(header):
+
+        # Determine which columns to process based on the specified column name
+        columns_to_process = [col_index for col_index, col_name in enumerate(header) if specified_column is None or col_name == specified_column]
+
+        if not columns_to_process:
+            raise Exception(f"Column '{specified_column}' not found in the CSV header.")
+
+         # Process each specified column in the input file
+        for col_index in columns_to_process:
+
+            col_name = header[col_index]
+
             # Create a folder for each column
             col_folder = os.path.join(output_folder, col_name)
             os.makedirs(col_folder, exist_ok=True)
