@@ -181,7 +181,7 @@ def update_job_status(job_id, status):
 # Function to send API request
 def send_api_request(prompt, base_prompt, disk_image_path, script_type_prompt, model_to_use):
     final_prompt = base_prompt.replace("{prompt}", prompt).replace("{DISK_IMAGE_PATH}", disk_image_path) + script_type_prompt
-
+    print(f"final_prompt: {final_prompt}")
     # url = "http://192.168.1.12:11434/api/generate"  # Replace with the actual API URL
     url = get_api_url()
     headers = {"Content-Type": "application/json"}
