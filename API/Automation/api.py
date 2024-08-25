@@ -192,6 +192,7 @@ def send_api_request(prompt, base_prompt, disk_image_path, script_type_prompt, m
     }
     
     response = requests.post(url, headers=headers, data=json.dumps(data))
+    print(f"response : {response}")
     return response.json()
 
 # Function to extract code from the response text
