@@ -177,8 +177,8 @@ def checkGroundTruth(cursor, base_test):
         result_dict = {}
         lines = []
         for row in rows:
-            lines.append(file_line)
             file_line, type_str = row
+            lines.append(file_line)
             if type_str not in result_dict:
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
