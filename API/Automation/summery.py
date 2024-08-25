@@ -110,8 +110,15 @@ def process_test_results(cursor, job_id, base_test_case):
             print(f"model:{model}")
             print(f"results:{results}")
 
+            # Initialize the dictionary entry if it doesn't exist
             if (job_id, base_test_case) not in summary_dict:
-                summary_dict[(job_id, base_test_case)] = Counter()
+                summary_dict[(job_id, base_test_case)] = {
+                    'active_count': 0,
+                    'deleted_count': 0,
+                    'unallocated_count': 0,
+                    'keywords_found_any_location': 0,
+                    'model': model
+                }
 
             autopsy_results, all_autopsy_rows = checkGroundTruth(cursor, base_test_case)
             print(f"all_autopsy_rows:{all_autopsy_rows}")
