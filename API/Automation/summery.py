@@ -123,10 +123,10 @@ def process_test_results(cursor, job_id, base_test_case):
                 # os._exit(1)
                
                 for any_str_line in all_autopsy_rows:
-                    print(f"any_str_line:{any_str_line}")
-                    combined_string = ' '.join(line)
-                    print(f"string_line_from_result{combined_string.strip()}")
-                    any_similarity = string_similarity(any_str_line, combined_string.strip())
+                    print(f"any_str_line: {any_str_line}")
+                    # combined_string = ' '.join(line)
+                    print(f"string_line_from_result: {line.strip()}")
+                    any_similarity = string_similarity(any_str_line, line.strip())
                     if any_similarity == True:
                         summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
 
