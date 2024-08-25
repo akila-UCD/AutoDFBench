@@ -153,7 +153,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
 
-        summary_dict[(job_id, base_test_case)]['model'] = model
+            summary_dict[(job_id, base_test_case)]['model'] = model
 
         summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
         summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
