@@ -229,6 +229,7 @@ def upsert_summary_results(cursor, summary_dict, model):
             cursor.execute(upsert_query, (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, keywords_found_any_location))
 
     except mysql.connector.Error as err:
+        print(upsert_query)
         print(f"Error: {err}")
 
 import re
