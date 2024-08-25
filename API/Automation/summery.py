@@ -210,8 +210,7 @@ def upsert_summary_results(cursor, summary_dict, model):
                 total_code_executions = VALUES(total_code_executions),
                 code_execution_avg_percentage = VALUES(code_execution_avg_percentage),
                 code_error_avg_percentage = VALUES(code_error_avg_percentage),
-                keywords_found_any_location = VALUES(keywords_found_any_location),
-
+                keywords_found_any_location = VALUES(keywords_found_any_location)
         """
 
         for key, counts in summary_dict.items():
