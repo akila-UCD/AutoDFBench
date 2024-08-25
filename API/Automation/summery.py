@@ -109,7 +109,7 @@ def process_test_results(cursor, job_id, base_test_case):
             _, _, _, results, error, model = row
             print(f"model:{model}")
             print(f"results:{results}")
-
+            
             # Initialize the dictionary entry if it doesn't exist
             if (job_id, base_test_case) not in summary_dict:
                 summary_dict[(job_id, base_test_case)] = {
@@ -117,6 +117,11 @@ def process_test_results(cursor, job_id, base_test_case):
                     'deleted_count': 0,
                     'unallocated_count': 0,
                     'keywords_found_any_location': 0,
+                    'code_execution_count' :0,
+                    'errors_count':0,
+                    'total_code_executions':0,
+                    'code_execution_avg_percentage':0,
+                    'code_error_avg_percentage':0,
                     'model': model
                 }
 
