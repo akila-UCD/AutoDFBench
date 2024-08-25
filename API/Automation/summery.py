@@ -118,6 +118,8 @@ def process_test_results(cursor, job_id, base_test_case):
                 # print(f"RESULTS:{results}")
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
                 print(f"LINE:{line}")
+                print(f"LINE:{line2}")
+                os._exit(1)
                
                 for any_str_line in all_autopsy_rows:
                     print(f"any_str_line:{any_str_line}")
