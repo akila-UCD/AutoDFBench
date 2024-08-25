@@ -254,9 +254,9 @@ os.makedirs(output_folder, exist_ok=True)
 
 # Fetch all queued jobs
 jobs = fetch_job_details()
-if not jobs:
-    print("No queued jobs to process.")
-    # exit(0)  # Exit if no job to process
+# if not jobs:
+#     print("No queued jobs to process.")
+#     exit(0)  # Exit if no job to process
 
 # Process each queued job
 for job_details in jobs:
