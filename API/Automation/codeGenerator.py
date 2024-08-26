@@ -5,6 +5,7 @@ import sys
 import mysql.connector
 
 job_id = sys.argv[1]
+base_test_case_arg = sys.argv[2] if len(sys.argv) > 2 else 0
 
 # Database configuration (replace with your actual database credentials)
 DB_HOST = '192.168.1.100'
@@ -43,7 +44,11 @@ def fetch_code_data():
     try:
         cursor = conn.cursor(dictionary=True)
         # Fetch data from the prompt_codes table
-        query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}'"
+        if base_test_case_arg == 0:
+             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}'"
+        else:
+            query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and base_test_case = '{base_test_case_arg}'"
+        
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
