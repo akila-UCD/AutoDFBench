@@ -45,7 +45,7 @@ def fetch_code_data():
         cursor = conn.cursor(dictionary=True)
         # Fetch data from the prompt_codes table
         if base_test_case_arg == 0:
-             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}'"
+             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and `file_path` IS NULL "
         else:
             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and base_test_case = '{base_test_case_arg}'"
         
