@@ -244,7 +244,11 @@ def externalAPI(prompt, base_prompt, disk_image_path, script_type_prompt, model_
     final_prompt = base_prompt.replace("{prompt}", prompt).replace("{DISK_IMAGE_PATH}", disk_image_path) + script_type_prompt
     # print(final_prompt)
     model = llm.get_model(model_to_use)
-    model.key = getConfigValues('Claude_API_KEY')
+    if model_to_use == 'claude-3.5-sonnet':
+        model.key = getConfigValues('Claude_API_KEY')
+    else:
+        model.key = getConfigValues('gpt-4o_API_KEY')
+
     response = model.prompt(final_prompt)
     # print(f"RES:{response}")
     return response
@@ -327,7 +331,7 @@ for job_details in jobs:
                     csv_line_content = row[col_index]
                     
                     # Send API request
-                    if model_to_use == 'claude-3.5-sonnet':
+                    if model_to_use == 'claude-3.5-sonnet' or model_to_use == 'gpt-4o':
                         api_response =  externalAPI(csv_line_content, BASE_PROMPT, DISK_IMAGE_PATH, script_type_prompt, model_to_use)
                         created_at = time.time()
                         response_text = api_response.text()
