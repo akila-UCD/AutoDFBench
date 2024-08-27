@@ -152,7 +152,7 @@ def main():
     # Fetch data from the database
     records = fetch_code_data()
     if not records:
-        print("No data found in the prompt_codes table.")
+        print("No data found in the prompt_codes table where file paths are null.")
         return False
 
     # Process the records and collect the output data
