@@ -379,7 +379,7 @@ for job_details in jobs:
                 infile.seek(0)
                 next(csv_reader)  # Skip the header again
                 if model_to_use == 'claude-3.5-sonnet':
-                    time.sleep(30)
+                    time.sleep(15)
 
     # Run the codeGenerator.py script
     # try:
