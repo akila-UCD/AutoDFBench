@@ -7,7 +7,7 @@ from mysql.connector import Error
 
 job_id = sys.argv[1]
 base_test_case_arg = sys.argv[2] if len(sys.argv) > 2 else 0
-prompt_code_id = sys.argv[3] if len(sys.argv) > 2 else 0
+
 
 # Function to check and copy necessary disk image files
 def check_and_copy_disk_images():
@@ -77,9 +77,7 @@ def process_scripts(conn, base_folder, output_folder):
     try:
         conn.reconnect()
         cursor = conn.cursor(dictionary=True)
-        if base_test_case_arg == '' and prompt_code_id != 0:
-            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE id ={prompt_code_id}"
-        elif base_test_case_arg == 0:
+        if base_test_case_arg == 0:
             query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s ORDER BY `prompt_codes`.`base_test_case` ASC"
         else:
             query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}'"
