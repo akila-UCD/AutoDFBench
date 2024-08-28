@@ -329,7 +329,7 @@ for job_details in jobs:
                         break
                     
                     csv_line_content = row[col_index]
-                    
+                    print("fcsv_line_content: {csv_line_content}")
                     # Send API request
                     if model_to_use == 'claude-3.5-sonnet' or model_to_use == 'gpt-4o':
                         api_response =  externalAPI(csv_line_content, BASE_PROMPT, DISK_IMAGE_PATH, script_type_prompt, model_to_use)
