@@ -152,7 +152,9 @@ def insert_result_to_db(conn, testcase, base_test_case, model, script_type, resu
             VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cursor.execute(insert_query, (testcase, base_test_case, model, script_type, results, active_file_hits, deleted_files_hits, unallocated_file_hits, error, job_id))
+        conn.commit()
         
+        cursor = conn.cursor()
         updateQuery = f"UPDATE `prompt_codes` SET `code_execution` = '1' WHERE `prompt_codes`.`id` = {prompt_code_id}"
         cursor.execute(updateQuery)
         conn.commit()
