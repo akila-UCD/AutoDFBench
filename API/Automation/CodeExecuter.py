@@ -78,11 +78,11 @@ def process_scripts(conn, base_folder, output_folder):
         conn.reconnect()
         cursor = conn.cursor(dictionary=True)
         if base_test_case_arg == '' and prompt_code_id != 0:
-            query = f"SELECT file_path, script_type, model FROM prompt_codes WHERE id ={prompt_code_id}"
+            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE id ={prompt_code_id}"
         elif base_test_case_arg == 0:
-            query = "SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s ORDER BY `prompt_codes`.`base_test_case` ASC"
+            query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s ORDER BY `prompt_codes`.`base_test_case` ASC"
         else:
-            query = f"SELECT file_path, script_type, model FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}'"
+            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}'"
         
         cursor.execute(query, (job_id,))
         rows = cursor.fetchall()
@@ -91,6 +91,7 @@ def process_scripts(conn, base_folder, output_folder):
             file_path = row["file_path"]
             script_type = row["script_type"]
             model = row["model"]
+            prompt_code_id = row["id"]
 
             if not file_path:
                 continue
@@ -111,7 +112,7 @@ def process_scripts(conn, base_folder, output_folder):
             deleted_files_hits, active_file_hits, unallocated_file_hits = count_hits(result)
 
             # Insert the result into the database
-            insert_result_to_db(conn, testcase, base_test_case, model, script_type, result, active_file_hits, deleted_files_hits, unallocated_file_hits, error)
+            insert_result_to_db(conn, testcase, base_test_case, model, script_type, result, active_file_hits, deleted_files_hits, unallocated_file_hits, error, prompt_code_id)
             print(f"Processed {file_path} with result: {result[:50]}... and error: {error[:50]}...")  # Print the first 50 chars of result and error for brevity
 
     except Error as e:
@@ -144,7 +145,7 @@ def count_hits(result):
     return deleted_files_hits, active_file_hits, unallocated_file_hits
 
 # Function to insert the result into the database
-def insert_result_to_db(conn, testcase, base_test_case, model, script_type, results, active_file_hits, deleted_files_hits, unallocated_file_hits, error):
+def insert_result_to_db(conn, testcase, base_test_case, model, script_type, results, active_file_hits, deleted_files_hits, unallocated_file_hits, error, prompt_code_id):
     try:
         conn.reconnect()
         cursor = conn.cursor()
@@ -153,6 +154,9 @@ def insert_result_to_db(conn, testcase, base_test_case, model, script_type, resu
             VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
         cursor.execute(insert_query, (testcase, base_test_case, model, script_type, results, active_file_hits, deleted_files_hits, unallocated_file_hits, error, job_id))
+        
+        updateQuery = f"UPDATE `prompt_codes` SET `code_execution` = '1' WHERE `prompt_codes`.`id` = {prompt_code_id}"
+        cursor.execute(updateQuery)
         conn.commit()
     except Error as e:
         print(f"Error: {e}")
