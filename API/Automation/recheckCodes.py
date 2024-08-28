@@ -110,13 +110,16 @@ def main():
 
             # Extract code from response
             code, script_type = extract_code(response)
-            # print(code)
+            print(script_type)
+            print(code)
             # os._exit(1)
             if code:
                 # Determine the file extension and script type
                 if script_type == "python":
                     extension = "py"
                 elif script_type == "bash":
+                    extension = "sh"
+                elif script_type == "generic":
                     extension = "sh"
                 else:
                     continue  # Skip if the script type is unsupported
