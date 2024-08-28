@@ -75,6 +75,7 @@ def update_code_and_file_path(conn, row_id, code, file_path):
         update_query = "UPDATE prompt_codes SET code = %s, file_path = %s WHERE id = %s"
         cursor.execute(update_query, (code, file_path, row_id))
         conn.commit()
+        print(update_query)
     except Error as e:
         print(f"Error: {e}")
 
