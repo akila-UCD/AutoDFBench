@@ -196,7 +196,7 @@ def process_test_results(cursor, job_id, base_test_case):
         # summary_dict[(job_id, base_test_case)]['active_similaraty_avg_percentage'] = sum(active_similarity_scores) / len(active_similarity_scores) if active_similarity_scores else 0
         # summary_dict[(job_id, base_test_case)]['deleted_similaraty_avg_percentage'] = sum(deleted_similarity_scores) / len(deleted_similarity_scores) if deleted_similarity_scores else 0
         # summary_dict[(job_id, base_test_case)]['unalocated_similaraty_avg_percentage'] = sum(unallocated_similarity_scores) / len(unallocated_similarity_scores) if unallocated_similarity_scores else 0
-        print(summary_dict)
+        # print(summary_dict)
 
         return summary_dict, model
 
@@ -259,7 +259,7 @@ def upsert_summary_results(cursor, summary_dict, model):
             cursor.execute(upsert_query, (job_id, model, base_test_case, active_count, deleted_count, unallocated_count, code_execution_count, errors_count, total_code_executions, code_execution_avg_percentage, code_error_avg_percentage, keywords_found_any_location))
 
     except mysql.connector.Error as err:
-        print(upsert_query)
+        # print(upsert_query)
         print(f"Error: {err}")
 
 import re
