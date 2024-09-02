@@ -4,9 +4,21 @@ import shutil  # Import shutil to copy files
 import mysql.connector
 import sys
 from mysql.connector import Error
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 job_id = sys.argv[1]
 base_test_case_arg = sys.argv[2] if len(sys.argv) > 2 else 0
+
+
+# Accessing the database settings from the environment variables
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
 
 
 # Function to check and copy necessary disk image files
@@ -169,10 +181,10 @@ def main():
     
     # Database connection
     conn = mysql.connector.connect(
-        host="192.168.1.100",
-        user="root",
-        password="19891209",
-        database="DFLLM"
+        host = DB_HOST,
+        user = DB_USER,
+        password = DB_PASSWORD,
+        database = DB_NAME
     )
 
     try:

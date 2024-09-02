@@ -8,15 +8,20 @@ import subprocess
 import llm
 import time
 import sys
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 specified_column = sys.argv[2] if len(sys.argv) > 2 else None
 job_id = sys.argv[1] if len(sys.argv) > 1 else None
 
-# Database configuration (replace with your actual database credentials)
-DB_HOST = '192.168.1.100'
-DB_USER = 'root'
-DB_PASSWORD = '19891209'
-DB_NAME = 'DFLLM'
+# Accessing the database settings from the environment variables
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
 
 # Function to establish a connection to the database
 def get_db_connection():

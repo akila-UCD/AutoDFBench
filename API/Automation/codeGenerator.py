@@ -3,16 +3,23 @@ import re
 import csv
 import sys
 import mysql.connector
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 job_id = sys.argv[1]
 base_test_case_arg = sys.argv[2] if len(sys.argv) > 2 else 0
 
-# Database configuration (replace with your actual database credentials)
-DB_HOST = '192.168.1.100'
-DB_USER = 'root'
-DB_PASSWORD = '19891209'
-DB_NAME = 'DFLLM'
+# Accessing the database settings from the environment variables
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
 
+# Example usage
+print(f"Connecting to database {DB_NAME} at {DB_HOST}:{DB_PORT} with user {DB_USER}")
 # Function to establish a connection to the database
 def get_db_connection():
     try:

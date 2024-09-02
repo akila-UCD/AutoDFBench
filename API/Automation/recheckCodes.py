@@ -4,6 +4,20 @@ import subprocess
 import sys
 import mysql.connector
 from mysql.connector import Error
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Accessing the database settings from the environment variables
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+
+# Example usage
+print(f"Connecting to database {DB_NAME} at {DB_HOST}:{DB_PORT} with user {DB_USER}")
 
 job_id = sys.argv[1]
 
@@ -89,10 +103,10 @@ def main():
     
     # Database connection
     conn = mysql.connector.connect(
-        host="192.168.1.100",
-        user="root",
-        password="19891209",
-        database="DFLLM"
+        host = DB_HOST,
+        user = DB_USER,
+        password = DB_PASSWORD,
+        database = DB_NAME
     )
 
     try:
