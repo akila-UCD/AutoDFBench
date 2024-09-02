@@ -135,7 +135,7 @@ def process_test_results(cursor, job_id, base_test_case):
                 }
 
             autopsy_results, all_autopsy_rows = checkGroundTruth(cursor, base_test_case)
-            print(f"all_autopsy_rows:{all_autopsy_rows}")
+            # print(f"all_autopsy_rows:{all_autopsy_rows}")
 
             for line in results.split('\n'):
                 # print(f"RESULTS:{results}")
@@ -282,7 +282,7 @@ def string_similarity(str1, str2):
         print("match True")
         return True
     else:
-        print("match False")
+        # print("match False")
         return False
 
 # Main function
