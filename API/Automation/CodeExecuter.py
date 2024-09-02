@@ -24,8 +24,8 @@ DB_PASSWORD = os.getenv('DB_PASSWORD')
 # Function to check and copy necessary disk image files
 def check_and_copy_disk_images():
     required_files = ["ss-unix-07-25-18.dd", "ss-win-07-25-18.dd"]
-    source_folder = "/home/ubuntu/API/"
-    destination_folder = "/home/ubuntu/API/DISKIMAGES"
+    source_folder = os.getenv('DISK_IMAGE_SOURCE_FOLDER')
+    destination_folder = os.getenv('DISK_IMAGE_DESTINATION_FOLDER')
 
     os.makedirs(destination_folder, exist_ok=True)
 
