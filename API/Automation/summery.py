@@ -92,7 +92,7 @@ def get_db_connection():
 def process_test_results(cursor, job_id, base_test_case):
     try:
         query = """
-            SELECT job_id, base_test_case, testCase, results, error, model
+            SELECT job_id, base_test_case, testCase, results, error, model, id
             FROM test_results
             WHERE job_id = %s AND base_test_case like %s
         """
@@ -114,7 +114,7 @@ def process_test_results(cursor, job_id, base_test_case):
         for index, row in enumerate(rows):
             if index >= 10:  # Stop after processing 10 rows
                 break
-            _, _, _, results, error, model = row
+            _, _, _, results, error, model, id = row
             print(f"model:{model}")
             print(f"results:{results}")
             
@@ -158,13 +158,17 @@ def process_test_results(cursor, job_id, base_test_case):
                         # deleted_similarity_scores.append(similarity)
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
-
+                            deleted_query_update_result = f"UPDATE `test_results` SET `deleted_files_hits` = deleted_files_hits+1 WHERE `test_results`.`id` = {id}"
+                            cursor.execute(deleted_query_update_result)
+                            
                 elif 'active' in line and 'active' in autopsy_results:
                     for str_line in autopsy_results['active']:
                         similarity = string_similarity(str_line, line2)
                         # active_similarity_scores.append(similarity)
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
+                            active_query_update_result = f"UPDATE `test_results` SET `active_file_hits` = active_file_hits+1 WHERE `test_results`.`id` = {id}"
+                            cursor.execute(active_query_update_result)
 
                 elif 'unallocated' in line and 'unallocated' in autopsy_results:
                     for str_line in autopsy_results['unallocated']:
@@ -172,6 +176,8 @@ def process_test_results(cursor, job_id, base_test_case):
                         # unallocated_similarity_scores.append(similarity)
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
+                            unallocated_query_update_result = f"UPDATE `test_results` SET `unallocated_file_hits` = unallocated_file_hits+1 WHERE `test_results`.`id` = {id}"
+                            cursor.execute(unallocated_query_update_result)
 
             summary_dict[(job_id, base_test_case)]['model'] = model
 
