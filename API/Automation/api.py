@@ -289,7 +289,11 @@ for job_details in jobs:
 
     # Script type needed
     script_type = job_details['script_type_need']
-    script_type_prompt = f" You should provide a {script_type} code to achieve this task"
+    if script_type == 'python':
+        script_type_prompt = f" You should provide a {script_type} code to achieve this task.  import "
+    else:
+        script_type_prompt = f" You should provide a {script_type} code to achieve this task. #!/bin/bash"
+   
 
     with open(input_file, mode='r', newline='') as infile:
         csv_reader = csv.reader(infile)
