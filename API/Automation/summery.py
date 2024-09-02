@@ -115,8 +115,9 @@ def process_test_results(cursor, job_id, base_test_case):
             if index >= 10:  # Stop after processing 10 rows
                 break
             _, _, _, results, error, model, id = row
-            print(f"model:{model}")
+            # print(f"model:{model}")
             print(f"results:{results}")
+            print(f"id:{id}")
             
             # Initialize the dictionary entry if it doesn't exist
             if (job_id, base_test_case) not in summary_dict:
@@ -139,19 +140,19 @@ def process_test_results(cursor, job_id, base_test_case):
             for line in results.split('\n'):
                 # print(f"RESULTS:{results}")
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
-                print(f"LINE:{line}")
-                print(f"LINE2:{line2}")
+                # print(f"LINE:{line}")
+                # print(f"LINE2:{line2}")
                 # os._exit(1)
                
                 for any_str_line in all_autopsy_rows:
-                    print(f"any_str_line: {any_str_line}")
+                    # print(f"any_str_line: {any_str_line}")
                     # combined_string = ' '.join(line)
-                    print(f"string_line_from_result: {line.strip()}")
+                    # print(f"string_line_from_result: {line.strip()}")
                     any_similarity = string_similarity(any_str_line, line.strip())
                     if any_similarity == True:
                         summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
 
-                print(f"SPLITS:{line2}")
+                # print(f"SPLITS:{line2}")
                 if 'deleted' in line and 'deleted' in autopsy_results:
                     for str_line in autopsy_results['deleted']:
                         similarity = string_similarity(str_line, line2)
@@ -159,6 +160,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
                             deleted_query_update_result = f"UPDATE `test_results` SET `deleted_files_hits` = deleted_files_hits+1 WHERE `test_results`.`id` = {id}"
+                            print(f"deleted_query_update_result:{deleted_query_update_result}")
                             cursor.execute(deleted_query_update_result)
                             
                 elif 'active' in line and 'active' in autopsy_results:
@@ -168,6 +170,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
                             active_query_update_result = f"UPDATE `test_results` SET `active_file_hits` = active_file_hits+1 WHERE `test_results`.`id` = {id}"
+                            print(f"deleted_query_update_result:{deleted_query_update_result}")
                             cursor.execute(active_query_update_result)
 
                 elif 'unallocated' in line and 'unallocated' in autopsy_results:
@@ -177,6 +180,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
                             unallocated_query_update_result = f"UPDATE `test_results` SET `unallocated_file_hits` = unallocated_file_hits+1 WHERE `test_results`.`id` = {id}"
+                            print(f"deleted_query_update_result:{deleted_query_update_result}")
                             cursor.execute(unallocated_query_update_result)
 
             summary_dict[(job_id, base_test_case)]['model'] = model
