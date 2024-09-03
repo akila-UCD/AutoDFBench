@@ -116,8 +116,9 @@ def process_test_results(cursor, job_id, base_test_case):
                 break
             _, _, _, results, error, model, id = row
             # print(f"model:{model}")
-            print(f"results:{results}")
             print(f"id:{id}")
+            print(f"results:{results}")
+            
             
             # Initialize the dictionary entry if it doesn't exist
             if (job_id, base_test_case) not in summary_dict:

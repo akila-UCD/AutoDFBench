@@ -260,7 +260,7 @@ def externalAPI(prompt, base_prompt, disk_image_path, script_type_prompt, model_
 
 
 # Read the input CSV file and send API requests
-input_file = "EvaluationMatrix-StringSearching-DataSets_v2.csv"
+# input_file = "EvaluationMatrix-StringSearching-DataSets_v2.csv"
 output_folder = "../output"
 
 # Create the output folder if it doesn't exist
@@ -299,6 +299,10 @@ for job_details in jobs:
     else:
         script_type_prompt = f" You should provide a {script_type} code to achieve this task. #!/bin/bash"
    
+    if job_details['disk_image'] == 'windows_disk_path':
+        input_file = os.getenv('WINDOWS_DATA_CSV_PATH')
+    else:
+        input_file = os.getenv('UNIX_DATA_CSV_PATH')
 
     with open(input_file, mode='r', newline='') as infile:
         csv_reader = csv.reader(infile)
