@@ -18,7 +18,7 @@ DB_NAME = os.getenv('DB_NAME')
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 
-base_test_cases = [
+base_test_cases_linx = [
     "FT-SS-01",
     "FT-SS-02-a",
     "FT-SS-02-b",
@@ -28,9 +28,6 @@ base_test_cases = [
     "FT-SS-03-a",
     "FT-SS-03-b",
     "FT-SS-03-c",
-    # "FT-SS-04",
-    # "FT-SS-05",
-    # "FT-SS-06",
     "FT-SS-07-a1",
     "FT-SS-07-a2",
     "FT-SS-07-b",
@@ -69,8 +66,65 @@ base_test_cases = [
     "FT-SS-09-a6",
     "FT-SS-09-a7",
     "FT-SS-09-a8",
-    "FT-SS-09-b",
-    "FT-SS-09-c",
+    "FT-SS-09-b1",
+    "FT-SS-09-b2",
+    "FT-SS-10-a1",
+    "FT-SS-10-a2"
+]
+
+base_test_cases_windows = [
+    "FT-SS-01",
+    "FT-SS-02-a",
+    "FT-SS-02-b",
+    "FT-SS-02-c",
+    "FT-SS-02-d",
+    "FT-SS-02-e",
+    "FT-SS-03-a",
+    "FT-SS-03-b",
+    "FT-SS-03-c",
+    "FT-SS-07-a1",
+    "FT-SS-07-a2",
+    "FT-SS-07-b",
+    "FT-SS-07-c1",
+    "FT-SS-07-c2",
+    "FT-SS-07-d",
+    "FT-SS-07-e1",
+    "FT-SS-07-e2",
+    "FT-SS-07-f1",
+    "FT-SS-07-f2",
+    "FT-SS-07-f3",
+    "FT-SS-07-f4",
+    "FT-SS-07-g1",
+    "FT-SS-07-g2",
+    "FT-SS-07-g3",
+    "FT-SS-07-g4",
+    "FT-SS-07-g5",
+    "FT-SS-07-g6",
+    "FT-SS-07-g7",
+    "FT-SS-07-g8",
+    "FT-SS-07-h",
+    "FT-SS-08-a1",
+    "FT-SS-08-a2",
+    "FT-SS-08-a3",
+    "FT-SS-08-a4",
+    "FT-SS-08-b1",
+    "FT-SS-08-b2",
+    "FT-SS-08-b3",
+    "FT-SS-08-b4",
+    "FT-SS-08-c",
+    "FT-SS-09-a1",
+    "FT-SS-09-a2",
+    "FT-SS-09-a3",
+    "FT-SS-09-a4",
+    "FT-SS-09-a5",
+    "FT-SS-09-a6",
+    "FT-SS-09-a7",
+    "FT-SS-09-a8",
+    "FT-SS-09-b1",
+    "FT-SS-09-b2",
+    "FT-SS-09-Frag1",
+    "FT-SS-09-Frag2",
+    "FT-SS-09-Lost",
     "FT-SS-10-a1",
     "FT-SS-10-a2"
 ]
@@ -181,7 +235,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
                             active_query_update_result = f"UPDATE `test_results` SET `active_file_hits` = active_file_hits+1 WHERE `test_results`.`id` = {id}"
-                            print(f"deleted_query_update_result:{deleted_query_update_result}")
+                            print(f"deleted_query_update_result:{active_query_update_result}")
                             cursor.execute(active_query_update_result)
 
                 elif 'unallocated' in line and 'unallocated' in autopsy_results:
@@ -191,7 +245,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
                             unallocated_query_update_result = f"UPDATE `test_results` SET `unallocated_file_hits` = unallocated_file_hits+1 WHERE `test_results`.`id` = {id}"
-                            print(f"deleted_query_update_result:{deleted_query_update_result}")
+                            print(f"deleted_query_update_result:{unallocated_query_update_result}")
                             cursor.execute(unallocated_query_update_result)
 
             summary_dict[(job_id, base_test_case)]['model'] = model
@@ -316,6 +370,12 @@ def main(job_id):
                         WHERE S1.id < S2.id AND S1.testCase = S2.testCase; """
 
     cursor.execute(deldupQuery)
+
+    job_data = get_job_details(cursor)
+    if job_data[3] == 'windows_disk_path':
+        base_test_cases = base_test_cases_windows
+    else:
+        base_test_cases = base_test_cases_linx
 
     for base_test_case in base_test_cases:
         summary_dict, model = process_test_results(cursor, job_id, base_test_case)
