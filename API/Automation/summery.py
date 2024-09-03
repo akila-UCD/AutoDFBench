@@ -87,6 +87,16 @@ def get_db_connection():
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
+    
+def get_job_details(cursor):
+    try:
+        query = f"SELECT * FROM `job` WHERE `id` = {job_id}"
+        cursor.execute(query)
+        for row in cursor:
+            print(row)
+            return row
+    except mysql.connector.Error as err:
+        print(f"get_job_details - Error : {err}")
 
 # Function to fetch and process results for a given job_id and base_test_case
 def process_test_results(cursor, job_id, base_test_case):
@@ -207,10 +217,16 @@ def process_test_results(cursor, job_id, base_test_case):
 
 def checkGroundTruth(cursor, base_test):
     try:
+        job_data = get_job_details(cursor)
+        if job_data[3] == 'windows_disk_path':
+            result_type = 'windows'
+        else:
+            result_type = 'windows'
+
         query = """
-            SELECT file_line, CAST(type AS CHAR) as string_value FROM `autopsy_results` where base_test_case like %s
+            SELECT file_line, CAST(type AS CHAR) as string_value FROM `autopsy_results` where os = %s  base_test_case like %s
         """
-        cursor.execute(query, (f'%{base_test}',))
+        cursor.execute(query, (result_type,f'%{base_test}',))
         rows = cursor.fetchall()
         result_dict = {}
         lines = []
