@@ -224,7 +224,7 @@ def checkGroundTruth(cursor, base_test):
             result_type = 'windows'
 
         query = """
-            SELECT file_line, CAST(type AS CHAR) as string_value FROM `autopsy_results` where os = %s  base_test_case like %s
+            SELECT file_line, CAST(type AS CHAR) as string_value FROM `autopsy_results` where os = %s AND base_test_case like %s
         """
         cursor.execute(query, (result_type,f'%{base_test}',))
         rows = cursor.fetchall()
