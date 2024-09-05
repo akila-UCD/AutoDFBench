@@ -181,7 +181,7 @@ def process_test_results(cursor, job_id, base_test_case):
             _, _, _, results, error, model, id = row
             # print(f"model:{model}")
             print(f"id:{id}")
-            print(f"results:{results}")
+            # print(f"results:{results}")
             
             
             # Initialize the dictionary entry if it doesn't exist
@@ -235,7 +235,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
                             active_query_update_result = f"UPDATE `test_results` SET `active_file_hits` = active_file_hits+1 WHERE `test_results`.`id` = {id}"
-                            print(f"deleted_query_update_result:{active_query_update_result}")
+                            print(f"active_query_update_result:{active_query_update_result}")
                             cursor.execute(active_query_update_result)
 
                 elif 'unallocated' in line and 'unallocated' in autopsy_results:
@@ -245,7 +245,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
                             unallocated_query_update_result = f"UPDATE `test_results` SET `unallocated_file_hits` = unallocated_file_hits+1 WHERE `test_results`.`id` = {id}"
-                            print(f"deleted_query_update_result:{unallocated_query_update_result}")
+                            print(f"unallocated_query_update_result:{unallocated_query_update_result}")
                             cursor.execute(unallocated_query_update_result)
 
             summary_dict[(job_id, base_test_case)]['model'] = model
@@ -263,6 +263,7 @@ def process_test_results(cursor, job_id, base_test_case):
         # summary_dict[(job_id, base_test_case)]['unalocated_similaraty_avg_percentage'] = sum(unallocated_similarity_scores) / len(unallocated_similarity_scores) if unallocated_similarity_scores else 0
         # print(summary_dict)
 
+        # cursor.close()
         return summary_dict, model
 
     except mysql.connector.Error as err:
