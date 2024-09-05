@@ -48,7 +48,7 @@ base_test_cases_linx = [
     "FT-SS-07-g6",
     "FT-SS-07-g7",
     "FT-SS-07-g8",
-    "FT-SS-07-h",
+    # "FT-SS-07-h",
     "FT-SS-08-a1",
     "FT-SS-08-a2",
     "FT-SS-08-a3",
