@@ -391,8 +391,8 @@ for job_details in jobs:
                 # Reset the reader to the start of the file for the next column
                 infile.seek(0)
                 next(csv_reader)  # Skip the header again
-                if model_to_use == 'claude-3.5-sonnet':
-                    time.sleep(15)
+                if model_to_use == 'claude-3.5-sonnet' or model_to_use == 'gpt-4o':
+                    time.sleep(20)
 
     # Run the codeGenerator.py script
     # try:
