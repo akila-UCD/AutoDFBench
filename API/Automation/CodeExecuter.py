@@ -90,9 +90,9 @@ def process_scripts(conn, base_folder, output_folder):
         conn.reconnect()
         cursor = conn.cursor(dictionary=True)
         if base_test_case_arg == 0:
-            query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s ORDER BY `prompt_codes`.`base_test_case` ASC"
+            query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and `code_execution` IS NULL ORDER BY `prompt_codes`.`base_test_case` ASC"
         else:
-            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}'"
+            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}' and `code_execution` IS NULL"
         
         cursor.execute(query, (job_id,))
         rows = cursor.fetchall()
