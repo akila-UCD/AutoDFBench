@@ -28,6 +28,9 @@ base_test_cases_linx = [
     "FT-SS-03-a",
     "FT-SS-03-b",
     "FT-SS-03-c",
+    "FT-SS-04",
+    "FT-SS-05",
+    "FT-SS-06"
     "FT-SS-07-a1",
     "FT-SS-07-a2",
     "FT-SS-07-b",
@@ -48,7 +51,7 @@ base_test_cases_linx = [
     "FT-SS-07-g6",
     "FT-SS-07-g7",
     "FT-SS-07-g8",
-    # "FT-SS-07-h",
+    "FT-SS-07-h",
     "FT-SS-08-a1",
     "FT-SS-08-a2",
     "FT-SS-08-a3",
@@ -57,7 +60,7 @@ base_test_cases_linx = [
     "FT-SS-08-b2",
     "FT-SS-08-b3",
     "FT-SS-08-b4",
-    # "FT-SS-08-c",
+    "FT-SS-08-c",
     "FT-SS-09-a1",
     "FT-SS-09-a2",
     "FT-SS-09-a3",
@@ -69,7 +72,9 @@ base_test_cases_linx = [
     "FT-SS-09-b1",
     "FT-SS-09-b2",
     "FT-SS-10-a1",
-    "FT-SS-10-a2"
+    "FT-SS-10-a2",
+    "FT-SS-10-Hex",
+    "FT-SS-09-Stem"
 ]
 
 base_test_cases_windows = [
@@ -82,6 +87,9 @@ base_test_cases_windows = [
     "FT-SS-03-a",
     "FT-SS-03-b",
     "FT-SS-03-c",
+    "FT-SS-04",
+    "FT-SS-05",
+    "FT-SS-06"
     "FT-SS-07-a1",
     "FT-SS-07-a2",
     "FT-SS-07-b",
@@ -102,7 +110,7 @@ base_test_cases_windows = [
     "FT-SS-07-g6",
     "FT-SS-07-g7",
     "FT-SS-07-g8",
-    # "FT-SS-07-h",
+    "FT-SS-07-h",
     "FT-SS-08-a1",
     "FT-SS-08-a2",
     "FT-SS-08-a3",
@@ -111,7 +119,7 @@ base_test_cases_windows = [
     "FT-SS-08-b2",
     "FT-SS-08-b3",
     "FT-SS-08-b4",
-    # "FT-SS-08-c",
+    "FT-SS-08-c",
     "FT-SS-09-a1",
     "FT-SS-09-a2",
     "FT-SS-09-a3",
@@ -120,13 +128,20 @@ base_test_cases_windows = [
     "FT-SS-09-a6",
     "FT-SS-09-a7",
     "FT-SS-09-a8",
-    "FT-SS-09-b1",
-    "FT-SS-09-b2",
+    # "FT-SS-09-b1",
+    # "FT-SS-09-b2",
     "FT-SS-09-Frag1",
     "FT-SS-09-Frag2",
-    "FT-SS-09-Lost",
+    # "FT-SS-09-Lost",
     "FT-SS-10-a1",
-    "FT-SS-10-a2"
+    "FT-SS-10-a2",
+    "FT-SS-09-Lost-a",
+    "FT-SS-09-Lost-b",
+    "FT-SS-09-Meta-a",
+    "FT-SS-09-Meta-b",
+    "FT-SS-09-Stem",
+    "FT-SS-10-Hex"
+
 ]
 
 # Function to establish a connection to the database
