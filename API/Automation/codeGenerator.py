@@ -77,7 +77,8 @@ def fetch_code_data():
              query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and `file_path` IS NULL LIMIT {take_in_test_count}"
         else:
             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and base_test_case = '{base_test_case_arg}' LIMIT {take_in_test_count}"
-        
+        print(query)
+        # os._exit(1)
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
@@ -97,6 +98,7 @@ def update_file_path_in_db(record_id, new_file_path):
     try:
         cursor = conn.cursor()
         update_query = "UPDATE prompt_codes SET file_path = %s WHERE id = %s"
+        print(update_query)
         cursor.execute(update_query, (new_file_path, record_id))
         conn.commit()
         cursor.close()
