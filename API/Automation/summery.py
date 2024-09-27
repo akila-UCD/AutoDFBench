@@ -30,7 +30,7 @@ base_test_cases_linx = [
     "FT-SS-03-c",
     "FT-SS-04",
     "FT-SS-05",
-    "FT-SS-06"
+    "FT-SS-06",
     "FT-SS-07-a1",
     "FT-SS-07-a2",
     "FT-SS-07-b",
@@ -89,7 +89,7 @@ base_test_cases_windows = [
     "FT-SS-03-c",
     "FT-SS-04",
     "FT-SS-05",
-    "FT-SS-06"
+    "FT-SS-06",
     "FT-SS-07-a1",
     "FT-SS-07-a2",
     "FT-SS-07-b",
