@@ -74,9 +74,9 @@ def fetch_code_data():
             take_in_test_count = row["take_in_test_count"]
 
         if base_test_case_arg == 0:
-             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and `file_path` IS NULL LIMIT {take_in_test_count}"
+             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and `file_path` IS NULL"
         else:
-            query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and base_test_case = '{base_test_case_arg}' LIMIT {take_in_test_count}"
+            query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and base_test_case = '{base_test_case_arg}'"
         print(query)
         # os._exit(1)
         cursor.execute(query)

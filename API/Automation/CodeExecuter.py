@@ -84,17 +84,43 @@ def create_subfolder(file_path, base_folder):
     else:
         return base_folder
 
-# Function to process the paths from the database and execute scripts
-def process_scripts(conn, base_folder, output_folder):
+def get_job_data(conn):
+
+    if conn is None:
+        return []
+    
     try:
         conn.reconnect()
         cursor = conn.cursor(dictionary=True)
+        query = f"SELECT * FROM job WHERE id = '{job_id}'"
+       
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return result
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
+
+# Function to process the paths from the database and execute scripts
+def process_scripts(conn, base_folder, output_folder):
+    try:  
+        jobData = get_job_data(conn)
+        for row in jobData:
+            take_in_test_count = row["take_in_test_count"]
+
+        conn.reconnect()
+        cursor = conn.cursor(dictionary=True)
+       
+
         if base_test_case_arg == 0:
-            query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and `code_execution` IS NULL ORDER BY `prompt_codes`.`base_test_case` ASC"
+            query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and `code_execution` IS NULL ORDER BY `prompt_codes`.`base_test_case` ASC LIMIT %s"
         else:
-            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}' and `code_execution` IS NULL"
+            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}' and `code_execution` IS NULL LIMIT '{take_in_test_count}'"
         
-        cursor.execute(query, (job_id,))
+        cursor.execute(query, (job_id,take_in_test_count))
         rows = cursor.fetchall()
 
         for row in rows:
