@@ -30,6 +30,26 @@ def get_db_connection():
     except mysql.connector.Error as err:
         print(f"Error: {err}")
         return None
+    
+
+def get_job_data():
+    conn = get_db_connection()
+    if conn is None:
+        return []
+    
+    try:
+        cursor = conn.cursor(dictionary=True)
+        query = f"SELECT * FROM job WHERE id = '{job_id}'"
+       
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        return result
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+        return []
 
 # Function to determine the type of code and return the appropriate file extension
 def get_file_extension(code):
@@ -49,10 +69,14 @@ def fetch_code_data():
     try:
         cursor = conn.cursor(dictionary=True)
         # Fetch data from the prompt_codes table
+        jobData = get_job_data()
+        for row in jobData:
+            take_in_test_count = row["take_in_test_count"]
+
         if base_test_case_arg == 0:
-             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and `file_path` IS NULL "
+             query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and `file_path` IS NULL LIMIT {take_in_test_count}"
         else:
-            query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and base_test_case = '{base_test_case_arg}'"
+            query = f"SELECT * FROM prompt_codes WHERE job_id = '{job_id}' and base_test_case = '{base_test_case_arg}' LIMIT {take_in_test_count}"
         
         cursor.execute(query)
         result = cursor.fetchall()
