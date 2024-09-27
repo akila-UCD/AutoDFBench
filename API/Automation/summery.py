@@ -188,7 +188,7 @@ def process_test_results(cursor, job_id, base_test_case):
         cursor.execute(query_error_count, (job_id, f'%{base_test_case}', take_in_count))
         code_error_count = cursor.fetchone()[0]
 
-        cursor.execute(query, (job_id, f'%{base_test_case}'))
+        cursor.execute(query, (job_id, f'%{base_test_case}'), take_in_count)
         rows = cursor.fetchall()
 
         summary_dict = {}
