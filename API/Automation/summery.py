@@ -170,10 +170,13 @@ def get_job_details(cursor):
 # Function to fetch and process results for a given job_id and base_test_case
 def process_test_results(cursor, job_id, base_test_case):
     try:
+
+        job_data = get_job_details(cursor)
+        take_in_count = job_data[1]
         query = """
             SELECT job_id, base_test_case, testCase, results, error, model, id
             FROM test_results
-            WHERE job_id = %s AND base_test_case like %s
+            WHERE job_id = %s AND base_test_case like %s LIMIT %s
         """
         query_code_exec_count = """SELECT count(*) as code_execution_count FROM `test_results` 
                                 WHERE job_id = %s AND base_test_case like %s AND error = '';"""
@@ -182,7 +185,7 @@ def process_test_results(cursor, job_id, base_test_case):
 
         query_error_count = """SELECT count(*) as error_count FROM `test_results` 
                                 WHERE job_id = %s AND base_test_case like %s AND error != '';"""
-        cursor.execute(query_error_count, (job_id, f'%{base_test_case}'))
+        cursor.execute(query_error_count, (job_id, f'%{base_test_case}', take_in_count))
         code_error_count = cursor.fetchone()[0]
 
         cursor.execute(query, (job_id, f'%{base_test_case}'))

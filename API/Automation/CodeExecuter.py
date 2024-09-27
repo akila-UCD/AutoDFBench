@@ -116,11 +116,11 @@ def process_scripts(conn, base_folder, output_folder):
        
 
         if base_test_case_arg == 0:
-            query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and `code_execution` IS NULL ORDER BY `prompt_codes`.`base_test_case` ASC LIMIT %s"
+            query = "SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and `code_execution` IS NULL ORDER BY `prompt_codes`.`base_test_case` ASC"
         else:
-            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}' and `code_execution` IS NULL LIMIT '{take_in_test_count}'"
+            query = f"SELECT file_path, script_type, model, id FROM prompt_codes WHERE job_id = %s and base_test_case = '{base_test_case_arg}' and `code_execution` IS NULL"
         
-        cursor.execute(query, (job_id,take_in_test_count))
+        cursor.execute(query, (job_id,))
         rows = cursor.fetchall()
 
         for row in rows:
