@@ -74,7 +74,10 @@ base_test_cases_linx = [
     "FT-SS-10-a1",
     "FT-SS-10-a2",
     "FT-SS-10-Hex",
-    "FT-SS-09-Stem"
+    "FT-SS-09-Stem",
+    "FT-SS-09-Stem-steal",
+    "FT-SS-09-Stem-city",
+    "FT-SS-09-Stem-plan"
 ]
 
 base_test_cases_windows = [
@@ -140,7 +143,10 @@ base_test_cases_windows = [
     "FT-SS-09-Meta-a",
     "FT-SS-09-Meta-b",
     "FT-SS-09-Stem",
-    "FT-SS-10-Hex"
+    "FT-SS-10-Hex",
+    "FT-SS-09-Stem-steal",
+    "FT-SS-09-Stem-city",
+    "FT-SS-09-Stem-plan"
 
 ]
 
