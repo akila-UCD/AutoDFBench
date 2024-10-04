@@ -362,7 +362,8 @@ import re
 
 def string_similarity(str1, str2):
     # Define the regex pattern to find the 4-digit number followed by '<'
-    pattern = r'\b\d{4}\s<'
+    # pattern = r'\b\d{4}\s<'
+    pattern = r'\b\d{4}<'
     
     # Search for the pattern in both strings
     match1 = re.search(pattern, str1)
