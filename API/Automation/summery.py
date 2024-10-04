@@ -242,7 +242,7 @@ def process_test_results(cursor, job_id, base_test_case):
                         summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
 
                 # print(f"SPLITS:{line2}")
-                if 'deleted' in line and 'deleted' in ground_truth:
+                if 'deleted' in line:
                     for str_line in ground_truth['deleted']:
                         similarity = string_similarity(str_line, line2)
                         # deleted_similarity_scores.append(similarity)
@@ -252,7 +252,7 @@ def process_test_results(cursor, job_id, base_test_case):
                             print(f"deleted_query_update_result:{deleted_query_update_result}")
                             cursor.execute(deleted_query_update_result)
                             
-                elif 'active' in line and 'active' in ground_truth:
+                elif 'active' in line:
                     for str_line in ground_truth['active']:
                         similarity = string_similarity(str_line, line2)
                         # active_similarity_scores.append(similarity)
@@ -262,7 +262,7 @@ def process_test_results(cursor, job_id, base_test_case):
                             print(f"active_query_update_result:{active_query_update_result}")
                             cursor.execute(active_query_update_result)
 
-                elif 'unallocated' in line and 'unallocated' in ground_truth:
+                elif 'unallocated' in line:
                     for str_line in ground_truth['unallocated']:
                         similarity = string_similarity(str_line, line2)
                         # unallocated_similarity_scores.append(similarity)
@@ -316,7 +316,7 @@ def checkGroundTruth(cursor, base_test):
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
 
-        # print(result_dict)
+        print(result_dict)
         return result_dict, lines
     
     except mysql.connector.Error as err:
