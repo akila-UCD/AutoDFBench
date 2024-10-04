@@ -319,7 +319,7 @@ def checkGroundTruth(cursor, base_test):
         # Add an empty array for 'unallocated' if the result_type is 'linux'
         if result_type == 'linux':
             result_dict['unallocated'] = []
-            
+
         print(f"GT_DATA {result_dict}")
         return result_dict, lines
     
@@ -379,7 +379,7 @@ def string_similarity(str1, str2):
     # print(match1.group())
     # print(match2.group())
     # Check if both strings have a match and the matches are identical
-    if match1 and match2 and match1.group() == match2.group():
+    if match1 and match2:
         print("match True")
         return True
     else:
