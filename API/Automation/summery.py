@@ -316,6 +316,8 @@ def checkGroundTruth(cursor, base_test):
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
 
+        if result_type == 'linux':
+            result_dict['unallocated'] = []
         print(result_dict)
         return result_dict, lines
     
