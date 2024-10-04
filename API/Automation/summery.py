@@ -362,25 +362,19 @@ def upsert_summary_results(cursor, summary_dict, model):
 
 import re
 
-def string_similarity(str1, str2):
-    # Define the regex pattern to find the 4-digit number followed by '<'
-    pattern = r'\b\d{4}\s<'
+def string_similarity(number, str2):
+    # Define the regex pattern to find the 4-digit number anywhere in the string
+    pattern = rf'\b{re.escape(number)}\b'
     
-    # Search for the pattern in both strings
-    match1 = re.search(pattern, str1)
-    # print(f"{str1, match1}")
-    match2 = re.search(pattern, str2)
+    # Search for the number in the second string
+    match = re.search(pattern, str2)
     
-    # print(f"{str1 , str2}")
-
-    # print(match1.group())
-    # print(match2.group())
-    # Check if both strings have a match and the matches are identical
-    if match1 and match2 :
-        print("match True")
+    # Check if the number is found in str2
+    if match:
+        print("Match True")
         return True
     else:
-        # print("match False")
+        print("Match False")
         return False
 
 # Main function
