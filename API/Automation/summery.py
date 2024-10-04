@@ -283,7 +283,7 @@ def process_test_results(cursor, job_id, base_test_case):
                                     print(f"unallocated_query_update_result:{unallocated_query_update_result}")
                                     cursor.execute(unallocated_query_update_result)
 
-        summary_dict[(job_id, base_test_case)]['model'] = model
+            summary_dict[(job_id, base_test_case)]['model'] = model
 
         summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
         summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
