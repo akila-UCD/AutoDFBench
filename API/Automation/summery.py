@@ -244,7 +244,7 @@ def process_test_results(cursor, job_id, base_test_case):
                 # print(f"SPLITS:{line2}")
                 if 'deleted' in line:
                     for str_line in ground_truth['deleted']:
-                        similarity = string_similarity(str_line, line2)
+                        similarity = string_similarity(str_line, line)
                         # deleted_similarity_scores.append(similarity)
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
@@ -254,7 +254,7 @@ def process_test_results(cursor, job_id, base_test_case):
                             
                 elif 'active' in line:
                     for str_line in ground_truth['active']:
-                        similarity = string_similarity(str_line, line2)
+                        similarity = string_similarity(str_line, line)
                         # active_similarity_scores.append(similarity)
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['active_count'] += 1
@@ -264,7 +264,7 @@ def process_test_results(cursor, job_id, base_test_case):
 
                 elif 'unallocated' in line:
                     for str_line in ground_truth['unallocated']:
-                        similarity = string_similarity(str_line, line2)
+                        similarity = string_similarity(str_line, line)
                         # unallocated_similarity_scores.append(similarity)
                         if similarity == True:
                             summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
