@@ -316,6 +316,10 @@ def checkGroundTruth(cursor, base_test):
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
 
+        # Add an empty array for 'unallocated' if the result_type is 'linux'
+        if result_type == 'linux':
+            result_dict['unallocated'] = []
+            
         print(f"GT_DATA {result_dict}")
         return result_dict, lines
     
