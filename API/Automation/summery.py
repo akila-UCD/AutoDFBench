@@ -308,6 +308,9 @@ def checkGroundTruth(cursor, base_test):
         cursor.execute(query, (result_type,f'%{base_test}',))
         rows = cursor.fetchall()
         result_dict = {}
+        result_dict['active'] = []
+        result_dict['deleted'] = []
+        result_dict['unallocated'] = []
         lines = []
         for row in rows:
             file_line, type_str = row
@@ -316,8 +319,8 @@ def checkGroundTruth(cursor, base_test):
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
 
-        if result_type == 'linux':
-            result_dict['unallocated'] = []
+        # if result_type == 'linux':
+        #     result_dict['unallocated'] = []
         print(result_dict)
         return result_dict, lines
     
@@ -374,7 +377,7 @@ def string_similarity(number, str2):
         print("Match True")
         return True
     else:
-        print("Match False")
+        # print("Match False")
         return False
 
 # Main function
