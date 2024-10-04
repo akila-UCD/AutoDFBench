@@ -225,7 +225,7 @@ def process_test_results(cursor, job_id, base_test_case):
 
             ground_truth, all_autopsy_rows = checkGroundTruth(cursor, base_test_case)
             # print(f"all_autopsy_rows:{all_autopsy_rows}")
-    
+
             for line in results.split('\n'):
                 # print(f"RESULTS:{results}")
                 line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
@@ -242,32 +242,32 @@ def process_test_results(cursor, job_id, base_test_case):
                         summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
 
                 # print(f"SPLITS:{line2}")
-                if 'deleted' in line:
+                if 'deleted' in line and 'deleted' in ground_truth:
                     for str_line in ground_truth['deleted']:
                         similarity = string_similarity(str_line, line2)
                         # deleted_similarity_scores.append(similarity)
                         if similarity == True:
-                            # summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
+                            summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
                             deleted_query_update_result = f"UPDATE `test_results` SET `deleted_files_hits` = deleted_files_hits+1 WHERE `test_results`.`id` = {id}"
                             print(f"deleted_query_update_result:{deleted_query_update_result}")
                             cursor.execute(deleted_query_update_result)
                             
-                elif 'active' in line:
+                elif 'active' in line and 'active' in ground_truth:
                     for str_line in ground_truth['active']:
                         similarity = string_similarity(str_line, line2)
                         # active_similarity_scores.append(similarity)
                         if similarity == True:
-                            # summary_dict[(job_id, base_test_case)]['active_count'] += 1
+                            summary_dict[(job_id, base_test_case)]['active_count'] += 1
                             active_query_update_result = f"UPDATE `test_results` SET `active_file_hits` = active_file_hits+1 WHERE `test_results`.`id` = {id}"
                             print(f"active_query_update_result:{active_query_update_result}")
                             cursor.execute(active_query_update_result)
 
-                elif 'unallocated' in line:
+                elif 'unallocated' in line and 'unallocated' in ground_truth:
                     for str_line in ground_truth['unallocated']:
                         similarity = string_similarity(str_line, line2)
                         # unallocated_similarity_scores.append(similarity)
                         if similarity == True:
-                            # summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
+                            summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
                             unallocated_query_update_result = f"UPDATE `test_results` SET `unallocated_file_hits` = unallocated_file_hits+1 WHERE `test_results`.`id` = {id}"
                             print(f"unallocated_query_update_result:{unallocated_query_update_result}")
                             cursor.execute(unallocated_query_update_result)
@@ -316,11 +316,7 @@ def checkGroundTruth(cursor, base_test):
                 result_dict[type_str] = []  # Initialize a list if the key does not exist
             result_dict[type_str].append(file_line)  # Append the file_line to the list
 
-        # Add an empty array for 'unallocated' if the result_type is 'linux'
-        if result_type == 'linux':
-            result_dict['unallocated'] = []
-
-        print(f"GT_DATA {result_dict}")
+        # print(result_dict)
         return result_dict, lines
     
     except mysql.connector.Error as err:
@@ -366,20 +362,19 @@ import re
 
 def string_similarity(str1, str2):
     # Define the regex pattern to find the 4-digit number followed by '<'
-    # pattern = r'\b\d{4}\s<'
-    pattern = r'\b\d{4}\b'
+    pattern = r'\b\d{4}\s<'
     
     # Search for the pattern in both strings
     match1 = re.search(pattern, str1)
-    print(f"{str1, match1}")
+    # print(f"{str1, match1}")
     match2 = re.search(pattern, str2)
     
-    print(f"{str1 , str2}")
+    # print(f"{str1 , str2}")
 
     # print(match1.group())
     # print(match2.group())
     # Check if both strings have a match and the matches are identical
-    if match1 and match2:
+    if match1 and match2 :
         print("match True")
         return True
     else:
@@ -409,8 +404,8 @@ def main(job_id):
 
     for base_test_case in base_test_cases:
         summary_dict, model = process_test_results(cursor, job_id, base_test_case)
-        # if summary_dict:
-        #     upsert_summary_results(cursor, summary_dict, model)
+        if summary_dict:
+            upsert_summary_results(cursor, summary_dict, model)
 
     conn.commit()
     cursor.close()
