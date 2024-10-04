@@ -223,7 +223,7 @@ def process_test_results(cursor, job_id, base_test_case):
                     'model': model
                 }
 
-            autopsy_results, all_autopsy_rows = checkGroundTruth(cursor, base_test_case)
+            ground_truth, all_autopsy_rows = checkGroundTruth(cursor, base_test_case)
             # print(f"all_autopsy_rows:{all_autopsy_rows}")
 
             for line in results.split('\n'):
@@ -242,8 +242,8 @@ def process_test_results(cursor, job_id, base_test_case):
                         summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
 
                 # print(f"SPLITS:{line2}")
-                if 'deleted' in line and 'deleted' in autopsy_results:
-                    for str_line in autopsy_results['deleted']:
+                if 'deleted' in line and 'deleted' in ground_truth:
+                    for str_line in ground_truth['deleted']:
                         similarity = string_similarity(str_line, line2)
                         # deleted_similarity_scores.append(similarity)
                         if similarity == True:
@@ -252,8 +252,8 @@ def process_test_results(cursor, job_id, base_test_case):
                             print(f"deleted_query_update_result:{deleted_query_update_result}")
                             cursor.execute(deleted_query_update_result)
                             
-                elif 'active' in line and 'active' in autopsy_results:
-                    for str_line in autopsy_results['active']:
+                elif 'active' in line and 'active' in ground_truth:
+                    for str_line in ground_truth['active']:
                         similarity = string_similarity(str_line, line2)
                         # active_similarity_scores.append(similarity)
                         if similarity == True:
@@ -262,8 +262,8 @@ def process_test_results(cursor, job_id, base_test_case):
                             print(f"active_query_update_result:{active_query_update_result}")
                             cursor.execute(active_query_update_result)
 
-                elif 'unallocated' in line and 'unallocated' in autopsy_results:
-                    for str_line in autopsy_results['unallocated']:
+                elif 'unallocated' in line and 'unallocated' in ground_truth:
+                    for str_line in ground_truth['unallocated']:
                         similarity = string_similarity(str_line, line2)
                         # unallocated_similarity_scores.append(similarity)
                         if similarity == True:
@@ -303,7 +303,7 @@ def checkGroundTruth(cursor, base_test):
             result_type = 'windows'
 
         query = """
-            SELECT file_line, CAST(type AS CHAR) as string_value FROM `autopsy_results` where os = %s AND base_test_case like %s
+            SELECT file_line, CAST(type AS CHAR) as string_value FROM `ground_truth` where os = %s AND base_test_case like %s
         """
         cursor.execute(query, (result_type,f'%{base_test}',))
         rows = cursor.fetchall()
