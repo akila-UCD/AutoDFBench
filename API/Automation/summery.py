@@ -300,7 +300,7 @@ def checkGroundTruth(cursor, base_test):
         if job_data[3] == 'windows_disk_path':
             result_type = 'windows'
         else:
-            result_type = 'windows'
+            result_type = 'linux'
 
         query = """
             SELECT file_line, CAST(type AS CHAR) as string_value FROM `ground_truth` where os = %s AND base_test_case like %s
