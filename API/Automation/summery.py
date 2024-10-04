@@ -225,54 +225,65 @@ def process_test_results(cursor, job_id, base_test_case):
 
             ground_truth, all_autopsy_rows = checkGroundTruth(cursor, base_test_case)
             # print(f"all_autopsy_rows:{all_autopsy_rows}")
+            for one_test_result in results:
+                one_test_result
+                query_one_row = """
+                            SELECT job_id, base_test_case, testCase, results, error, model, id
+                            FROM test_results
+                            WHERE job_id = %s
+                        """
+                cursor.execute(query_one_row, (job_id, f'%{id}'))
+                rows = cursor.fetchall()
+                for index, row in enumerate(rows):
+                    _, _, _, row_results, error, model, id = row
 
-            for line in results.split('\n'):
-                # print(f"RESULTS:{results}")
-                line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
-                # print(f"LINE:{line}")
-                # print(f"LINE2:{line2}")
-                # os._exit(1)
-               
-                for any_str_line in all_autopsy_rows:
-                    # print(f"any_str_line: {any_str_line}")
-                    # combined_string = ' '.join(line)
-                    # print(f"string_line_from_result: {line.strip()}")
-                    any_similarity = string_similarity(any_str_line, line.strip())
-                    if any_similarity == True:
-                        summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
+                    for line in row_results.split('\n'):
+                        # print(f"RESULTS:{results}")
+                        # line2 = line.split(",")[1] if len(line.split(",")) > 2 else ''
+                        # print(f"LINE:{line}")
+                        # print(f"LINE2:{line2}")
+                        # os._exit(1)
+                    
+                        for any_str_line in all_autopsy_rows:
+                            # print(f"any_str_line: {any_str_line}")
+                            # combined_string = ' '.join(line)
+                            # print(f"string_line_from_result: {line.strip()}")
+                            any_similarity = string_similarity(any_str_line, line.strip())
+                            if any_similarity == True:
+                                summary_dict[(job_id, base_test_case)]['keywords_found_any_location'] += 1
 
-                # print(f"SPLITS:{line2}")
-                if 'deleted' in line:
-                    for str_line in ground_truth['deleted']:
-                        similarity = string_similarity(str_line, line2)
-                        # deleted_similarity_scores.append(similarity)
-                        if similarity == True:
-                            summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
-                            deleted_query_update_result = f"UPDATE `test_results` SET `deleted_files_hits` = deleted_files_hits+1 WHERE `test_results`.`id` = {id}"
-                            print(f"deleted_query_update_result:{deleted_query_update_result}")
-                            cursor.execute(deleted_query_update_result)
-                            
-                elif 'active' in line:
-                    for str_line in ground_truth['active']:
-                        similarity = string_similarity(str_line, line2)
-                        # active_similarity_scores.append(similarity)
-                        if similarity == True:
-                            summary_dict[(job_id, base_test_case)]['active_count'] += 1
-                            active_query_update_result = f"UPDATE `test_results` SET `active_file_hits` = active_file_hits+1 WHERE `test_results`.`id` = {id}"
-                            print(f"active_query_update_result:{active_query_update_result}")
-                            cursor.execute(active_query_update_result)
+                        # print(f"SPLITS:{line2}")
+                        if 'deleted' in line:
+                            for str_line in ground_truth['deleted']:
+                                similarity = string_similarity(str_line, line)
+                                # deleted_similarity_scores.append(similarity)
+                                if similarity == True:
+                                    summary_dict[(job_id, base_test_case)]['deleted_count'] += 1
+                                    deleted_query_update_result = f"UPDATE `test_results` SET `deleted_files_hits` = deleted_files_hits+1 WHERE `test_results`.`id` = {id}"
+                                    print(f"deleted_query_update_result:{deleted_query_update_result}")
+                                    cursor.execute(deleted_query_update_result)
+                                    
+                        elif 'active' in line:
+                            for str_line in ground_truth['active']:
+                                similarity = string_similarity(str_line, line1)
+                                # active_similarity_scores.append(similarity)
+                                if similarity == True:
+                                    summary_dict[(job_id, base_test_case)]['active_count'] += 1
+                                    active_query_update_result = f"UPDATE `test_results` SET `active_file_hits` = active_file_hits+1 WHERE `test_results`.`id` = {id}"
+                                    print(f"active_query_update_result:{active_query_update_result}")
+                                    cursor.execute(active_query_update_result)
 
-                elif 'unallocated' in line:
-                    for str_line in ground_truth['unallocated']:
-                        similarity = string_similarity(str_line, line2)
-                        # unallocated_similarity_scores.append(similarity)
-                        if similarity == True:
-                            summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
-                            unallocated_query_update_result = f"UPDATE `test_results` SET `unallocated_file_hits` = unallocated_file_hits+1 WHERE `test_results`.`id` = {id}"
-                            print(f"unallocated_query_update_result:{unallocated_query_update_result}")
-                            cursor.execute(unallocated_query_update_result)
+                        elif 'unallocated' in line:
+                            for str_line in ground_truth['unallocated']:
+                                similarity = string_similarity(str_line, line)
+                                # unallocated_similarity_scores.append(similarity)
+                                if similarity == True:
+                                    summary_dict[(job_id, base_test_case)]['unallocated_count'] += 1
+                                    unallocated_query_update_result = f"UPDATE `test_results` SET `unallocated_file_hits` = unallocated_file_hits+1 WHERE `test_results`.`id` = {id}"
+                                    print(f"unallocated_query_update_result:{unallocated_query_update_result}")
+                                    cursor.execute(unallocated_query_update_result)
 
-            summary_dict[(job_id, base_test_case)]['model'] = model
+        summary_dict[(job_id, base_test_case)]['model'] = model
 
         summary_dict[(job_id, base_test_case)]['code_execution_count'] = code_exec_count
         summary_dict[(job_id, base_test_case)]['errors_count'] = code_error_count
