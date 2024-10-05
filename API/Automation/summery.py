@@ -396,6 +396,10 @@ def main(job_id):
     cursor.execute(deldupQuery)
 
     job_data = get_job_details(cursor)
+    
+    resetQuery = f"UPDATE `test_results` SET `active_file_hits` = '0', `deleted_files_hits` = '0', `unallocated_file_hits` = '0' WHERE `job_id` = {job_id};"
+    cursor.execute(resetQuery)
+   
     if job_data[3] == 'windows_disk_path':
         base_test_cases = base_test_cases_windows
     else:
