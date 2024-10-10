@@ -380,6 +380,144 @@ def string_similarity(number, str2):
         # print("Match False")
         return False
 
+def calScoreCal(job_id):
+    conn = get_db_connection()
+    if conn is None:
+        print("Failed to connect to the database.")
+        return
+
+    cursor = conn.cursor()
+    # job_id = 100
+    job_data = get_job_details(cursor)
+    if job_data[3] == 'windows_disk_path':
+        ops = 'windows'
+    else:
+        ops = 'linux'
+
+    q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id}"
+    cursor.execute(q_fetch_results)
+    rows = cursor.fetchall()
+    result_ary = {}
+    for row in rows:
+        r_id = row[0]
+        r_base_test_case = extract_test_case(row[1])
+        # print(r_base_test_case)
+        r_results = row[2]
+        
+        types = ['active','deleted','unallocated']
+        total_tp_count = 0
+        total_fp_count = 0
+        total_fn_count = 0
+
+        for type in types:
+            q_fn = f"SELECT type,file_line FROM `ground_truth` WHERE `base_test_case` LIKE '%{r_base_test_case}%' AND `type` != '{type}' AND `os` = '{ops}' ORDER BY `base_test_case` ASC;"
+            cursor.execute(q_fn)
+            rows_fn = cursor.fetchall()
+
+        q_fp = f"SELECT type,file_line FROM `ground_truth` WHERE `base_test_case` LIKE '%{r_base_test_case}%' AND `os` = '{ops}' ORDER BY `base_test_case` ASC"
+        cursor.execute(q_fp)
+        rows_fp = cursor.fetchall()
+        fp_ary = []
+        for row_fp in rows_fp:
+            fp_ary.append(row_fp)
+            
+        true_positives, false_positives, false_negatives = count_true_false_positives_negatives(r_results, fp_ary, rows_fn,type)
+
+        total_tp_count += true_positives
+        total_fp_count += false_positives
+        total_fn_count += false_negatives
+
+        print(f"total_tp_count: {total_tp_count}")
+        print(f"total_fp_count: {total_fp_count}")
+        print(f"total_fn_count: {total_fn_count}")
+
+        if total_tp_count + total_fp_count == 0:
+            precision = 0
+        else:
+            precision = total_tp_count / (total_tp_count + total_fp_count)
+
+        if total_tp_count+total_fn_count == 0:
+            recall = 0
+        else:
+            recall = total_tp_count/ (total_tp_count+total_fn_count)
+
+        if precision + recall == 0:
+            f1 = 0
+        else:
+            f1 = 2 * ((precision * recall) / (precision + recall))
+        print(f"precision: {precision}")
+        print(f"recall: {recall}")
+        print(f"f1: {f1}")
+
+        q_update = f"UPDATE `test_results` SET `TP` = '{total_tp_count}', `FP` = '{total_fp_count}', `FN` = '{total_fn_count}', `precision` = '{precision}', `recall` = '{recall}', `F1` = '{f1}' WHERE `test_results`.`id` = {r_id};"
+        cursor.execute(q_update)
+        print(f"updated: {r_id}")
+
+    conn.commit()
+
+            
+
+
+def count_true_false_positives_negatives(text, array, fn_ary,status):
+
+    lines = text.splitlines()
+
+    # First regex pattern to check for status in angle brackets
+    pattern_brackets = r"(\d{4})[^0-9]*?<([a-zA-Z]+)>"
+    # Second regex pattern to capture the last word if no match is found
+    pattern_last_word = r"(\d{4})[^0-9]*?(\w+)\s*$"
+
+    matched_set = set()
+
+    for line in lines:
+
+        matches = re.findall(pattern_brackets, line)
+        print(f"Matches with brackets: {matches}") 
+        
+        if matches:
+            matched_set.update((status.lower(), string_id) for string_id, status in matches)
+        else:
+
+            matches = re.findall(pattern_last_word, line)
+            print(f"Matches with last word: {matches}") 
+            
+            if matches:
+                matched_set.update((last_word.lower(), string_id) for string_id, last_word in matches)
+
+    print("Final Matches:", matched_set) 
+
+    true_positive_count = 0
+    false_positive_count = 0
+    false_negative_count = 0
+    
+    # Count true positives, false positives, and false negatives
+    for status, str_id in matched_set:
+        if (status, str_id) in array:
+            true_positive_count += 1
+        elif (status, str_id) in fn_ary: 
+            false_negative_count += 1
+        else: 
+            false_positive_count += 1
+
+    # Check for false negatives
+    for status, str_id in fn_ary:
+        if (status, str_id) in array:
+            if (status.lower(), str_id) not in matched_set:
+                false_negative_count += 1
+
+    return true_positive_count, false_positive_count, false_negative_count
+        
+
+    
+
+def extract_test_case(text):
+
+    parts = text.split('_')
+
+    return parts[2]
+
+
+
 # Main function
 def main(job_id):
     conn = get_db_connection()
@@ -419,4 +557,5 @@ if __name__ == "__main__":
         print("Usage: python script.py <job_id>")
     else:
         job_id = sys.argv[1]
-        main(job_id)
+        # main(job_id)
+        calScoreCal(job_id)
