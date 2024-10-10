@@ -444,7 +444,7 @@ def calScoreCal(job_id):
         if precision + recall == 0:
             f1 = 0
         else:
-            f1 = 2 * ((precision * recall) / (precision + recall))
+            f1 =  (2* (precision * recall)) / (precision + recall)
         print(f"precision: {precision}")
         print(f"recall: {recall}")
         print(f"f1: {f1}")
