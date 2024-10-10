@@ -516,6 +516,19 @@ def extract_test_case(text):
 
     return parts[2]
 
+def cal():
+    conn = get_db_connection()
+    if conn is None:
+        print("Failed to connect to the database.")
+        return
+    cursor = conn.cursor()
+    q_job = f"SELECT id FROM `job` where version = 17;"
+    cursor.execute(q_job)
+    rows_jobs = cursor.fetchall()
+    for job in rows_jobs:
+        global job_id
+        job_id = job[0]
+        calScoreCal(job_id)
 
 
 # Main function
@@ -554,8 +567,12 @@ def main(job_id):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
+        cal()
+        print("Runing cal")
         print("Usage: python script.py <job_id>")
+        
     else:
         job_id = sys.argv[1]
-        # main(job_id)
-        calScoreCal(job_id)
+        main(job_id)
+
+        
