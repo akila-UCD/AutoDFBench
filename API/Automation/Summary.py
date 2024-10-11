@@ -462,7 +462,8 @@ def calScoreCal(job_id):
 def count_true_false_positives_negatives(text, array, fn_ary,status):
 
     lines = text.splitlines()
-
+    print(text)
+    print(array)
     # First regex pattern to check for status in angle brackets
     pattern_brackets = r"(\d{4})[^0-9]*?<([a-zA-Z]+)>"
     # Second regex pattern to capture the last word if no match is found
