@@ -402,7 +402,7 @@ def calScoreCal(job_id):
     for row in rows:
         r_id = row[0]
         r_base_test_case = extract_test_case(row[1])
-        print(r_base_test_case)
+        print(f"r_base_test_case{r_base_test_case}")
         r_results = row[2]
         
         types = ['active','deleted','unallocated']
@@ -414,7 +414,7 @@ def calScoreCal(job_id):
             q_fn = f"SELECT type,file_line FROM `ground_truth` WHERE `base_test_case` LIKE '%{r_base_test_case}%' AND `type` != '{type}' AND `os` = '{ops}' ORDER BY `base_test_case` ASC;"
             cursor.execute(q_fn)
             rows_fn = cursor.fetchall()
-
+        print(r_base_test_case)
         q_fp = f"SELECT type,file_line FROM `ground_truth` WHERE `base_test_case` LIKE '%{r_base_test_case}%' AND `os` = '{ops}' ORDER BY `base_test_case` ASC"
         cursor.execute(q_fp)
         rows_fp = cursor.fetchall()
@@ -517,10 +517,8 @@ def count_true_false_positives_negatives(text, array, fn_ary,status):
     
 
 def extract_test_case(text):
-
-    parts = text.split('_')
-
-    return parts[2]
+    parts = text.rsplit('_', 1)  # Split from the right, at the last underscore
+    return parts[1]  # Return the part after the last underscore
 
 def cal():
     conn = get_db_connection()
