@@ -394,7 +394,8 @@ def calScoreCal(job_id):
     else:
         ops = 'linux'
 
-    q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id} and score_cal_status = 0;"
+    # q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id} and score_cal_status = 0;"
+    q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `id` = 19979"
     cursor.execute(q_fetch_results)
     rows = cursor.fetchall()
     result_ary = {}
@@ -485,6 +486,8 @@ def count_true_false_positives_negatives(text, array, fn_ary,status):
                 matched_set.update((last_word.lower(), string_id) for string_id, last_word in matches)
 
     print("Final Matches:", matched_set) 
+    print("status:", matched_set) 
+    # os._exit(1)
 
     true_positive_count = 0
     false_positive_count = 0
@@ -504,7 +507,8 @@ def count_true_false_positives_negatives(text, array, fn_ary,status):
         if (status, str_id) in array:
             if (status.lower(), str_id) not in matched_set:
                 false_negative_count += 1
-
+    print("true_positive_count:", true_positive_count) 
+    os._exit(1)
     return true_positive_count, false_positive_count, false_negative_count
         
 
