@@ -402,7 +402,7 @@ def calScoreCal(job_id):
     for row in rows:
         r_id = row[0]
         r_base_test_case = extract_test_case(row[1])
-        # print(r_base_test_case)
+        print(r_base_test_case)
         r_results = row[2]
         
         types = ['active','deleted','unallocated']
@@ -421,6 +421,7 @@ def calScoreCal(job_id):
         fp_ary = []
         for row_fp in rows_fp:
             fp_ary.append(row_fp)
+        print(fp_ary)
             
         true_positives, false_positives, false_negatives = count_true_false_positives_negatives(r_results, fp_ary, rows_fn,type)
 
