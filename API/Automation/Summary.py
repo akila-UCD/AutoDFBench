@@ -394,7 +394,7 @@ def calScoreCal(job_id):
     else:
         ops = 'linux'
 
-    q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id}"
+    q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id} and score_cal_status = 0;"
     cursor.execute(q_fetch_results)
     rows = cursor.fetchall()
     result_ary = {}
@@ -449,7 +449,7 @@ def calScoreCal(job_id):
         print(f"recall: {recall}")
         print(f"f1: {f1}")
 
-        q_update = f"UPDATE `test_results` SET `TP` = '{total_tp_count}', `FP` = '{total_fp_count}', `FN` = '{total_fn_count}', `precision` = '{precision}', `recall` = '{recall}', `F1` = '{f1}' WHERE `test_results`.`id` = {r_id};"
+        q_update = f"UPDATE `test_results` SET `TP` = '{total_tp_count}', `FP` = '{total_fp_count}', `FN` = '{total_fn_count}', `precision` = '{precision}', `recall` = '{recall}', `F1` = '{f1}', `score_cal_status` = '0' WHERE `test_results`.`id` = {r_id};"
         cursor.execute(q_update)
         print(f"updated: {r_id}")
 
@@ -548,7 +548,7 @@ def main(job_id):
 
     job_data = get_job_details(cursor)
     
-    resetQuery = f"UPDATE `test_results` SET `active_file_hits` = '0', `deleted_files_hits` = '0', `unallocated_file_hits` = '0' WHERE `job_id` = {job_id};"
+    resetQuery = f"UPDATE `test_results` SET `active_file_hits` = '0', `deleted_files_hits` = '0', `unallocated_file_hits` = '0' WHERE `job_id` = {job_id}; "
     cursor.execute(resetQuery)
    
     if job_data[3] == 'windows_disk_path':
@@ -573,6 +573,7 @@ if __name__ == "__main__":
         
     else:
         job_id = sys.argv[1]
-        main(job_id)
+        # main(job_id)
+        calScoreCal(job_id)
 
         
