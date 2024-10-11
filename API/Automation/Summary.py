@@ -394,7 +394,8 @@ def calScoreCal(job_id):
     else:
         ops = 'linux'
 
-    q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id} and score_cal_status = 0;"
+    # q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id} and score_cal_status = 0;"
+     q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `job_id` = {job_id}"
     # q_fetch_results = f"SELECT id,base_test_case,results FROM `test_results` WHERE `id` = 19979"
     cursor.execute(q_fetch_results)
     rows = cursor.fetchall()
