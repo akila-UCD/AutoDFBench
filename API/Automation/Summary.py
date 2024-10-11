@@ -449,7 +449,7 @@ def calScoreCal(job_id):
         print(f"recall: {recall}")
         print(f"f1: {f1}")
 
-        q_update = f"UPDATE `test_results` SET `TP` = '{total_tp_count}', `FP` = '{total_fp_count}', `FN` = '{total_fn_count}', `precision` = '{precision}', `recall` = '{recall}', `F1` = '{f1}', `score_cal_status` = '0' WHERE `test_results`.`id` = {r_id};"
+        q_update = f"UPDATE `test_results` SET `TP` = '{total_tp_count}', `FP` = '{total_fp_count}', `FN` = '{total_fn_count}', `precision` = '{precision}', `recall` = '{recall}', `F1` = '{f1}', `score_cal_status` = '1' WHERE `test_results`.`id` = {r_id};"
         cursor.execute(q_update)
         print(f"updated: {r_id}")
 
