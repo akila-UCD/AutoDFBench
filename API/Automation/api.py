@@ -45,7 +45,12 @@ def fetch_disk_image_path(disk_image):
     try:
         cursor = conn.cursor()
         # Determine the column name in the config table
-        config_column = 'windows_disk_path' if disk_image == 'windows_disk_path' else 'linux_disk_path'
+        if disk_image == 'windows_disk_path':
+            config_column = 'windows_disk_path'
+        elif disk_image == 'linux_disk_path':
+            config_column = 'linux_disk_path'
+        else:
+            config_column = 'deleted_file_recovery_disk_path'
 
         # Execute query to fetch the path
         query = f"SELECT value FROM config WHERE type = '{config_column}'"
@@ -145,7 +150,7 @@ def fetch_job_details():
     try:
         cursor = conn.cursor()
         # Execute query to fetch job details where status is 'queued'
-        query = f"SELECT id, take_in_test_count, CAST(model_to_use AS CHAR) as string_value, disk_image, CAST(script_type_need AS CHAR) as string_value, base_prompt_id FROM job WHERE id = '{job_id}'"
+        query = f"SELECT id, take_in_test_count, CAST(model_to_use AS CHAR) as string_value, disk_image, CAST(script_type_need AS CHAR) as string_value, base_prompt_id, CAST(cftt_task AS CHAR) as string_value, disk_image_name FROM job WHERE id = '{job_id}'"
         cursor.execute(query)
         result = cursor.fetchall()
         cursor.close()
@@ -159,7 +164,9 @@ def fetch_job_details():
                 "model_to_use": row[2],
                 "disk_image": row[3],
                 "script_type_need": row[4],
-                "base_prompt_id": row[5]
+                "base_prompt_id": row[5],
+                "cftt_task": row[6],
+                "disk_image_name": row[6],
             })
         return jobs
     except mysql.connector.Error as err:
@@ -258,24 +265,7 @@ def externalAPI(prompt, base_prompt, disk_image_path, script_type_prompt, model_
     # print(f"RES:{response}")
     return response
 
-
-# Read the input CSV file and send API requests
-# input_file = "EvaluationMatrix-StringSearching-DataSets_v2.csv"
-output_folder = "../output"
-
-# Create the output folder if it doesn't exist
-os.makedirs(output_folder, exist_ok=True)
-
-# Fetch all queued jobs
-jobs = fetch_job_details()
-if not jobs:
-    print("No queued jobs to process.")
-    exit(0)  # Exit if no job to process
-
-# Process each queued job
-for job_details in jobs:
-    # Update the job status to 'started'
-    update_job_status(job_details['id'], 'started')
+def process_string_search(job_details):
 
     # Fetch the DISK_IMAGE_PATH based on the job's disk_image value
     DISK_IMAGE_PATH = fetch_disk_image_path(job_details['disk_image'])
@@ -393,6 +383,154 @@ for job_details in jobs:
                 next(csv_reader)  # Skip the header again
                 if model_to_use == 'claude-3.5-sonnet' or model_to_use == 'gpt-4o':
                     time.sleep(20)
+
+
+def process_delfile_recovery(job_details):
+
+     # Fetch the DISK_IMAGE_PATH based on the job's disk_image value
+    DISK_IMAGE_PATH = fetch_disk_image_path(job_details['disk_image'])
+    if not DISK_IMAGE_PATH:
+        raise Exception("Failed to retrieve DISK_IMAGE_PATH from the database.")
+
+    # Fetch the base PROMPT
+    base_prompt_data = fetch_base_prompt(job_details['base_prompt_id'])
+    if not base_prompt_data:
+        raise Exception("Failed to retrieve BASE_PROMPT from the database.")
+    BASE_PROMPT = base_prompt_data[1]  # Extract the prompt
+    base_prompt_id = base_prompt_data[0]  # Extract the base prompt ID
+
+    # Model to use for API request
+    model_to_use = job_details['model_to_use']
+
+    # Script type needed
+    script_type = job_details['script_type_need']
+    if script_type == 'python':
+        script_type_prompt = f" You should provide a {script_type} code to achieve this task.  import "
+    else:
+        script_type_prompt = f" You should provide a {script_type} code to achieve this task. #!/bin/bash"
+   
+    disk_image = job_details['disk_image_name']
+    PROMPT_CSV = os.getenv('DELETED_FILE_DATA_CSV_PATH')
+
+
+    with open(PROMPT_CSV, mode='r', newline='') as infile:
+        csv_reader = csv.reader(infile)
+        
+        # Get the header from the input file
+        header = next(csv_reader)
+
+        # Determine which columns to process based on the specified column name
+        columns_to_process = [col_index for col_index, col_name in enumerate(header) if specified_column is None or col_name == specified_column]
+
+        if not columns_to_process:
+            raise Exception(f"Column '{specified_column}' not found in the CSV header.")
+
+         # Process each specified column in the input file
+        for col_index in columns_to_process:
+
+            col_name = f"{header[col_index]}_{disk_image}"
+
+            # Create a folder for each column
+            col_folder = os.path.join(output_folder, col_name)
+            os.makedirs(col_folder, exist_ok=True)
+            print(f"Folder created for column: {col_name}")
+            
+            # Create an output CSV file for the column
+            output_file = os.path.join(col_folder, f"{col_name}.csv")
+            
+            with open(output_file, mode='w', newline='') as outfile:
+                csv_writer = csv.writer(outfile)
+                
+                # Write the header for the output CSV file
+                output_header = ["prompt", "model", "created_at", "response", "done", "total_duration", "prompt_eval_count", "prompt_eval_duration", "eval_count", "eval_duration", "code"]
+                csv_writer.writerow(output_header)
+                
+                # Read the number of rows specified in take_in_test_count
+                for row_index, row in enumerate(csv_reader):
+                    if row_index >= job_details['take_in_test_count']:
+                        break
+                    
+                    csv_line_content = row[col_index]
+                    print(f"csv_line_content: {csv_line_content}")
+                    # Send API request
+                    if model_to_use == 'claude-3.5-sonnet' or model_to_use == 'gpt-4o':
+                        api_response =  externalAPI(csv_line_content, BASE_PROMPT, DISK_IMAGE_PATH, script_type_prompt, model_to_use)
+                        created_at = time.time()
+                        response_text = api_response.text()
+                        done = 1
+                        total_duration = 0
+                        prompt_eval_count = 0
+                        prompt_eval_duration = 0
+                        eval_count = 0
+                        eval_duration = 0
+                    else:
+                        api_response = send_api_request(csv_line_content, BASE_PROMPT, DISK_IMAGE_PATH, script_type_prompt, model_to_use)
+                        created_at = api_response.get("created_at")
+                        response_text = api_response.get("response")
+                        done = api_response.get("done")
+                        total_duration = api_response.get("total_duration")
+                        prompt_eval_count = api_response.get("prompt_eval_count")
+                        prompt_eval_duration = api_response.get("prompt_eval_duration")
+                        eval_count = api_response.get("eval_count")
+                        eval_duration = api_response.get("eval_duration")
+                    
+                    # Extract required fields from the response
+                    prompt = csv_line_content
+                    base_test_case = col_name
+                    model = model_to_use
+                    
+                    
+                    code, code_type = extract_code(response_text)
+
+                    db_data = (
+                        base_test_case, prompt, created_at, response_text, done, total_duration, prompt_eval_count,
+                        prompt_eval_duration, eval_count, eval_duration, code, model,
+                        job_details['disk_image'], script_type, base_prompt_id, job_details['id']
+                    )
+                    print(f"DB Inset for prompt=> {prompt}")
+                    insert_prompt_code_data(db_data)
+                    
+                    # Write the extracted data to the output CSV file
+                    csvData = [prompt, model, created_at, response_text, done, total_duration, prompt_eval_count, prompt_eval_duration, eval_count, eval_duration, code]
+                    csv_writer.writerow(csvData)
+                   
+                    
+                print(f"Completed processing for column: {col_name}")
+                
+                # Reset the reader to the start of the file for the next column
+                infile.seek(0)
+                next(csv_reader)  # Skip the header again
+                if model_to_use == 'claude-3.5-sonnet' or model_to_use == 'gpt-4o':
+                    time.sleep(20)
+
+
+# Read the input CSV file and send API requests
+# input_file = "EvaluationMatrix-StringSearching-DataSets_v2.csv"
+output_folder = "../output"
+
+# Create the output folder if it doesn't exist
+os.makedirs(output_folder, exist_ok=True)
+
+# Fetch all queued jobs
+jobs = fetch_job_details()
+if not jobs:
+    print("No queued jobs to process.")
+    exit(0)  # Exit if no job to process
+
+# Process each queued job
+for job_details in jobs:
+    # Update the job status to 'started'
+    update_job_status(job_details['id'], 'started')
+
+
+    if jobs['cftt_task'] == 'string_search':
+        process_string_search(job_details);
+    elif jobs['cftt_task'] == 'deleted_file_recovery':
+        process_delfile_recovery(job_details)
+    else:
+
+
+    
 
     # Run the codeGenerator.py script
     # try:
