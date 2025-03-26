@@ -63,9 +63,9 @@ INSERT INTO `config` (`id`, `type`, `value`) VALUES
 (2, 'linux_disk_path', '/home/ubuntu/API/DISKIMAGES/ss-unix-07-25-18.dd'),
 (4, 'llama3_API', 'http://192.168.1.12:11434/api/generate'),
 (5, 'gemma2_API', 'http://192.168.1.20:11434/api/generate'),
-(6, 'Claude_API_KEY', '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'),
+(6, 'Claude_API_KEY', ''),
 (7, 'codellama_API', 'http://192.168.1.18:11434/api/generate'),
-(8, 'gpt-4o_API_KEY', 'sk-eKoJzzyaJLMvOrVAAZh4mRV7IkoOQ15clPJ3WSS6V4T3BlbkFJf88IUR6TjtbKF4JIZREwLysdnIm3cqgjjqTmmIPcUA'),
+(8, 'gpt-4o_API_KEY', '',
 (9, 'wojtek/wavecoder:6.7b-ultra-Q8_0_API', 'http://192.168.1.26:11434/api/generate'),
 (10, 'starcoder2:15b-instruct_API', 'http://192.168.1.28:11434/api/generate');
 
