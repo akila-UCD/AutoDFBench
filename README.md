@@ -1,3 +1,4 @@
+<img width="150px" src="https://github.com/akila-UCD/AutoDFBench/blob/main/autoDFBenchLogo.png?raw=true" alt="AutoDFBench Logo"> 
 
 # **AutoDFBench** Setup Guide
 
