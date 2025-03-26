@@ -40,13 +40,13 @@ cd <cloned-directory>
 ```
 
 ###  IMPORTANT: Rename the .env-sample to .env
-CONDA_EXECUTE_ENV : Your conda environment.
-DISK_IMAGE_SOURCE_FOLDER:  Back Up Folder for disk images
-DISK_IMAGE_DESTINATION_FOLDER: Folder for disk images
-WINDOWS_DATA_CSV_PATH: Prompt CSV path for windows tests (for CFTT String Search)
-UNIX_DATA_CSV_PATH: Prompt CSV path for linx tests (for CFTT String Search)
-DELETED_FILE_DATA_CSV_PATH:  Prompt CSV path for  CFTT Deleted File Recovery)
-EXTERNAL_MODELS : external models if using
+ - CONDA_EXECUTE_ENV : Your conda environment. 
+ - DISK_IMAGE_SOURCE_FOLDER:   Back Up Folder for disk images 
+ - DISK_IMAGE_DESTINATION_FOLDER: Folder for disk images 
+ - WINDOWS_DATA_CSV_PATH: Prompts CSV path for windows tests (for CFTT String Search) 
+ - UNIX_DATA_CSV_PATH: Prompts CSV path for linx tests (for CFTT String Search)  
+ - DELETED_FILE_DATA_CSV_PATH: Prompt CSV path for  CFTT Deleted File Recovery
+ - EXTERNAL_MODELS :  External models if using
 
 example:
 ```bash
