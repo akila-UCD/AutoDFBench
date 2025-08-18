@@ -23,6 +23,7 @@ class ImageCompare:
         visibility_percentage = score * 100
         print(f"Estimated visibility: {visibility_percentage:.2f}")
         return visibility_percentage
+
     
     def block_compare(carved_path, groundtruth_path, block_size=512, verbose=False):
         with open(carved_path, 'rb') as f_carved, open(groundtruth_path, 'rb') as f_truth:
@@ -57,6 +58,7 @@ class ImageCompare:
             "total_blocks": total_blocks,
             "block_recovery_pct": block_recovery_pct
         }
+
 
 
 
