@@ -44,7 +44,6 @@ def get_confgs(conf_value):
     conn = get_db_connection()
     if conn is None:
         return None
-
     try:
         cursor = conn.cursor()
         query = """
@@ -62,10 +61,14 @@ def get_confgs(conf_value):
         return None
 
 def get_ground_truth_paths(base_test_case):
+    """
+    Returns rows with columns:
+    0:file_name, 1:deleted_time_stamp, 2:modify_time_stamp, 3:access_time_stamp,
+    4:change_time_stamp, 5:f-bks, 6:size
+    """
     conn = get_db_connection()
     if conn is None:
         return None
-
     try:
         cursor = conn.cursor()
         query = """
@@ -85,6 +88,9 @@ def get_ground_truth_paths(base_test_case):
 def insert_result_to_db(base_test_case, testcase, tp, fp, fn, precision, recall, F1):
     try:
         conn = get_db_connection()
+        if conn is None:
+            print("DB connection failed; cannot insert results.")
+            return
         cursor = conn.cursor()
         insert_query = """
             INSERT INTO test_results ( base_test_case, testCase, job_id, TP, FP, FN, `precision`, `recall`, F1 )
@@ -92,8 +98,33 @@ def insert_result_to_db(base_test_case, testcase, tp, fp, fn, precision, recall,
         """
         cursor.execute(insert_query, (base_test_case, testcase, '0', tp, fp, fn, precision, recall, F1))
         conn.commit()
+        cursor.close()
+        conn.close()
     except mysql.connector.Error as err:
         print(f"Error: {err}")
+
+# ------- helpers -------
+def to_int(v):
+    """Robustly convert a value to int; return None if not possible."""
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        try:
+            s = str(v).strip()
+            return int(s)
+        except Exception:
+            return None
+
+def has_recoverable_inode(inode_val, size_val):
+    """Recoverable = inode present (non-empty, not 'invalid/none/null') AND size > 0."""
+    if inode_val is None:
+        return False
+    inode_str = str(inode_val).strip()
+    if len(inode_str) == 0 or inode_str.lower() in {"invalid", "none", "null"}:
+        return False
+    size_int = to_int(size_val)
+    return size_int is not None and size_int > 0
+# -----------------------
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self):
@@ -115,53 +146,112 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             base_test_case = data.get("base_test_case")
             tool_used = data.get("tool_used")
             files = data.get("files", [])
-            file_system = data.get("file_system", "")  # File system type (e.g., "FAT" or empty)
+            file_system = data.get("file_system", "")
             check_meta = data.get("check_meta", False)
+            include_orphans = bool(data.get("include_orphans", False))  # NEW: include orphan files?
 
             if not base_test_case or not tool_used or not isinstance(files, list):
                 self.send_error(400, "Missing or invalid fields: base_test_case, tool_used, files")
                 return
 
+            # Validate duplicate file names
             seen_filenames = set()
             for file_entry in files:
                 file_name = file_entry.get("file_name")
-                if not file_name:
-                    self.send_error(400, "Each file must have a file_name")
+                inode_val = file_entry.get("inode")
+                file_size_val = file_entry.get("file_size")
+
+                # Check for required fields
+                if file_name in (None, "", "NULL") or inode_val in (None, "", "NULL") or file_size_val in (None, "", "NULL"):
+                    self.send_error(
+                        400,
+                        f"Missing required fields in submitted file entry: inode={inode_val}, file_name={file_name}, file_size={file_size_val}"
+                    )
                     return
+
+                # Check for duplicate filenames
                 if file_name in seen_filenames:
                     self.send_error(400, f"Duplicate file_name detected: {file_name}")
                     return
+
                 seen_filenames.add(file_name)
+                test_case = f"{base_test_case}_{tool_used}"
+                print(test_case)
 
-            test_case = f"{base_test_case}_{tool_used}"
-            print(test_case)
-
-            # Fetch ground truth data from the database
+            # Fetch ground truth
             gt_entries = get_ground_truth_paths(base_test_case)
             if not gt_entries:
                 self.send_error(400, "No ground truth data found or query failed.")
                 return
 
-            # All the ground truth files with their size and filenames
-            gt_files = [{"filename": row[0], "size": row[6]} for row in gt_entries]
+            # Build GT file list
+            gt_files = []
+            for row in gt_entries:
+                gt_files.append({
+                    "filename": row[0],
+                    "deleted_timestamp": int(row[1]) if row[1] not in (None, "", "NULL") else None,
+                    "modified_timestamp": int(row[2]) if row[2] not in (None, "", "NULL") else None,
+                    "accessed_timestamp": int(row[3]) if row[3] not in (None, "", "NULL") else None,
+                    "changed_timestamp": int(row[4]) if row[4] not in (None, "", "NULL") else None,
+                    "fbks": row[5],
+                    "size": int(row[6]) if row[6] not in (None, "", "NULL") else None,
+                })
+
+            # Precompute GT sizes (ignore None)
+            gt_sizes = {row["size"] for row in gt_files if row["size"] is not None}
 
             matched_gt_files = set()
             matched_files = 0
             total_submitted = len(files)
+            total_evaluated = 0  # files considered after skip logic
+            rec_evaluated = 0    # recoverable evaluated (inode+size>0)
+
             null_metadata_fields_count = 0
             details = []
             all_meta_tp = all_meta_fp = all_meta_fn = 0
+            name_match_count = 0
 
-            matched_deleted_file_count = 0  # Counter for matched deleted files
-            matched_size_file_count = 0  # Counter for matched files where size is the same
-            sigma_count = 0  # Counter for sigma (matching files with size for FAT and "_")
+            matched_deleted_file_count = 0  # matched & recoverable
+            matched_size_file_count = 0
+            sigma_count = 0  # FAT "_" -> "X" name mapping with size equality
 
-            matched_deleted_files = []  # List to store GT file name and size of matched deleted files
-            matched_size_files = []  # List to store GT file name and size of matched files with same size
+            matched_deleted_files = []  # only recoverable matches
+            matched_size_files = []     # name+size exact matches list
+            size_only_matches = []      # size matches ignoring filename
 
+            # Skips tracking
+            skipped_orphan_zero_size = 0
+            skipped_orphans_excluded = 0
+            rec_evaluated = 0
+
+            # Exact name + size matches counter
+            exact_name_size_match_count = 0
+
+            # Evaluate each submitted file
             for file_entry in files:
                 filename = file_entry.get("file_name")
-                filesize = str(file_entry.get("file_size")) if file_entry.get("file_size") is not None else None
+                filesize = file_entry.get("file_size")
+                filesize_str = str(filesize) if filesize is not None else None
+
+                # ---------- Orphan handling ----------
+                is_orphan = isinstance(filename, str) and "$OrphanFiles" in filename
+                if is_orphan:
+                    size_int_tmp = to_int(filesize)
+                    if not include_orphans and (size_int_tmp is None or size_int_tmp == 0):
+                        skipped_orphan_zero_size += 1
+                        continue
+                # ---------- End orphan handling ----------
+
+                # File evaluated
+                total_evaluated += 1
+                
+
+                # Recoverable?
+                inode_val = file_entry.get("inode")
+                is_recoverable = has_recoverable_inode(inode_val, filesize)
+                if is_recoverable:
+                    rec_evaluated += 1
+
                 deleted_date = file_entry.get("deleted_timestamp")
                 modified_date = file_entry.get("modified_timestamp")
                 access_date = file_entry.get("accessed_timestamp")
@@ -172,50 +262,62 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 matched_gt_file = None
                 per_file_f1 = 0.0
                 unmatched_fields = []
+                matched_fields = []
 
-                # Adjust the filename comparison logic based on the file system type
-                if file_system == "FAT":
-                    # If file_system is FAT, replace the first character "_" with "X"
+                # --- size-only match ignoring filename ---
+                if filesize is not None:
+                    try:
+                        if int(filesize) in gt_sizes:
+                            size_only_matches.append({"submitted_filename": filename, "file_size": int(filesize)})
+                    except (TypeError, ValueError):
+                        if str(filesize) in {str(s) for s in gt_sizes}:
+                            size_only_matches.append({"submitted_filename": filename, "file_size": filesize})
+
+                # FAT name normalization
+                if file_system.startswith("FAT"):
                     filename_for_comparison = filename
-                    if filename.startswith("_"):
-                        filename_for_comparison = "X" + filename[1:]  # Replace "_" with "X"
-                        # Check if the size matches for sigma count
-                        gt_row = next((row for row in gt_files if row["filename"] == filename_for_comparison and str(row["size"]) == filesize), None)
-                        if gt_row:
-                            sigma_count += 1  # Increment sigma if size matches
+                    used_sigma_mapping = False
+                    if isinstance(filename, str) and filename.startswith("_"):
+                        filename_for_comparison = "X" + filename[1:]
+                        used_sigma_mapping = True
                 else:
-                    filename_for_comparison = filename  # Compare the full filename if it's not FAT or empty
+                    filename_for_comparison = filename
+                    used_sigma_mapping = False
 
                 print(f"Comparing {filename_for_comparison} with ground truth filenames")
-               
 
-                # Look for matching GT file (after adjusting for FAT file system)
+                # Exact GT row by filename equality
                 gt_row = next((row for row in gt_files if row["filename"] == filename_for_comparison), None)
+
                 if gt_row:
-                    gt_deleted, gt_modified, gt_accessed, gt_changed, gt_fbks, gt_size = gt_row["filename"], gt_row.get("modified_timestamp", None), gt_row.get("accessed_timestamp", None), gt_row.get("changed_timestamp", None), gt_row.get("fbks", None), gt_row["size"]
+                    if file_system.startswith("FAT") and used_sigma_mapping:
+                        if str(gt_row["size"]) == str(filesize_str):
+                            sigma_count += 1
 
                     if check_meta:
+                        # fbks intentionally ignored
                         meta_pairs = [
-                            ("deleted_date", deleted_date, gt_deleted),
-                            ("modified_date", modified_date, gt_modified),
-                            ("accessed_date", access_date, gt_accessed),
-                            ("changed_date", changed_date, gt_changed),
-                            ("fbks", fbks, gt_fbks),
-                            ("file_size", filesize, str(gt_size) if gt_size is not None else None)
+                            ("filename", filename_for_comparison, gt_row["filename"]),
+                            ("deleted_date", deleted_date, gt_row["deleted_timestamp"]),
+                            ("modified_date", modified_date, gt_row["modified_timestamp"]),
+                            ("accessed_date", access_date, gt_row["accessed_timestamp"]),
+                            ("changed_date", changed_date, gt_row["changed_timestamp"]),
+                            ("file_size", filesize_str, str(gt_row["size"]) if gt_row["size"] is not None else None),
                         ]
-
+                        print(meta_pairs)
+                        # os._exit(1)
                         tp = fp = fn = 0
                         for field, submitted_val, gt_val in meta_pairs:
-                            if gt_val is None or gt_val == "":
+                            if gt_val in (None, "", "NULL"):
                                 null_metadata_fields_count += 1
                                 continue
                             if field in ["deleted_date", "modified_date", "accessed_date", "changed_date"]:
                                 if not isinstance(submitted_val, int):
                                     self.send_error(400, f"{field} must be provided as an epoch integer timestamp")
-                                    # return
-
+                                    return
                             if str(submitted_val) == str(gt_val):
                                 tp += 1
+                                matched_fields.append(field)
                             else:
                                 fp += 1
                                 fn += 1
@@ -231,21 +333,43 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
                         matched = tp > 0
                     else:
-                        matched = filename_for_comparison in [row["filename"] for row in gt_files]  # Compare full filename for non-FAT systems
+                        # name presence in GT = match
+                        matched = True
 
                     if matched:
                         matched_files += 1
-                        matched_gt_files.add(filename)
-                        matched_gt_file = filename
+                        matched_gt_files.add(filename_for_comparison)
+                        matched_gt_file = filename_for_comparison
 
-                        # Add matched deleted file with GT size
-                        matched_deleted_file_count += 1
-                        matched_deleted_files.append({"filename": filename, "size": gt_size})
+                        # Append only if recoverable (inode + size > 0)
+                        if is_recoverable:
+                            matched_deleted_file_count += 1
+                            matched_deleted_files.append({
+                                "filename": filename_for_comparison,
+                                "size": gt_row["size"],
+                                "inode": inode_val
+                            })
 
-                        # Add matched size file if sizes are the same
-                        if str(filesize) == str(gt_size):
+                        # Exact name + size equal
+                        if str(filesize_str) == str(gt_row["size"]):
                             matched_size_file_count += 1
-                            matched_size_files.append({"filename": filename, "size": gt_size})
+                            matched_size_files.append({"filename": filename_for_comparison, "size": gt_row["size"]})
+
+                            # Exact name + size match for new Match metric
+                            exact_name_size_match_count += 1
+
+                        # Count name match only if inode exists
+                        if is_recoverable or (inode_val is not None and str(inode_val).strip()):
+                            if filename_for_comparison == gt_row["filename"]:
+                                name_match_count += 1
+                else:
+                    if check_meta:
+                        total_fields = 6  # filename + 4 timestamps + size
+                        all_meta_fn += total_fields
+                        unmatched_fields = ["filename", "deleted_date", "modified_date", "accessed_date", "changed_date", "file_size"]
+                        per_file_f1 = 0.0
+                    matched = False
+                    matched_gt_file = None
 
                 if check_meta:
                     details.append({
@@ -253,12 +377,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                         "matched": matched,
                         "matched_gt_file": matched_gt_file,
                         "f1_score_per_file": per_file_f1,
-                        "unmatched_meta_fields": unmatched_fields
+                        "matched_meta_fields": matched_fields,
+                        "unmatched_meta_fields": unmatched_fields if check_meta else []
                     })
-            match_count = matched_deleted_file_count - sigma_count
-            
+
             true_positives = matched_files
-            false_positives = total_submitted - matched_files
+            false_positives = total_submitted - (matched_files + skipped_orphan_zero_size + skipped_orphans_excluded)
             false_negatives = len(gt_files) - len(matched_gt_files)
 
             if check_meta:
@@ -272,26 +396,40 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
             insert_result_to_db(base_test_case, test_case, true_positives, false_positives, false_negatives, overall_precision, overall_recall, overall_f1_score)
 
+            name_match = name_match_count - sigma_count  # preserve your Sigma adjustment
+
             response = {
                 "tool_used": tool_used,
                 "base_test_case": base_test_case,
+                "include_orphans": include_orphans,
                 "total_ground_truth_files": len(gt_files),
                 "total_submitted_files": total_submitted,
+                "total_evaluated_files(REC)": rec_evaluated,  # recoverable files only (inode+size>0)
                 "true_positives": true_positives,
                 "false_positives": false_positives,
                 "false_negatives": false_negatives,
                 "precision": overall_precision,
                 "recall": overall_recall,
-                "f1_score": overall_f1_score,
-                "SS": len(matched_size_files),  # Size matched file name and size
-                "Full":len(matched_size_files),
-                "Match": match_count,
-                "Sigma": sigma_count,  # Output the sigma count
+                "AutoDFBench_score": overall_f1_score,
+
+                # Size-only matches (ignores filename)
+                "Size_match": len(size_only_matches),
+
+                # Name + size exact matches
+                "SS": exact_name_size_match_count,
+                "GT_COUNT": len(gt_files),
+                
+
+                # Name matches requiring inode (with Sigma adjustment)
+                "NAME_ONLY_Match": name_match,
+                "Sigma": sigma_count,
+                "Full": exact_name_size_match_count,
                 "null_metadata_fields_ignored": null_metadata_fields_count,
+                # Matched AND recoverable only
                 "matched_deleted_file_count": matched_deleted_file_count,
-                "matched_size_file_count": matched_size_file_count,
-                "Del": gt_files,  # All GT files (filename, size)
-                "Full": matched_size_files,  # Size matched file name and size
+                "matched_deleted_files": matched_deleted_files,
+                "SS_NAME_files": matched_size_files,
+                
                 "details": details if check_meta else []
             }
 
@@ -299,7 +437,6 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
             self.wfile.write(json.dumps(response, indent=2).encode('utf-8'))
-
         else:
             self.send_error(404, "Endpoint not found")
 

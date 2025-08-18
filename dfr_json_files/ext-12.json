@@ -1,0 +1,309 @@
+{
+  "base_test_case": "DFR-12/ext-12",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": true,
+  "file_system": "EXT",
+  "include_orphans": false,
+  "files": [
+    {
+      "inode": "16322",
+      "file_name": "$OrphanFiles/OrphanFile-16322",
+      "file_size": 4096,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850320,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "16323",
+      "file_name": "$OrphanFiles/OrphanFile-16323",
+      "file_size": 4096,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850380,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "16324",
+      "file_name": "$OrphanFiles/OrphanFile-16324",
+      "file_size": 4096,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850440,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "30602",
+      "file_name": "$OrphanFiles/OrphanFile-30602",
+      "file_size": 8192,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850320,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "30603",
+      "file_name": "$OrphanFiles/OrphanFile-30603",
+      "file_size": 8192,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850380,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "30604",
+      "file_name": "$OrphanFiles/OrphanFile-30604",
+      "file_size": 8192,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850440,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "32642",
+      "file_name": "$OrphanFiles/OrphanFile-32642",
+      "file_size": 8192,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850320,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "32643",
+      "file_name": "$OrphanFiles/OrphanFile-32643",
+      "file_size": 8192,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850380,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "32644",
+      "file_name": "$OrphanFiles/OrphanFile-32644",
+      "file_size": 8192,
+      "deleted_timestamp": 1328150626,
+      "modified_timestamp": 951850440,
+      "changed_timestamp": 1328150626,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "18362",
+      "file_name": "Cygnus/Albireo.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "18363",
+      "file_name": "Cygnus/Deneb.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "18364",
+      "file_name": "Cygnus/Sadr.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "16322",
+      "file_name": "$OrphanFiles/OrphanFile-16322",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "16323",
+      "file_name": "$OrphanFiles/OrphanFile-16323",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "16324",
+      "file_name": "$OrphanFiles/OrphanFile-16324",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "73442",
+      "file_name": "$OrphanFiles/OrphanFile-73442",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "73443",
+      "file_name": "$OrphanFiles/OrphanFile-73443",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "73444",
+      "file_name": "$OrphanFiles/OrphanFile-73444",
+      "file_size": 0,
+      "deleted_timestamp": 1328150627,
+      "modified_timestamp": 1328150627,
+      "changed_timestamp": 1328150627,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "13",
+      "file_name": "$OrphanFiles/OrphanFile-13",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "14",
+      "file_name": "$OrphanFiles/OrphanFile-14",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "15",
+      "file_name": "$OrphanFiles/OrphanFile-15",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "18",
+      "file_name": "$OrphanFiles/OrphanFile-18",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "19",
+      "file_name": "$OrphanFiles/OrphanFile-19",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "20",
+      "file_name": "$OrphanFiles/OrphanFile-20",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "32646",
+      "file_name": "$OrphanFiles/OrphanFile-32646",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "32647",
+      "file_name": "$OrphanFiles/OrphanFile-32647",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "32648",
+      "file_name": "$OrphanFiles/OrphanFile-32648",
+      "file_size": 0,
+      "deleted_timestamp": 1328150628,
+      "modified_timestamp": 1328150628,
+      "changed_timestamp": 1328150628,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    },
+    {
+      "inode": "32650",
+      "file_name": "$OrphanFiles/OrphanFile-32650",
+      "file_size": 0,
+      "deleted_timestamp": 1328149989,
+      "modified_timestamp": 1328149989,
+      "changed_timestamp": 1328149989,
+      "accessed_timestamp": 915266520,
+      "fbks": null
+    },
+    {
+      "inode": "32651",
+      "file_name": "$OrphanFiles/OrphanFile-32651",
+      "file_size": 0,
+      "deleted_timestamp": 1328149989,
+      "modified_timestamp": 1328149989,
+      "changed_timestamp": 1328149989,
+      "accessed_timestamp": 915266580,
+      "fbks": null
+    },
+    {
+      "inode": "32652",
+      "file_name": "$OrphanFiles/OrphanFile-32652",
+      "file_size": 0,
+      "deleted_timestamp": 1328149989,
+      "modified_timestamp": 1328149989,
+      "changed_timestamp": 1328149989,
+      "accessed_timestamp": 915266640,
+      "fbks": null
+    }
+  ]
+}

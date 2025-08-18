@@ -1,0 +1,129 @@
+{
+  "base_test_case": "DFR-14/fat-14",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": true,
+  "file_system": "FAT",
+  "include_orphans": false,
+  "files": [
+    {
+      "inode": "6",
+      "file_name": "fat12-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744564,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "15",
+      "file_name": "fat12-shortcut-dl.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744564,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "18",
+      "file_name": "fat12-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744564,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "21",
+      "file_name": "fat12-shortcut-db.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "6",
+      "file_name": "fat16-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "15",
+      "file_name": "fat16-shortcut-dl.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "18",
+      "file_name": "fat16-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "21",
+      "file_name": "fat16-shortcut-db.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "6",
+      "file_name": "fat32-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "15",
+      "file_name": "fat32-shortcut-dl.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "18",
+      "file_name": "fat32-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    },
+    {
+      "inode": "437",
+      "file_name": "fat32-shortcut-db.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "fbks": null
+    }
+  ]
+}

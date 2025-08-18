@@ -1,0 +1,39 @@
+{
+  "base_test_case": "DFR-11/ntfs-11",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": true,
+  "file_system": "NTFS",
+  "include_orphans": false,
+  "files": [
+    {
+      "inode": "70-128-2",
+      "file_name": "Lyra/Sheliak.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1322156400,
+      "accessed_timestamp": 915264240,
+      "fbks": null
+    },
+    {
+      "inode": "71-128-2",
+      "file_name": "Lyra/Vega.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1322156400,
+      "accessed_timestamp": 915264240,
+      "fbks": null
+    },
+    {
+      "inode": "72-128-2",
+      "file_name": "Lyra/Sulafat.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1322156400,
+      "accessed_timestamp": 915264240,
+      "fbks": null
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "base_test_case": "DFR-14/ntfs-14",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": true,
+  "file_system": "NTFS",
+  "include_orphans": false,
+  "files": [
+    {
+      "inode": "35-128-4",
+      "file_name": "shortcut-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534157,
+      "changed_timestamp": 1325534157,
+      "accessed_timestamp": 1325534157,
+      "fbks": null
+    },
+    {
+      "inode": "38-128-1",
+      "file_name": "shortcut-shortcut-dl.lnk",
+      "file_size": 247,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    },
+    {
+      "inode": "39-128-4",
+      "file_name": "shortcut-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    },
+    {
+      "inode": "40-128-1",
+      "file_name": "shortcut-shortcut-db.lnk",
+      "file_size": 247,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    },
+    {
+      "inode": "43-128-4",
+      "file_name": "hard-link-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534555,
+      "accessed_timestamp": 1325534280,
+      "fbks": null
+    },
+    {
+      "inode": "44-128-4",
+      "file_name": "symbolic-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    },
+    {
+      "inode": "47-128-1",
+      "file_name": "symbolic-link-dl.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    },
+    {
+      "inode": "48-128-4",
+      "file_name": "symbolic-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    },
+    {
+      "inode": "49-128-1",
+      "file_name": "symbolic-link-db.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    },
+    {
+      "inode": "50-128-4",
+      "file_name": "stream-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534280,
+      "fbks": null
+    },
+    {
+      "inode": "50-128-6",
+      "file_name": "stream-file-df.txt:Volga.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534280,
+      "fbks": null
+    },
+    {
+      "inode": "52-128-5",
+      "file_name": "stream-dir:Nile.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1325534158,
+      "changed_timestamp": 1325534158,
+      "accessed_timestamp": 1325534158,
+      "fbks": null
+    }
+  ]
+}
