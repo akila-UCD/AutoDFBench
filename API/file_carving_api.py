@@ -124,7 +124,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             graphic_file_carving_source_path = get_confgs('graphic_file_carving_source_path')
             
             base_test_case = form.getvalue("base_test_case")
+
             too_used = form.getvalue("tool_used")
+
             test_case = f"{base_test_case}_{too_used}"
 
 
@@ -161,6 +163,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
                     score = ImageCompare.compute_visibility(file_path, gt_file_path)
                     print(f"Comparing: {file_path} ↔ {gt_file_path} = Score: {score}")
+
+                    
+                    hexScore = ImageCompare.block_compare(file_path, gt_file_path)
+                    print(f"hexScore: {hexScore}")
+
 
                     if score == 100:
                         matched = True

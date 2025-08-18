@@ -1,0 +1,99 @@
+{
+  "base_test_case": "DFR-11/fat-11",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": true,
+  "file_system": "FAT",
+  "include_orphans": false,
+  "files": [
+    {
+      "inode": "646",
+      "file_name": "Auriga/Capella.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "648",
+      "file_name": "Auriga/Maaz.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "650",
+      "file_name": "Auriga/Sadatoni.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "550",
+      "file_name": "Draco/Rastaban.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "552",
+      "file_name": "Draco/Thuban.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "554",
+      "file_name": "Draco/Tyl.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "54",
+      "file_name": "Sagittarius/Rukbat.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "56",
+      "file_name": "Sagittarius/Elnasl.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    },
+    {
+      "inode": "58",
+      "file_name": "Sagittarius/Nunki.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833700,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "fbks": null
+    }
+  ]
+}
