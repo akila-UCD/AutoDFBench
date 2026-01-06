@@ -1,0 +1,47 @@
+{
+  "base_test_case": "DFR-07/ext-07-two",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "files": [
+    {
+      "file_name": "$OrphanFiles/OrphanFile-14",
+      "file_size": 8192,
+      "deleted_timestamp": 1328384851,
+      "modified_timestamp": 1328384228,
+      "changed_timestamp": 1328384851,
+      "accessed_timestamp": 1328384666,
+      "created_timestamp": 0,
+      "blocks": [
+        7681,
+        7682,
+        7683,
+        7684,
+        7685,
+        7686,
+        7687,
+        7688
+      ]
+    },
+    {
+      "file_name": "Castor.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1328384852,
+      "modified_timestamp": 1328384852,
+      "changed_timestamp": 1328384852,
+      "accessed_timestamp": 1328384666,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Chort.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1328384852,
+      "modified_timestamp": 1328384852,
+      "changed_timestamp": 1328384852,
+      "accessed_timestamp": 1328384667,
+      "created_timestamp": 0,
+      "blocks": []
+    }
+  ]
+}

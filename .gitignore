@@ -1,0 +1,152 @@
+# ================================
+# Python
+# ================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+ENV/
+pip-wheel-metadata/
+
+# ================================
+# IDE / Editor
+# ================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+*~
+.DS_Store
+
+# ================================
+# OS / System
+# ================================
+Thumbs.db
+ehthumbs.db
+
+# ================================
+# Environment & Secrets
+# ================================
+.env
+.env.*
+*.env
+secrets/
+config/local/
+config/*.local.*
+
+# ================================
+# Docker
+# ================================
+docker-compose.override.yml
+*.pid
+*.log
+
+# ================================
+# Databases
+# ================================
+*.sql
+*.dump
+*.bak
+mysql-data/
+db-data/
+db_backup/
+*.db
+
+# ================================
+# AutoDFBench Outputs
+# ================================
+results/
+reports/
+output/
+outputs/
+logs/
+tmp/
+temp/
+.cache/
+.dfr_tests/
+
+# API-generated outputs
+*_results.json
+summary_*.csv
+
+# ================================
+# Uploaded / Temporary Evidence
+# ================================
+uploads/
+uploaded_files/
+TEMP_FILE_UPLOAD_PATH/
+Data/upload/
+Data/uploads/
+Data/tmp/
+Data/temp/
+
+# ================================
+# Forensic Datasets / Evidence
+# (NEVER commit)
+# ================================
+Data/
+datasets/
+evidence/
+images/
+*.E01
+*.e01
+*.dd
+*.img
+*.raw
+*.aff
+*.aff4
+*.iso
+*.bin
+
+# ================================
+# File Carving Inputs / Outputs
+# ================================
+Data/fileCarve/
+carved/
+carvings/
+
+
+# ================================
+# CSV / Evaluation Artefacts
+# ================================
+tests/**/out/
+tests/**/results/
+*_eval.csv
+*_results.csv
+ss_unix.csv
+ss_win.csv
+
+# ================================
+# Jupyter / Research
+# ================================
+.ipynb_checkpoints/
+notebooks/
+*.ipynb
+
+# ================================
+# LaTeX / Papers
+# ================================
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+
+# ================================
+# Misc
+# ================================
+*.zip
+*.tar
+*.tar.gz
+*.7z

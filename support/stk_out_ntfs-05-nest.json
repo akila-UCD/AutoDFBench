@@ -1,0 +1,62 @@
+{
+  "base_test_case": "DFR-05/ntfs-05-nest",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": false,
+  "file_system": "FAT",
+  "files": [
+    {
+      "file_name": "Bunda.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215175440,
+      "changed_timestamp": 1328142069,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 1328139863,
+      "blocks": [
+        307222,
+        307223,
+        307224,
+        307225,
+        307226,
+        307227,
+        307228,
+        307229,
+        307270,
+        307271,
+        307272,
+        307273,
+        307274,
+        307275,
+        307276,
+        307277
+      ]
+    },
+    {
+      "file_name": "Duhr.TXT",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848040,
+      "changed_timestamp": 1328142069,
+      "accessed_timestamp": 883728240,
+      "created_timestamp": 1328139864,
+      "blocks": [
+        307238,
+        307239,
+        307240,
+        307241,
+        307242,
+        307243,
+        307244,
+        307245,
+        307254,
+        307255,
+        307256,
+        307257,
+        307258,
+        307259,
+        307260,
+        307261
+      ]
+    }
+  ]
+}

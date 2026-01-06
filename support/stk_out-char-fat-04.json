@@ -1,0 +1,694 @@
+{
+  "base_test_case": "DFR-04/fat-04",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "NON_LATIN_CHAR_TESTS",
+  "check_meta": false,
+  "file_system": "FAT",
+  "file_count": 36,
+  "files": [
+    {
+      "file_name": "नान.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176
+      ]
+    },
+    {
+      "file_name": "پکوڑا.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192
+      ]
+    },
+    {
+      "file_name": "서울.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208
+      ]
+    },
+    {
+      "file_name": "گردو.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232
+      ]
+    },
+    {
+      "file_name": "חומוס.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248
+      ]
+    },
+    {
+      "file_name": "طاجين.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        257,
+        258,
+        259,
+        260,
+        261,
+        262,
+        263,
+        264
+      ]
+    },
+    {
+      "file_name": "чай.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272
+      ]
+    },
+    {
+      "file_name": "ミツビシ.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        281,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287,
+        288
+      ]
+    },
+    {
+      "file_name": "みつびし.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296
+      ]
+    },
+    {
+      "file_name": "Gefäß.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        305,
+        306,
+        307,
+        308,
+        309,
+        310,
+        311,
+        312
+      ]
+    },
+    {
+      "file_name": "北京.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        313,
+        314,
+        315,
+        316,
+        317,
+        318,
+        319,
+        320
+      ]
+    },
+    {
+      "file_name": "東京.txt1",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667794,
+      "blocks": [
+        337,
+        338,
+        339,
+        340,
+        341,
+        342,
+        343,
+        344
+      ]
+    },
+    {
+      "file_name": "नान.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        545,
+        546,
+        547,
+        548,
+        549,
+        550,
+        551,
+        552
+      ]
+    },
+    {
+      "file_name": "پکوڑا.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        561,
+        562,
+        563,
+        564,
+        565,
+        566,
+        567,
+        568
+      ]
+    },
+    {
+      "file_name": "서울.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        577,
+        578,
+        579,
+        580,
+        581,
+        582,
+        583,
+        584
+      ]
+    },
+    {
+      "file_name": "گردو.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        601,
+        602,
+        603,
+        604,
+        605,
+        606,
+        607,
+        608
+      ]
+    },
+    {
+      "file_name": "חומוס.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        617,
+        618,
+        619,
+        620,
+        621,
+        622,
+        623,
+        624
+      ]
+    },
+    {
+      "file_name": "طاجين.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        633,
+        634,
+        635,
+        636,
+        637,
+        638,
+        639,
+        640
+      ]
+    },
+    {
+      "file_name": "чай.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        641,
+        642,
+        643,
+        644,
+        645,
+        646,
+        647,
+        648
+      ]
+    },
+    {
+      "file_name": "ミツビシ.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        657,
+        658,
+        659,
+        660,
+        661,
+        662,
+        663,
+        664
+      ]
+    },
+    {
+      "file_name": "みつびし.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        665,
+        666,
+        667,
+        668,
+        669,
+        670,
+        671,
+        672
+      ]
+    },
+    {
+      "file_name": "Gefäß.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        681,
+        682,
+        683,
+        684,
+        685,
+        686,
+        687,
+        688
+      ]
+    },
+    {
+      "file_name": "北京.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        689,
+        690,
+        691,
+        692,
+        693,
+        694,
+        695,
+        696
+      ]
+    },
+    {
+      "file_name": "東京.txt2",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        713,
+        714,
+        715,
+        716,
+        717,
+        718,
+        719,
+        720
+      ]
+    },
+    {
+      "file_name": "नान.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8194,
+        8195,
+        8196,
+        8197,
+        8198,
+        8199,
+        8200,
+        8201
+      ]
+    },
+    {
+      "file_name": "پکوڑا.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8210,
+        8211,
+        8212,
+        8213,
+        8214,
+        8215,
+        8216,
+        8217
+      ]
+    },
+    {
+      "file_name": "서울.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8226,
+        8227,
+        8228,
+        8229,
+        8230,
+        8231,
+        8232,
+        8233
+      ]
+    },
+    {
+      "file_name": "گردو.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8251,
+        8252,
+        8253,
+        8254,
+        8255,
+        8256,
+        8257,
+        8258
+      ]
+    },
+    {
+      "file_name": "חומוס.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8267,
+        8268,
+        8269,
+        8270,
+        8271,
+        8272,
+        8273,
+        8274
+      ]
+    },
+    {
+      "file_name": "طاجين.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8283,
+        8284,
+        8285,
+        8286,
+        8287,
+        8288,
+        8289,
+        8290
+      ]
+    },
+    {
+      "file_name": "чай.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8291,
+        8292,
+        8293,
+        8294,
+        8295,
+        8296,
+        8297,
+        8298
+      ]
+    },
+    {
+      "file_name": "ミツビシ.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8307,
+        8308,
+        8309,
+        8310,
+        8311,
+        8312,
+        8313,
+        8314
+      ]
+    },
+    {
+      "file_name": "みつびし.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8316,
+        8317,
+        8318,
+        8319,
+        8320,
+        8321,
+        8322,
+        8323
+      ]
+    },
+    {
+      "file_name": "Gefäß.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8332,
+        8333,
+        8334,
+        8335,
+        8336,
+        8337,
+        8338,
+        8339
+      ]
+    },
+    {
+      "file_name": "北京.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8340,
+        8341,
+        8342,
+        8343,
+        8344,
+        8345,
+        8346,
+        8347
+      ]
+    },
+    {
+      "file_name": "東京.txt3",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081028040,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1046649600,
+      "created_timestamp": 1331667796,
+      "blocks": [
+        8364,
+        8365,
+        8366,
+        8367,
+        8368,
+        8369,
+        8370,
+        8371
+      ]
+    }
+  ]
+}

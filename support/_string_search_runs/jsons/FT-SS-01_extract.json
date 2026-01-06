@@ -1,0 +1,14 @@
+{
+  "base_test_case": "FT-SS-01",
+  "file_contents_found": [
+    "ASCII ====> DireWolf 0897 <==== fat Bay SHARK pond? RIVER Ocean SHARK. Creek, SHARK SHARK BlueCrab pond, HARBOR. Trout! bass! HARBOR Trout Island bass",
+    "ASCII ====> DireWolf 0896 <==== fat RIVER. BlueCrab, Creek KingCrab Brook",
+    "ASCII ====> DireWolf 0899 <==== exfat Ocean Carp",
+    "ASCII ====> DireWolf 0898 <==== exfat bass",
+    "ASCII ====> DireWolf 0901 <==== ntfs HARBOR? pond Island! RIVER",
+    "ASCII ====> DireWolf 0900 <==== ntfs Trout",
+    "OR Ocean Trout Carp. Ocean Bay Carp KingCrab Squid  ASCII ====> DireWolf 0902 <==== unalloc Brook tuna pond, Squid Island. Carp."
+  ],
+  "os": "windows",
+  "tool_used": "IPED Version 3.18.13"
+}

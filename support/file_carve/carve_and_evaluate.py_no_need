@@ -1,0 +1,559 @@
+#!/usr/bin/env python3
+"""
+carve_and_evaluate.py
+
+Automate file carving with Scalpel (v1.60), stage carved files to a central folder,
+and (optionally) upload to a local evaluator API.
+
+Per image (e.g., image-contig-jpg.dd):
+  - base_test_case: 'carv-contig-jpg' (if name starts with 'image-'; else just the stem)
+  - Scalpel output dir: <work_root>/<base_test_case>  (temporary working output)
+  - Staging dir: /.../fileCarve/<base_test_case>/     (final copy target for uploads)
+  - API POST: http://localhost:8000/api/v1/file-carving/evaluate
+      fields: base_test_case, tool_used=Scalpel_version_1.60, files=<all staged files>
+  - JSONs saved in staging dir (per case):
+      <base_test_case>_request.json
+      <base_test_case>_response.json (only when an upload actually happens)
+
+Modes:
+  - Default (no mode flag): carve + upload
+  - --carve-only : carve + stage only (no API)
+  - --upload-only: upload only from existing staged files (no carving)
+
+Extras:
+  - --confirm-upload : prompt before sending each case to the API (one-by-one)
+  - --only-case NAME : process only this test case or image name (repeatable).
+                       Accepts 'carv-*', 'image-*.dd', or 'image-*'
+  - --pattern        : substring/regex to select images
+  - --limit N        : cap the number of images processed
+  - --force          : re-carve even if work output exists
+  - --dry-run        : log and scaffold folders; no carving or uploading
+  - --debug          : verbose logging
+"""
+
+import argparse
+import hashlib
+import json
+import logging
+import mimetypes
+import os
+import re
+import shutil
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import List, Tuple, Optional, Dict, Any, Set
+
+import requests
+
+# ---------------------------- Defaults ----------------------------
+
+IMAGES_DIR_DEFAULT = "/home/akila/Downloads/file-carving-graphic-files-cftt-test-data/file-carving-graphic-files-cftt-test-data/images"
+API_URL_DEFAULT = "http://localhost:8000/api/v1/file-carving/evaluate"
+SCALPEL_CONFIG_DEFAULT = "/etc/scalpel/scalpel.conf"
+TOOL_USED_CONSTANT = "Scalpel_version_1.60"
+
+# Where ALL carved files should be staged first (per your request)
+STAGING_DIR_DEFAULT = "/media/akila/Data/UCD/Phd/AutoDFBench_GIT/AutoDFBench/Data/fileCarve"
+
+# Temporary working root for Scalpel -o (per-case subdirs created under here)
+WORK_ROOT_DEFAULT = "./carvedout_work"
+
+
+# ---------------------------- Helpers ----------------------------
+
+def find_scalpel_version(logger: logging.Logger) -> Optional[str]:
+    try:
+        res = subprocess.run(["scalpel", "-V"], capture_output=True, text=True, check=False)
+        out = (res.stdout or "") + (res.stderr or "")
+        out = out.strip()
+        if out:
+            logger.debug("Scalpel version output: %s", out)
+            m = re.search(r"([0-9]+\.[0-9]+)", out)
+            if m:
+                return m.group(1)
+        return None
+    except FileNotFoundError:
+        logger.error("scalpel not found in PATH")
+        return None
+    except Exception as e:
+        logger.debug("Version check failed: %s", e)
+        return None
+
+
+def derive_base_test_case(image_name: str) -> str:
+    """
+    - 'image-contig-bmp.dd' -> 'carv-contig-bmp'
+    - 'dfr-04-ext.dd'       -> 'dfr-04-ext'
+    """
+    stem = re.sub(r"\.dd$", "", image_name, flags=re.IGNORECASE)
+    if stem.startswith("image-"):
+        return "carv-" + stem[len("image-"):]
+    return stem
+
+
+def list_dd_images(images_dir: Path, name_pattern: Optional[str]) -> List[Path]:
+    candidates = sorted(images_dir.glob("*.dd"))
+    if not name_pattern:
+        return candidates
+    try:
+        rx = re.compile(name_pattern, flags=re.IGNORECASE)
+        return [p for p in candidates if rx.search(p.name)]
+    except re.error:
+        low = name_pattern.lower()
+        return [p for p in candidates if low in p.name.lower()]
+
+
+def normalize_only_case_arg(s: str) -> str:
+    """
+    Accepts 'carv-contig-jpg' OR 'image-contig-jpg.dd' OR 'image-contig-jpg'.
+    Returns normalized base_test_case.
+    """
+    s = s.strip()
+    if s.endswith(".dd"):
+        return derive_base_test_case(s)
+    if s.startswith("image-"):
+        return derive_base_test_case(s + ".dd")
+    # assume already a base_test_case (e.g., 'carv-contig-jpg' or 'dfr-04-ext')
+    return s
+
+
+def filter_images_by_only_case(images: List[Path], only_cases: Set[str]) -> List[Path]:
+    if not only_cases:
+        return images
+    picked = []
+    for p in images:
+        base = derive_base_test_case(p.name)
+        if base in only_cases:
+            picked.append(p)
+    return picked
+
+
+def run_scalpel(image_path: Path, out_dir: Path, scalpel_conf: Path,
+                logger: logging.Logger, dry_run: bool = False, force: bool = False) -> None:
+    """
+    Run: scalpel -c /etc/scalpel/scalpel.conf -o <out_dir> <image.dd>
+    Ensure out_dir exists even if Scalpel produced no files (drop NO_OUTPUT.txt).
+    """
+    if out_dir.exists():
+        if force:
+            logger.debug("Removing existing work output: %s", out_dir)
+            shutil.rmtree(out_dir)
+        else:
+            logger.info("Work output exists for %s -> %s (skip; use --force to re-run).",
+                        image_path.name, out_dir)
+            return
+
+    out_dir.parent.mkdir(parents=True, exist_ok=True)
+
+    if dry_run:
+        logger.info("[DRY-RUN] Would run: scalpel -c %s -o %s %s", scalpel_conf, out_dir, image_path)
+        out_dir.mkdir(parents=True, exist_ok=True)
+        (out_dir / "NO_OUTPUT.txt").write_text(
+            "DRY-RUN: Scalpel not executed; folder scaffolded for visibility.\n",
+            encoding="utf-8"
+        )
+        return
+
+    cmd = ["scalpel", "-c", str(scalpel_conf), "-o", str(out_dir), str(image_path)]
+    logger.debug("Scalpel command: %s", " ".join(cmd))
+
+    ret = 0
+    try:
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        assert proc.stdout is not None
+        for line in proc.stdout:
+            logger.debug("[scalpel] %s", line.rstrip())
+        ret = proc.wait()
+    except Exception as e:
+        logger.error("Scalpel invocation failed for %s: %s", image_path, e)
+        ret = -1
+
+    # Ensure there is a folder even if Scalpel didn’t create one
+    if not out_dir.exists():
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+    # If Scalpel failed or carved nothing, drop a stub so it’s obvious
+    if ret != 0:
+        (out_dir / "NO_OUTPUT.txt").write_text(
+            f"Scalpel exit code: {ret}. Check logs/audit.\n", encoding="utf-8"
+        )
+        return
+
+    # Some runs produce only audit files; mark no payloads
+    try:
+        has_payloads = any(
+            p.is_file() and p.name.lower() not in {"audit.txt", "report.xml", "report.html"}
+            for p in out_dir.rglob("*")
+        )
+        if not has_payloads:
+            (out_dir / "NO_OUTPUT.txt").write_text(
+                "Scalpel ran but produced no carved files (likely FRAG/NON case, or rule disabled).\n",
+                encoding="utf-8"
+            )
+    except Exception:
+        pass
+
+
+def collect_nonempty_files(root: Path, logger: logging.Logger, skip_names: Optional[set] = None) -> List[Path]:
+    """
+    Collect non-empty files under root, skipping known metadata and any names in skip_names.
+    """
+    if not root.exists():
+        return []
+    skip = {"audit.txt", "report.xml", "report.html"}
+    if skip_names:
+        skip |= {n.lower() for n in skip_names}
+    picked: List[Path] = []
+    for p in root.rglob("*"):
+        if not p.is_file():
+            continue
+        if p.name.lower() in skip:
+            continue
+        try:
+            if p.stat().st_size <= 0:
+                continue
+        except FileNotFoundError:
+            continue
+        picked.append(p)
+    logger.debug("Collected %d files from %s", len(picked), root)
+    return picked
+
+
+def safe_copy(src: Path, dst_dir: Path) -> Path:
+    """
+    Copy src into dst_dir. If a file with same name exists, append numeric suffix before extension.
+    Returns destination path.
+    """
+    dst_dir.mkdir(parents=True, exist_ok=True)
+    base = src.name
+    target = dst_dir / base
+    if not target.exists():
+        shutil.copy2(src, target)
+        return target
+
+    stem, ext = os.path.splitext(base)
+    i = 1
+    while True:
+        cand = dst_dir / f"{stem}_{i}{ext}"
+        if not cand.exists():
+            shutil.copy2(src, cand)
+            return cand
+        i += 1
+
+
+def stage_carved_files(work_out_dir: Path, staging_case_dir: Path, logger: logging.Logger) -> List[Path]:
+    """
+    Copy carved files from Scalpel's work output into the central staging per-case directory.
+    Returns list of staged file paths.
+    """
+    carved = collect_nonempty_files(work_out_dir, logger)
+    staged: List[Path] = []
+    for f in carved:
+        staged_path = safe_copy(f, staging_case_dir)
+        staged.append(staged_path)
+    logger.info("Staged %d payload files to %s", len(staged), staging_case_dir)
+    return staged
+
+
+def collect_staged_files(staging_case_dir: Path, logger: logging.Logger) -> List[Path]:
+    """
+    Find files already staged for a case, skipping JSON manifests (any *.json).
+    """
+    if not staging_case_dir.exists():
+        return []
+    picked: List[Path] = []
+    for p in staging_case_dir.rglob("*"):
+        if not p.is_file():
+            continue
+        if p.suffix.lower() == ".json":     # skip request/response manifests
+            continue
+        if p.name.lower() in {"audit.txt", "report.xml", "report.html"}:
+            continue
+        try:
+            if p.stat().st_size <= 0:
+                continue
+        except FileNotFoundError:
+            continue
+        picked.append(p)
+    logger.debug("Collected %d staged payload files from %s", len(picked), staging_case_dir)
+    return picked
+
+
+def sha256sum(path: Path, chunk_size: int = 1024 * 1024) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        while True:
+            b = f.read(chunk_size)
+            if not b:
+                break
+            h.update(b)
+    return h.hexdigest()
+
+
+def prepare_multipart(files: List[Path]) -> List[Tuple[str, Tuple[str, object, str]]]:
+    """Build the 'files' payload (repeated field name 'files')."""
+    form_files = []
+    for f in files:
+        mime, _ = mimetypes.guess_type(f.name)
+        if not mime:
+            mime = "application/octet-stream"
+        form_files.append(("files", (f.name, open(f, "rb"), mime)))
+    return form_files
+
+
+def save_json(doc: Dict[str, Any], dest: Path, logger: logging.Logger) -> None:
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    with open(dest, "w", encoding="utf-8") as fh:
+        json.dump(doc, fh, ensure_ascii=False, indent=2)
+    logger.debug("Saved JSON: %s", dest)
+
+
+def build_input_manifest(base_test_case: str, tool_used: str, source_image: Path,
+                         staging_case_dir: Path, files: List[Path],
+                         scalpel_version: Optional[str], dry_run: bool, mode: str) -> Dict[str, Any]:
+    files_meta = []
+    for f in files:
+        size = f.stat().st_size
+        mime, _ = mimetypes.guess_type(f.name)
+        files_meta.append({
+            "name": f.name,
+            "path": str(f),
+            "size_bytes": size,
+            "mime": mime or "application/octet-stream",
+            "sha256": sha256sum(f),
+        })
+    return {
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "mode": mode,  # 'carve_only' | 'upload_only' | 'carve_and_upload'
+        "base_test_case": base_test_case,
+        "tool_used": tool_used,
+        "scalpel_version_detected": scalpel_version,
+        "dry_run": dry_run,
+        "source_image": str(source_image),
+        "staging_dir": str(staging_case_dir),
+        "file_count": len(files),
+        "files": files_meta,
+    }
+
+
+def post_to_evaluator(api_url: str, base_test_case: str, files: List[Path],
+                      logger: logging.Logger, dry_run: bool = False, timeout: int = 300) -> requests.Response:
+    data = {"base_test_case": base_test_case, "tool_used": TOOL_USED_CONSTANT}
+
+    if dry_run:
+        logger.info("[DRY-RUN] Would POST to %s with base_test_case=%s and %d files",
+                    api_url, base_test_case, len(files))
+
+        class _FakeResp:
+            status_code = 200
+            headers = {"X-Dry-Run": "true"}
+            text = json.dumps({"status": "dry_run", "base_test_case": base_test_case, "files": len(files)})
+            def json(self): return json.loads(self.text)
+        return _FakeResp()  # type: ignore[return-value]
+
+    files_param = prepare_multipart(files)
+    try:
+        resp = requests.post(api_url, data=data, files=files_param, timeout=timeout)
+        return resp
+    finally:
+        for _, (_fname, fh, _mime) in files_param:
+            try:
+                fh.close()
+            except Exception:
+                pass
+
+
+# ---------------------------- Main ----------------------------
+
+def main():
+    parser = argparse.ArgumentParser(description="Scalpel carve -> stage to central dir -> (optional) evaluate API.")
+    parser.add_argument("--images-dir", default=IMAGES_DIR_DEFAULT, help="Folder containing *.dd images.")
+    parser.add_argument("--scalpel-conf", default=SCALPEL_CONFIG_DEFAULT, help="Path to scalpel.conf.")
+    parser.add_argument("--api-url", default=API_URL_DEFAULT, help="Evaluator API endpoint.")
+    parser.add_argument("--staging-dir", default=STAGING_DIR_DEFAULT,
+                        help="Central folder to place carved files into first (per-case subfolders).")
+    parser.add_argument("--work-root", default=WORK_ROOT_DEFAULT,
+                        help="Temporary working root for Scalpel -o (per-case subfolders).")
+    parser.add_argument("--pattern", default=None, help="Filter images by substring/regex (case-insensitive).")
+    parser.add_argument("--limit", type=int, default=None, help="Process at most N images.")
+    parser.add_argument("--force", action="store_true", help="Re-carve if work output exists.")
+    parser.add_argument("--dry-run", action="store_true", help="Log actions; do not carve or upload.")
+    parser.add_argument("--debug", action="store_true", help="Verbose logs.")
+    parser.add_argument("--timeout", type=int, default=300, help="HTTP timeout seconds.")
+
+    # Mode selectors
+    mode_group = parser.add_mutually_exclusive_group()
+    mode_group.add_argument("--carve-only", action="store_true",
+                            help="Carve & stage only; do not call the API.")
+    mode_group.add_argument("--upload-only", action="store_true",
+                            help="Only call the API using already staged files; do not carve.")
+
+    # New: confirm-per-case (step-by-step) and only-case filter
+    parser.add_argument("--confirm-upload", action="store_true",
+                        help="Before uploading each case, prompt for confirmation (y/N).")
+    parser.add_argument("--only-case", action="append", default=[],
+                        help="Process only this base_test_case or image name (repeatable). "
+                             "Accepts 'carv-*', 'image-*.dd', or 'image-*'.")
+
+    args = parser.parse_args()
+
+    # Logging
+    level = logging.DEBUG if args.debug else logging.INFO
+    logging.basicConfig(level=level, format="%(asctime)s %(levelname)-8s %(message)s", datefmt="[%H:%M:%S]")
+    logger = logging.getLogger("carve_and_evaluate")
+
+    images_dir = Path(args.images_dir).expanduser().resolve()
+    if not images_dir.is_dir():
+        logger.error("Images directory not found: %s", images_dir)
+        sys.exit(1)
+
+    scalpel_conf = Path(args.scalpel_conf).expanduser().resolve()
+    api_url = args.api_url
+    staging_root = Path(args.staging_dir).expanduser().resolve()
+    work_root = Path(args.work_root).expanduser().resolve()
+
+    if not args.dry_run:
+        staging_root.mkdir(parents=True, exist_ok=True)
+        work_root.mkdir(parents=True, exist_ok=True)
+
+    logger.info("Images dir : %s", images_dir)
+    logger.info("Staging dir: %s", staging_root)
+    logger.info("Work root  : %s", work_root)
+    logger.info("API URL    : %s", api_url)
+    logger.info("Scalpel conf: %s", scalpel_conf)
+
+    scalpel_version = find_scalpel_version(logger)
+    if scalpel_version:
+        logger.info("Detected Scalpel version: %s", scalpel_version)
+    else:
+        logger.warning("Could not detect Scalpel version (ensure 'scalpel' is installed and in PATH).")
+
+    # Discover and optionally filter images
+    all_imgs = sorted(images_dir.glob("*.dd"))
+    images = list_dd_images(images_dir, args.pattern)
+
+    # Apply --only-case filters (normalize inputs first)
+    only_set: Set[str] = {normalize_only_case_arg(s) for s in args.only_case} if args.only_case else set()
+    if only_set:
+        images = filter_images_by_only_case(images, only_set)
+
+    if args.limit is not None:
+        images = images[: args.limit]
+
+    logging.info("Discovered %d .dd images; pattern=%r, only_case=%s -> %d selected",
+                 len(all_imgs), args.pattern, (sorted(only_set) if only_set else None), len(images))
+    for p in images:
+        logging.debug("  selected: %s  (base=%s)", p.name, derive_base_test_case(p.name))
+
+    if not images:
+        logger.warning("No .dd images found matching criteria.")
+        return
+
+    total, successes, failures = len(images), 0, 0
+
+    for idx, img in enumerate(images, start=1):
+        logger.info("(%d/%d) Processing %s", idx, total, img.name)
+        base_test_case = derive_base_test_case(img.name)
+
+        work_out_dir = work_root / base_test_case
+        staging_case_dir = staging_root / base_test_case
+
+        try:
+            mode = (
+                "carve_only" if args.carve_only else
+                "upload_only" if args.upload_only else
+                "carve_and_upload"
+            )
+
+            staged_files: List[Path] = []
+
+            # Carve & stage (unless upload-only)
+            if not args.upload_only:
+                run_scalpel(img, work_out_dir, scalpel_conf, logger, dry_run=args.dry_run, force=args.force)
+                if not args.dry_run:
+                    staged_files = stage_carved_files(work_out_dir, staging_case_dir, logger)
+
+            # If we're uploading (default or upload-only), gather staged files if not already
+            if args.upload_only:
+                staged_files = collect_staged_files(staging_case_dir, logger)
+
+            # Save/update input manifest with test-case-named file
+            input_manifest = build_input_manifest(
+                base_test_case=base_test_case,
+                tool_used=TOOL_USED_CONSTANT,
+                source_image=img,
+                staging_case_dir=staging_case_dir,
+                files=staged_files,
+                scalpel_version=scalpel_version,
+                dry_run=args.dry_run,
+                mode=mode,
+            )
+            request_json_path = staging_case_dir / f"{base_test_case}_request.json"
+            save_json(input_manifest, request_json_path, logger)
+
+            # Decide whether to call API
+            should_upload = (not args.carve_only) and (not args.dry_run)
+
+            if should_upload:
+                # Optional confirmation (one-by-one)
+                if args.confirm_upload:
+                    try:
+                        answer = input(f"Upload '{base_test_case}' with {len(staged_files)} files? [y/N]: ").strip().lower()
+                    except EOFError:
+                        answer = ""
+                    if answer not in {"y", "yes"}:
+                        logger.info("Skipped upload for %s (user declined).", base_test_case)
+                        successes += 1
+                        continue
+
+                if not staged_files:
+                    logger.warning("No staged files for %s in %s; skipping upload.", base_test_case, staging_case_dir)
+                    successes += 1
+                    continue
+
+                resp = post_to_evaluator(
+                    api_url=api_url,
+                    base_test_case=base_test_case,
+                    files=staged_files,
+                    logger=logger,
+                    dry_run=False,
+                    timeout=args.timeout,
+                )
+
+                response_doc: Dict[str, Any] = {
+                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+                    "http_status": getattr(resp, "status_code", None),
+                    "headers": dict(getattr(resp, "headers", {}) or {}),
+                    "base_test_case": base_test_case,
+                }
+                body_text = getattr(resp, "text", "")
+                try:
+                    response_doc["body"] = json.loads(body_text) if body_text else None
+                except Exception:
+                    response_doc["body_raw"] = body_text
+
+                response_json_path = staging_case_dir / f"{base_test_case}_response.json"
+                save_json(response_doc, response_json_path, logger)
+
+                status = response_doc.get("http_status") or 0
+                if 200 <= status < 300:
+                    logger.info("Uploaded OK: %s | HTTP %s", base_test_case, status)
+                    successes += 1
+                else:
+                    logger.error("Upload failed: %s | HTTP %s", base_test_case, status)
+                    failures += 1
+            else:
+                logger.info("API upload skipped (mode=%s).", mode)
+                successes += 1
+
+        except Exception as e:
+            logger.exception("Failed on %s: %s", img.name, e)
+            failures += 1
+
+    logger.info("Done. Successes: %d | Failures: %d | Total: %d", successes, failures, total)
+
+
+if __name__ == "__main__":
+    main()

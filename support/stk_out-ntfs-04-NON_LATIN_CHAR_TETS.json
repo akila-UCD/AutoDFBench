@@ -1,0 +1,190 @@
+{
+  "base_test_case": "DFR-04/ntfs-04",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "FILE_SIZE_TESTS",
+  "check_meta": false,
+  "file_system": "EXT",
+  "file_count": 12,
+  "files": [
+    {
+      "file_name": "नान.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        205242,
+        205243,
+        205244,
+        205245
+      ]
+    },
+    {
+      "file_name": "پکوڑا.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        213432,
+        213433,
+        213434,
+        213435
+      ]
+    },
+    {
+      "file_name": "서울.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        221624,
+        221625,
+        221626,
+        221627
+      ]
+    },
+    {
+      "file_name": "گردو.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        233912,
+        233913,
+        233914,
+        233915
+      ]
+    },
+    {
+      "file_name": "חומוס.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        242104,
+        242105,
+        242106,
+        242107
+      ]
+    },
+    {
+      "file_name": "طاجين.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        250296,
+        250297,
+        250298,
+        250299
+      ]
+    },
+    {
+      "file_name": "чай.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        254392,
+        254393,
+        254394,
+        254395
+      ]
+    },
+    {
+      "file_name": "ミツビシ.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        262584,
+        262585,
+        262586,
+        262587
+      ]
+    },
+    {
+      "file_name": "みつびし.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        266680,
+        266681,
+        266682,
+        266683
+      ]
+    },
+    {
+      "file_name": "Gefäß.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        274872,
+        274873,
+        274874,
+        274875
+      ]
+    },
+    {
+      "file_name": "北京.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011484,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        278968,
+        278969,
+        278970,
+        278971
+      ]
+    },
+    {
+      "file_name": "東京.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1327011485,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 1327011303,
+      "blocks": [
+        291256,
+        291257,
+        291258,
+        291259
+      ]
+    }
+  ]
+}

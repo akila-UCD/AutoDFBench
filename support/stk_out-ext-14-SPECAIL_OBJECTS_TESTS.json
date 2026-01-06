@@ -1,0 +1,280 @@
+{
+  "base_test_case": "DFR-14/ext-14",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "SPECAIL_OBJECTS_TESTS",
+  "check_meta": false,
+  "file_system": "EXT",
+  "file_count": 22,
+  "files": [
+    {
+      "file_name": "Castor-far-rmLink-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Capella-far-rmBoth-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Canopus-target-local-rmTarget-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Canopus-target-remote-rmTarget-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Castor-near-rmLink-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Capella-target-local-rmBoth-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Capella-target-remote-rmBoth-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Capella-near-rmBoth-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Mintaka-target-local-rmTarget-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Mintaka-target-remote-rmTarget-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Mimosa-target-local-rmBoth-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Mimosa-target-remote-rmBoth-X4.txt",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 0,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 0,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-16",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212324,
+      "modified_timestamp": 1318192345,
+      "changed_timestamp": 1318192524,
+      "accessed_timestamp": 1318192524,
+      "created_timestamp": 0,
+      "blocks": [
+        531,
+        532,
+        533,
+        534
+      ]
+    },
+    {
+      "file_name": "OrphanFile-17",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212324,
+      "modified_timestamp": 1318192345,
+      "changed_timestamp": 1318192524,
+      "accessed_timestamp": 1318192524,
+      "created_timestamp": 0,
+      "blocks": [
+        1025,
+        1026,
+        1027,
+        1028
+      ]
+    },
+    {
+      "file_name": "OrphanFile-18",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212334,
+      "modified_timestamp": 1318192355,
+      "changed_timestamp": 1318192534,
+      "accessed_timestamp": 1318192355,
+      "created_timestamp": 0,
+      "blocks": [
+        3073,
+        3074,
+        3075,
+        3076
+      ]
+    },
+    {
+      "file_name": "OrphanFile-19",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212334,
+      "modified_timestamp": 1318192355,
+      "changed_timestamp": 1318192534,
+      "accessed_timestamp": 1318192355,
+      "created_timestamp": 0,
+      "blocks": [
+        3585,
+        3586,
+        3587,
+        3588
+      ]
+    },
+    {
+      "file_name": "OrphanFile-24",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212335,
+      "modified_timestamp": 1318192375,
+      "changed_timestamp": 1318192535,
+      "accessed_timestamp": 1318192375,
+      "created_timestamp": 0,
+      "blocks": [
+        2053,
+        2054,
+        2055,
+        2056
+      ]
+    },
+    {
+      "file_name": "OrphanFile-25",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212335,
+      "modified_timestamp": 1318192375,
+      "changed_timestamp": 1318192535,
+      "accessed_timestamp": 1318192375,
+      "created_timestamp": 0,
+      "blocks": [
+        2561,
+        2562,
+        2563,
+        2564
+      ]
+    },
+    {
+      "file_name": "OrphanFile-42842",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212346,
+      "modified_timestamp": 1318192405,
+      "changed_timestamp": 1318192546,
+      "accessed_timestamp": 1318192405,
+      "created_timestamp": 0,
+      "blocks": [
+        174593,
+        174594,
+        174595,
+        174596
+      ]
+    },
+    {
+      "file_name": "OrphanFile-46922",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212346,
+      "modified_timestamp": 1318192405,
+      "changed_timestamp": 1318192546,
+      "accessed_timestamp": 1318192405,
+      "created_timestamp": 0,
+      "blocks": [
+        192001,
+        192002,
+        192003,
+        192004
+      ]
+    },
+    {
+      "file_name": "OrphanFile-63242",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212346,
+      "modified_timestamp": 1318192395,
+      "changed_timestamp": 1318192546,
+      "accessed_timestamp": 1318192395,
+      "created_timestamp": 0,
+      "blocks": [
+        254465,
+        254466,
+        254467,
+        254468
+      ]
+    },
+    {
+      "file_name": "OrphanFile-77522",
+      "file_size": 4096,
+      "deleted_timestamp": 1318212346,
+      "modified_timestamp": 1318192395,
+      "changed_timestamp": 1318192546,
+      "accessed_timestamp": 1318192395,
+      "created_timestamp": 0,
+      "blocks": [
+        318977,
+        318978,
+        318979,
+        318980
+      ]
+    }
+  ]
+}

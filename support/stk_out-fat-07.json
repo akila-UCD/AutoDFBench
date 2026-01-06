@@ -1,0 +1,205 @@
+{
+  "base_test_case": "DFR-07/fat-07",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "FILE_SIZE_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "file_count": 9,
+  "files": [
+    {
+      "file_name": "_FURUD.TXT",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318225030,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318225030,
+      "blocks": [
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91
+      ]
+    },
+    {
+      "file_name": "Graffias.TXT",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318225030,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318225030,
+      "blocks": [
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99
+      ]
+    },
+    {
+      "file_name": "Fomalhaut.TXT",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318225032,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318225032,
+      "blocks": [
+        553,
+        554,
+        555,
+        556,
+        557,
+        558,
+        559,
+        560,
+        561,
+        562,
+        563,
+        564,
+        565,
+        566,
+        567,
+        568
+      ]
+    },
+    {
+      "file_name": "Gemma.TXT",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318225032,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318225032,
+      "blocks": [
+        569,
+        570,
+        571,
+        572,
+        573,
+        574,
+        575,
+        576
+      ]
+    },
+    {
+      "file_name": "_APELLA.TXT",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318224660,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318224660,
+      "blocks": [
+        561,
+        562,
+        563,
+        564,
+        565,
+        566,
+        567,
+        568
+      ]
+    },
+    {
+      "file_name": "Deneb.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318224660,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318224660,
+      "blocks": [
+        569,
+        570,
+        571,
+        572,
+        573,
+        574,
+        575,
+        576
+      ]
+    },
+    {
+      "file_name": "FumAlSamakah.txt",
+      "file_size": 8192,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318225032,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318225032,
+      "blocks": [
+        8202,
+        8203,
+        8204,
+        8205,
+        8206,
+        8207,
+        8208,
+        8209,
+        8210,
+        8211,
+        8212,
+        8213,
+        8214,
+        8215,
+        8216,
+        8217
+      ]
+    },
+    {
+      "file_name": "Giauzar.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318225032,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318225032,
+      "blocks": [
+        8218,
+        8219,
+        8220,
+        8221,
+        8222,
+        8223,
+        8224,
+        8225
+      ]
+    },
+    {
+      "file_name": "_ENEBOLA.TXT",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318224664,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318224664,
+      "blocks": [
+        8218,
+        8219,
+        8220,
+        8221,
+        8222,
+        8223,
+        8224,
+        8225
+      ]
+    }
+  ]
+}

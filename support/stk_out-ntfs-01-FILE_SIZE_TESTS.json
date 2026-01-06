@@ -1,0 +1,103 @@
+{
+  "base_test_case": "DFR-01/ntfs-01",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "FILE_SIZE_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "file_count": 9,
+  "files": [
+    {
+      "file_name": "Bunda.txt",
+      "file_size": 4296,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848040,
+      "changed_timestamp": 1328281979,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 1328281801,
+      "blocks": [
+        13368,
+        13369
+      ]
+    },
+    {
+      "file_name": "OrphanFile-16",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-17",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-18",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-19",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-20",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-21",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-22",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-23",
+      "file_size": 0,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1328281730,
+      "changed_timestamp": 1328281730,
+      "accessed_timestamp": 1328281730,
+      "created_timestamp": 1328281730,
+      "blocks": []
+    }
+  ]
+}
