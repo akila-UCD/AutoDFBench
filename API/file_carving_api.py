@@ -75,13 +75,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if ctype != "multipart/form-data":
             return self._json_error(400, "Content-Type must be multipart/form-data")
 
-            graphic_file_carving_source_path = get_confgs('graphic_file_carving_source_path')
-            
-            base_test_case = form.getvalue("base_test_case")
-
-            too_used = form.getvalue("tool_used")
-
-            test_case = f"{base_test_case}_{too_used}"
+        # Required for FieldStorage parsing
+        if "boundary" not in pdict:
+            return self._json_error(400, "multipart boundary missing")
+        pdict["boundary"] = pdict["boundary"].encode("utf-8")
 
         try:
             pdict["CONTENT-LENGTH"] = int(self.headers.get("Content-Length", "0") or "0")
@@ -152,41 +149,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             if not saved_paths:
                 return self._json_error(400, "No valid files were uploaded")
 
-                for gt in ground_truth_paths:
-                    gt_file_name = gt[6]
-                    gt_file_path = Path(graphic_file_carving_source_path[2]) / gt_file_name
-
-                    score = ImageCompare.compute_visibility(file_path, gt_file_path)
-                    print(f"Comparing: {file_path} ↔ {gt_file_path} = Score: {score}")
-
-                    
-                    hexScore = ImageCompare.block_compare(file_path, gt_file_path)
-                    print(f"hexScore: {hexScore}")
-
-
-                    if score == 100:
-                        matched = True
-                        matched_files += 1
-                        matched_gt_files.add(gt_file_name)
-                        matched_gt_name = gt_file_name
-                        break  # stop comparing if exact match found
-
-                details.append({
-                    "submitted_file": filename,
-                    "matched": matched,
-                    "matched_gt_file": matched_gt_name
-                })
-
-            true_positives = matched_files
-            false_positives = total_submitted - matched_files
-            false_negatives = len(gt_filenames - matched_gt_files)
-
-            precision = true_positives / (true_positives + false_positives) if (true_positives + false_positives) > 0 else 0.0
-            recall = true_positives / (true_positives + false_negatives) if (true_positives + false_negatives) > 0 else 0.0
-            f1_score = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
-
-            insert_result_to_db(base_test_case, test_case, true_positives,false_positives,false_negatives,precision,recall, f1_score)
-            response = {
+            # Delegate evaluation to shared evaluator
+            payload = {
                 "base_test_case": base_test_case,
                 "tool_used": tool_used,
                 "carved_files": [str(p) for p in saved_paths],
