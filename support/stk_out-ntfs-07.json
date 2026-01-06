@@ -1,0 +1,65 @@
+{
+  "base_test_case": "DFR-07/ntfs-07",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "FILE_SIZE_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "file_count": 3,
+  "files": [
+    {
+      "file_name": "Furud.txt",
+      "file_size": 7680,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1320611796,
+      "changed_timestamp": 1320611796,
+      "accessed_timestamp": 1320611796,
+      "created_timestamp": 1320611796,
+      "blocks": [
+        1006145,
+        1006146,
+        1006147,
+        1006148,
+        1006149,
+        1006150,
+        1006151,
+        1010240,
+        1010241,
+        1010242,
+        1010243,
+        1010244,
+        1010245,
+        1010246,
+        1010247
+      ]
+    },
+    {
+      "file_name": "Grumium.txt",
+      "file_size": 512,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1320611796,
+      "changed_timestamp": 1320611796,
+      "accessed_timestamp": 1320611796,
+      "created_timestamp": 1320611796,
+      "blocks": []
+    },
+    {
+      "file_name": "Duhr.TXT",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1320610199,
+      "changed_timestamp": 1320610199,
+      "accessed_timestamp": 1320610376,
+      "created_timestamp": 1320610199,
+      "blocks": [
+        1010240,
+        1010241,
+        1010242,
+        1010243,
+        1010244,
+        1010245,
+        1010246,
+        1010247
+      ]
+    }
+  ]
+}

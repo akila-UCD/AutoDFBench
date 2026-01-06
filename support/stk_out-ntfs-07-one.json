@@ -1,0 +1,36 @@
+{
+  "base_test_case": "DFR-07/ntfs-07-one",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "OVERWITE_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "file_count": 2,
+  "files": [
+    {
+      "file_name": "Eltanin.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1322235926,
+      "changed_timestamp": 1322235926,
+      "accessed_timestamp": 1322235926,
+      "created_timestamp": 1322235926,
+      "blocks": [
+        523051,
+        523052
+      ]
+    },
+    {
+      "file_name": "Castor.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1322233476,
+      "changed_timestamp": 1322233476,
+      "accessed_timestamp": 1322235171,
+      "created_timestamp": 1322233476,
+      "blocks": [
+        523051,
+        523052
+      ]
+    }
+  ]
+}

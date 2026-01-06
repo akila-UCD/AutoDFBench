@@ -1,0 +1,38 @@
+{
+  "base_test_case": "DFR-06/fat-06",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": false,
+  "file_system": "FAT",
+  "files": [
+    {
+      "file_name": "_BEID.TXT",
+      "file_size": 8353792,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157380,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318223016,
+      "blocks": []
+    },
+    {
+      "file_name": "Betelgeuse.txt",
+      "file_size": 33275392,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157380,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318223018,
+      "blocks": []
+    },
+    {
+      "file_name": "Bellatrix.txt",
+      "file_size": 62913536,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157380,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318223024,
+      "blocks": []
+    }
+  ]
+}

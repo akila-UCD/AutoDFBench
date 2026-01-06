@@ -1,0 +1,40 @@
+{
+  "base_test_case": "DFR-01/ntfs-01-recycle",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "RECYCLE_DEL_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "file_count": 2,
+  "files": [
+    {
+      "file_name": "$I019S2V.txt",
+      "file_size": 544,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1332945238,
+      "changed_timestamp": 1332945238,
+      "accessed_timestamp": 1332945238,
+      "created_timestamp": 1332945238,
+      "blocks": []
+    },
+    {
+      "file_name": "$R019S2V.txt",
+      "file_size": 4296,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848040,
+      "changed_timestamp": 1332945238,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 1332944246,
+      "blocks": [
+        311784,
+        311785,
+        311786,
+        311787,
+        311788,
+        311789,
+        311790,
+        311791,
+        311792
+      ]
+    }
+  ]
+}

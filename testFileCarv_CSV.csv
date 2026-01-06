@@ -1,0 +1,8 @@
+base_test_case,tool_used,files_json
+carv-frag-jpg,Scalpel_version_1.60,"[
+""/media/akila/Data/UCD/Phd/AutoDFBench_GIT/AutoDFBench/Data/fileCarve/carv-frag-jpg/00000000.jpg"",
+""/media/akila/Data/UCD/Phd/AutoDFBench_GIT/AutoDFBench/Data/fileCarve/carv-frag-jpg/00000001.jpg"",
+""/media/akila/Data/UCD/Phd/AutoDFBench_GIT/AutoDFBench/Data/fileCarve/carv-frag-jpg/00000002.jpg"",
+""/media/akila/Data/UCD/Phd/AutoDFBench_GIT/AutoDFBench/Data/fileCarve/carv-frag-jpg/00000003.jpg"",
+""/media/akila/Data/UCD/Phd/AutoDFBench_GIT/AutoDFBench/Data/fileCarve/carv-frag-jpg/00000004.jpg""
+]"

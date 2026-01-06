@@ -1,0 +1,17 @@
+{
+  "base_test_case": "FT-SS-01",
+  "tool_used": "IPED Version 3.18.13",
+  "total_gt_lines": 7,
+  "total_submitted_lines": 7,
+  "true_positives": 7,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1_score": 1.0,
+  "hit_counts_by_type": {
+    "active": 3,
+    "deleted": 3,
+    "unallocated": 1
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "base_test_case": "DFR-07/fat-07-two",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "files": [
+    {
+      "file_name": "_ETELG~1.TXT",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318228278,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318228278,
+      "blocks": [
+        553
+      ]
+    },
+    {
+      "file_name": "Capella.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318228278,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318228278,
+      "blocks": [
+        561
+      ]
+    },
+    {
+      "file_name": "Canopus.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1318228282,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1318185000,
+      "created_timestamp": 1318228282,
+      "blocks": [
+        8210
+      ]
+    }
+  ]
+}

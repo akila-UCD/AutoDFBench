@@ -1,0 +1,100 @@
+{
+  "base_test_case": "DFR-05/fat-05-braid",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "NON_LATIN_CHAR_TESTS",
+  "check_meta": false,
+  "file_system": "EXT",
+  "file_count": 6,
+  "files": [
+    {
+      "file_name": "_BEID.TXT",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157260,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318342488,
+      "blocks": [
+        108,
+        109,
+        110,
+        111
+      ]
+    },
+    {
+      "file_name": "_CAPH.TXT",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833460,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 883699200,
+      "created_timestamp": 1318342488,
+      "blocks": [
+        110,
+        111,
+        112,
+        113
+      ]
+    },
+    {
+      "file_name": "Betelgeuse.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157320,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318342488,
+      "blocks": [
+        300,
+        301,
+        302,
+        303
+      ]
+    },
+    {
+      "file_name": "Capella.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833520,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 883699200,
+      "created_timestamp": 1318342488,
+      "blocks": [
+        302,
+        303,
+        304,
+        305
+      ]
+    },
+    {
+      "file_name": "Bellatrix.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157380,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318342490,
+      "blocks": [
+        16390,
+        16391,
+        16392,
+        16393
+      ]
+    },
+    {
+      "file_name": "Canopus.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833580,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 883699200,
+      "created_timestamp": 1318342490,
+      "blocks": [
+        16392,
+        16393,
+        16394,
+        16395
+      ]
+    }
+  ]
+}

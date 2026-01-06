@@ -1,0 +1,126 @@
+{
+  "base_test_case": "DFR-11/ext-11",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "FILE_SIZE_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "files": [
+    {
+      "file_name": "$OrphanFiles/OrphanFile-38762",
+      "file_size": 8192,
+      "deleted_timestamp": 1318206061,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1318186261,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": [
+        163329,
+        163330,
+        163331,
+        163332,
+        163333,
+        163334,
+        163335,
+        163336
+      ]
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-38763",
+      "file_size": 8192,
+      "deleted_timestamp": 1318206061,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1318186261,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": [
+        155906,
+        155907,
+        155908,
+        155909,
+        155910,
+        155911,
+        155912,
+        155913
+      ]
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-38764",
+      "file_size": 8192,
+      "deleted_timestamp": 1318206061,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1318186261,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": [
+        156161,
+        156162,
+        156163,
+        156164,
+        156165,
+        156166,
+        156167,
+        156168
+      ]
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-59162",
+      "file_size": 0,
+      "deleted_timestamp": 1318206062,
+      "modified_timestamp": 1318186262,
+      "changed_timestamp": 1318186262,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-59163",
+      "file_size": 0,
+      "deleted_timestamp": 1318206062,
+      "modified_timestamp": 1318186262,
+      "changed_timestamp": 1318186262,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-59164",
+      "file_size": 0,
+      "deleted_timestamp": 1318206062,
+      "modified_timestamp": 1318186262,
+      "changed_timestamp": 1318186262,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-32646",
+      "file_size": 0,
+      "deleted_timestamp": 1318206062,
+      "modified_timestamp": 1318186262,
+      "changed_timestamp": 1318186262,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-32647",
+      "file_size": 0,
+      "deleted_timestamp": 1318206062,
+      "modified_timestamp": 1318186262,
+      "changed_timestamp": 1318186262,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "$OrphanFiles/OrphanFile-32648",
+      "file_size": 0,
+      "deleted_timestamp": 1318206062,
+      "modified_timestamp": 1318186262,
+      "changed_timestamp": 1318186262,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    }
+  ]
+}

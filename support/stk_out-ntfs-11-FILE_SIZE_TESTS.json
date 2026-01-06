@@ -1,0 +1,55 @@
+{
+  "base_test_case": "DFR-11/ntfs-11",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "FILE_SIZE_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "file_count": 3,
+  "files": [
+    {
+      "file_name": "Sheliak.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1322156400,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 1322156218,
+      "blocks": [
+        1010240,
+        1010241,
+        1010242,
+        1010243
+      ]
+    },
+    {
+      "file_name": "Vega.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1322156400,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 1322156218,
+      "blocks": [
+        1014336,
+        1014337,
+        1014338,
+        1014339
+      ]
+    },
+    {
+      "file_name": "Sulafat.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951848100,
+      "changed_timestamp": 1322156400,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 1322156218,
+      "blocks": [
+        1018432,
+        1018433,
+        1018434,
+        1018435
+      ]
+    }
+  ]
+}
