@@ -1,0 +1,430 @@
+{
+  "base_test_case": "DFR-04/ext-04",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "NON_LATIN_CHAR_TESTS",
+  "check_meta": false,
+  "file_system": "FAT",
+  "file_count": 36,
+  "files": [
+    {
+      "file_name": "OrphanFile-12",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        5633,
+        5634,
+        5635,
+        5636
+      ]
+    },
+    {
+      "file_name": "OrphanFile-14",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        7681,
+        7682,
+        7683,
+        7684
+      ]
+    },
+    {
+      "file_name": "OrphanFile-16",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        1537,
+        1538,
+        1539,
+        1540
+      ]
+    },
+    {
+      "file_name": "OrphanFile-19",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        4609,
+        4610,
+        4611,
+        4612
+      ]
+    },
+    {
+      "file_name": "OrphanFile-21",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        6661,
+        6662,
+        6663,
+        6664
+      ]
+    },
+    {
+      "file_name": "OrphanFile-23",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        536,
+        537,
+        538,
+        539
+      ]
+    },
+    {
+      "file_name": "OrphanFile-24",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        1541,
+        1542,
+        1543,
+        1544
+      ]
+    },
+    {
+      "file_name": "OrphanFile-26",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        3589,
+        3590,
+        3591,
+        3592
+      ]
+    },
+    {
+      "file_name": "OrphanFile-27",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        4613,
+        4614,
+        4615,
+        4616
+      ]
+    },
+    {
+      "file_name": "OrphanFile-29",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        6665,
+        6666,
+        6667,
+        6668
+      ]
+    },
+    {
+      "file_name": "OrphanFile-30",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        7689,
+        7690,
+        7691,
+        7692
+      ]
+    },
+    {
+      "file_name": "OrphanFile-33",
+      "file_size": 4096,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1081049640,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": [
+        3073,
+        3074,
+        3075,
+        3076
+      ]
+    },
+    {
+      "file_name": "नान.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684774,
+      "modified_timestamp": 1331684774,
+      "changed_timestamp": 1331684774,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "پکوڑا.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "서울.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "گردو.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "חומוס.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "طاجين.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "чай.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "ミツビシ.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "みつびし.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Gefäß.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "北京.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "東京.txt4",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "नान.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "پکوڑا.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "서울.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "گردو.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684775,
+      "modified_timestamp": 1331684775,
+      "changed_timestamp": 1331684775,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "חומוס.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "طاجين.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "чай.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "ミツビシ.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "みつびし.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Gefäß.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "北京.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "東京.txt5",
+      "file_size": 0,
+      "deleted_timestamp": 1331684776,
+      "modified_timestamp": 1331684776,
+      "changed_timestamp": 1331684776,
+      "accessed_timestamp": 1046678580,
+      "created_timestamp": 0,
+      "blocks": []
+    }
+  ]
+}

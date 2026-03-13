@@ -1,0 +1,75 @@
+Test Case,GT_TestCase,Case/String,Active Hits,Deleted Hits,Unallocated Hits,f1_score
+FT-SS-01,FT-SS-01,DireWolf,3,3,1,1.0
+FT-SS-02,FT-SS-02-c,Wolf,3,2,1,0.30000000000000004
+FT-SS-02,FT-SS-02-d,DireWolf,3,3,1,1.0
+FT-SS-02,FT-SS-02-a,WOLF,3,2,1,0.30000000000000004
+FT-SS-02,FT-SS-02-e,WereWolf,2,3,1,0.8571428571428571
+FT-SS-02,FT-SS-02-b,wolf,3,3,1,0.35
+FT-SS-03,FT-SS-03-c,Wolf,3,2,1,0.30000000000000004
+FT-SS-03,FT-SS-03-a,WOLF,3,2,1,0.30000000000000004
+FT-SS-03,FT-SS-03-b,wolf,3,3,1,0.35
+FT-SS-04,FT-SS-04,Panda and fox,0,0,0,0.0
+FT-SS-05,FT-SS-05,DireWolf,3,3,1,0.6666666666666666
+FT-SS-05,FT-SS-05,WereWolf,3,3,1,0.6666666666666666
+FT-SS-06,FT-SS-06,fox and not tiger,0,0,0,0.0
+FT-SS-07-CJK-char,FT-SS-07-a1,中国,3,3,1,0.4827586206896552
+FT-SS-07-CJK-char,FT-SS-07-a2,東京,3,3,1,0.5
+FT-SS-07-CJK-hangul,FT-SS-07-b,서울,3,3,1,0.5
+FT-SS-07-CJK-kana,FT-SS-07-c2,みつびし,3,3,1,0.5
+FT-SS-07-CJK-kana,FT-SS-07-c1,スバル,3,3,1,0.5
+FT-SS-07-Cyrillic,FT-SS-07-d,Сибирь,3,3,1,0.5
+FT-SS-07-Latin,FT-SS-07-e2,Schönheit,3,3,1,0.5
+FT-SS-07-Latin,FT-SS-07-e1,garçon,2,4,1,0.5
+FT-SS-07-NoBOM,FT-SS-07-f4,QuarterHorse,6,6,2,0.6666666666666666
+FT-SS-07-NoBOM,FT-SS-07-f1,Россия,3,3,1,0.5
+FT-SS-07-NoBOM,FT-SS-07-f2,فلافل,3,3,1,0.5
+FT-SS-07-NoBOM,FT-SS-07-f3,中國,3,3,1,0.5
+FT-SS-07-Norm,FT-SS-07-g3,Mäuse (NFD),0,0,0,0.0
+FT-SS-07-Norm,FT-SS-07-g5,Mäuse (NFC),0,0,0,0.0
+FT-SS-07-Norm,FT-SS-07-g2,infinity (No Ligature),0,0,0,0.0
+FT-SS-07-Norm,FT-SS-07-g4,inﬁnity (Ligature),0,0,0,0.0
+FT-SS-07-Norm,FT-SS-07-g6,libertà (NFD),0,0,0,0.0
+FT-SS-07-Norm,FT-SS-07-g7,libertà (NFC),0,0,0,0.0
+FT-SS-07-Norm,FT-SS-07-g1,mañana (NFD),0,0,0,0.0
+FT-SS-07-Norm,FT-SS-07-g8,mañana (NFC),0,0,0,0.0
+FT-SS-07-RTL,FT-SS-07-h,الكسكس,3,3,1,0.5
+FT-SS-08-Email,FT-SS-08-a3,berlin@deutchland.net,3,3,1,1.0
+FT-SS-08-Email,FT-SS-08-a1,iron.man@marvel.com,6,6,2,0.6511627906976745
+FT-SS-08-Email,FT-SS-08-a4,kgb@moscow.red.square.ru,3,3,1,1.0
+FT-SS-08-Email,FT-SS-08-a2,potus@capitol.gov,3,3,1,1.0
+FT-SS-08-Phone,FT-SS-08-b1,(901)555-1111,0,0,0,0.0
+FT-SS-08-Phone,FT-SS-08-b4,202.555.3270,0,0,0,0.0
+FT-SS-08-Phone,FT-SS-08-b2,301.555-9009,0,0,0,0.0
+FT-SS-08-Phone,FT-SS-08-b3,800-555-1122,0,0,0,0.0
+FT-SS-08-SS,FT-SS-08-c,123-45-6789,0,0,0,0.0
+FT-SS-09-Doc,FT-SS-09-a7,crossbow,1,0,1,0.6666666666666666
+FT-SS-09-Doc,FT-SS-09-a8,flintlock,2,0,2,1.0
+FT-SS-09-Doc,FT-SS-09-a1,longbow,2,0,2,1.0
+FT-SS-09-Doc,FT-SS-09-a5,nitroglycerin,1,0,1,0.6666666666666666
+FT-SS-09-Doc,FT-SS-09-a4,peroxide,1,0,1,0.6666666666666666
+FT-SS-09-Doc,,revolver,0,0,0,
+FT-SS-09-Doc,FT-SS-09-a6,rifle,2,0,2,1.0
+FT-SS-09-Doc,FT-SS-09-a2,shotgun,1,0,1,0.6666666666666666
+FT-SS-09-Frag,FT-SS-09-Frag2,California,1,0,0,1.0
+FT-SS-09-Frag,FT-SS-09-Frag1,Washington,1,0,0,1.0
+FT-SS-09-Lost,FT-SS-09-Lost-a,SecretKey,0,0,1,0.6666666666666666
+FT-SS-09-Lost,FT-SS-09-Lost-b,disconnected,0,0,0,0.0
+FT-SS-09-MFT,FT-SS-09-MFT ,bear,0,0,0,
+FT-SS-09-Meta,FT-SS-09-a,cañón,0,0,0,
+FT-SS-09-Meta,FT-SS-09-b,thunderbird,0,0,0,
+FT-SS-09-Stem,,cities,0,0,0,
+FT-SS-09-Stem,,city,0,0,0,
+FT-SS-09-Stem,,knife,0,0,0,
+FT-SS-09-Stem,,knives,0,0,0,
+FT-SS-09-Stem,,plan,0,0,0,
+FT-SS-09-Stem,,plans,0,0,0,
+FT-SS-09-Stem,,planned,0,0,0,
+FT-SS-09-Stem,,planner,0,0,0,
+FT-SS-09-Stem,,planning,0,0,0,
+FT-SS-09-Stem,,stealer,0,0,0,
+FT-SS-09-Stem,,stealing,0,0,0,
+FT-SS-09-Stem,,steals,0,0,0,
+FT-SS-09-Stem,,steal,0,0,0,
+FT-SS-10-Hex,,panda,0,0,0,
+FT-SS-10-Regex,FT-SS-10-a1,DireWolf,3,3,1,1.0
+FT-SS-10-Regex,FT-SS-10-a2,WereWolf,3,3,1,1.0

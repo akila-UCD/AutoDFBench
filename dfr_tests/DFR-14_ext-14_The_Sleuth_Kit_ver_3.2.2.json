@@ -1,0 +1,337 @@
+{
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "base_test_case": "DFR-14/ext-14",
+  "test_set_used": "SPECAIL_OBJECTS_TESTS",
+  "sector_size": 512,
+  "total_ground_truth_files": 6,
+  "total_ground_truth_files_considered": 6,
+  "all_gt_have_dfr_blocks": false,
+  "total_submitted_files": 22,
+  "true_positives": 0,
+  "false_positives": 22,
+  "false_negatives": 6,
+  "precision": 0.0,
+  "recall": 0.0,
+  "F1": 0.0,
+  "AutoDFBench_score": 0.0,
+  "Rec": 22,
+  "SS": 10,
+  "Full": 2,
+  "First": 2,
+  "Match": 6,
+  "Over": 0,
+  "Multi": 0,
+  "Size_match": 2,
+  "GT_COUNT": 6,
+  "details": [
+    {
+      "submitted_file": "Castor-far-rmLink-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": true,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Capella-far-rmBoth-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Canopus-target-local-rmTarget-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": true,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Canopus-target-remote-rmTarget-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": true,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Castor-near-rmLink-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": true,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Capella-target-local-rmBoth-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": true,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Capella-target-remote-rmBoth-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": true,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Capella-near-rmBoth-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Mintaka-target-local-rmTarget-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Mintaka-target-remote-rmTarget-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Mimosa-target-local-rmBoth-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "Mimosa-target-remote-rmBoth-X4.txt",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": false,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-16",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": true,
+        "First": true,
+        "Over": false,
+        "Multi": false,
+        "Size_match": true
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-17",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": true,
+        "First": true,
+        "Over": false,
+        "Multi": false,
+        "Size_match": true
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-18",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-19",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-24",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-25",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-42842",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-46922",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-63242",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    },
+    {
+      "submitted_file": "OrphanFile-77522",
+      "mapped_gt_for_f1": null,
+      "meets_f1": false,
+      "flags": {
+        "Match": false,
+        "SS": true,
+        "Full": false,
+        "First": false,
+        "Over": false,
+        "Multi": false,
+        "Size_match": false
+      }
+    }
+  ],
+  "weighted_selected_pairs": []
+}

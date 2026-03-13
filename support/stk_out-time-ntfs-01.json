@@ -1,0 +1,8 @@
+{
+  "base_test_case": "DFR-01/ntfs-01",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "NON_LATIN_CHAR_TESTS",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "files": []
+}

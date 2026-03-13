@@ -1,0 +1,87 @@
+{
+  "base_test_case": "DFR-05/fat-05-nest",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set_used": "NO_OVERWITE_TESTS",
+  "check_meta": false,
+  "file_system": "FAT",
+  "files": [
+    {
+      "file_name": "_BEID.TXT",
+      "file_size": 1024,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157260,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318396608,
+      "blocks": [
+        170,
+        172
+      ]
+    },
+    {
+      "file_name": "_DUBHE.TXT",
+      "file_size": 1024,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833460,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 883699200,
+      "created_timestamp": 1318396608,
+      "blocks": [
+        172,
+        174
+      ]
+    },
+    {
+      "file_name": "Betelgeuse.txt",
+      "file_size": 1024,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157320,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318396610,
+      "blocks": [
+        546,
+        548
+      ]
+    },
+    {
+      "file_name": "Deneb.txt",
+      "file_size": 1024,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833520,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 883699200,
+      "created_timestamp": 1318396610,
+      "blocks": [
+        548,
+        550
+      ]
+    },
+    {
+      "file_name": "Bellatrix.txt",
+      "file_size": 1024,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1215157380,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 915235200,
+      "created_timestamp": 1318396610,
+      "blocks": [
+        8195,
+        8197
+      ]
+    },
+    {
+      "file_name": "Denebola.TXT",
+      "file_size": 1024,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951833580,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 883699200,
+      "created_timestamp": 1318396610,
+      "blocks": [
+        8197,
+        8199
+      ]
+    }
+  ]
+}

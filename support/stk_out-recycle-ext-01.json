@@ -1,0 +1,117 @@
+{
+  "base_test_case": "DFR-01/ext-01-recycle",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "NON_LATIN_CHAR_TESTS",
+  "check_meta": false,
+  "file_system": "EXT",
+  "file_count": 10,
+  "files": [
+    {
+      "file_name": "OrphanFile-13",
+      "file_size": 4096,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 951847980,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 915264180,
+      "created_timestamp": 0,
+      "blocks": [
+        7169,
+        7170,
+        7171,
+        7172
+      ]
+    },
+    {
+      "file_name": "OrphanFile-75482",
+      "file_size": 0,
+      "deleted_timestamp": 1331768893,
+      "modified_timestamp": 1331768893,
+      "changed_timestamp": 1331768893,
+      "accessed_timestamp": 1331768893,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-75483",
+      "file_size": 65,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331768893,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 1331768894,
+      "created_timestamp": 0,
+      "blocks": [
+        309762
+      ]
+    },
+    {
+      "file_name": "Bunda.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331769091,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Bunda.txt.trashinfo",
+      "file_size": 0,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331769091,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 1331768907,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Bunda.txt.trashinfo.7ADCBW",
+      "file_size": 0,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331769091,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 1331768907,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Bunda.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331769091,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "3639592356",
+      "file_size": 0,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331769091,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 915264240,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "Botein.txt",
+      "file_size": 0,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331769091,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 915264300,
+      "created_timestamp": 0,
+      "blocks": []
+    },
+    {
+      "file_name": "OrphanFile-32645",
+      "file_size": 0,
+      "deleted_timestamp": 1331769091,
+      "modified_timestamp": 1331769091,
+      "changed_timestamp": 1331769091,
+      "accessed_timestamp": 1331768918,
+      "created_timestamp": 0,
+      "blocks": []
+    }
+  ]
+}

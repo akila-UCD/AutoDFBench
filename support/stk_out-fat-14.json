@@ -1,0 +1,196 @@
+{
+  "base_test_case": "DFR-14/fat-14",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "test_set": "SPECAIL_OBJECTS_TESTS",
+  "check_meta": false,
+  "file_system": "FAT",
+  "file_count": 12,
+  "files": [
+    {
+      "file_name": "fat12-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744564,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744563,
+      "blocks": [
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175
+      ]
+    },
+    {
+      "file_name": "fat12-shortcut-dl.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744564,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744563,
+      "blocks": [
+        185
+      ]
+    },
+    {
+      "file_name": "fat12-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744564,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744563,
+      "blocks": [
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193
+      ]
+    },
+    {
+      "file_name": "fat12-shortcut-db.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744564,
+      "blocks": [
+        194
+      ]
+    },
+    {
+      "file_name": "fat16-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744564,
+      "blocks": [
+        544,
+        545,
+        546,
+        547,
+        548,
+        549,
+        550,
+        551
+      ]
+    },
+    {
+      "file_name": "fat16-shortcut-dl.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744564,
+      "blocks": [
+        561
+      ]
+    },
+    {
+      "file_name": "fat16-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744564,
+      "blocks": [
+        562,
+        563,
+        564,
+        565,
+        566,
+        567,
+        568,
+        569
+      ]
+    },
+    {
+      "file_name": "fat16-shortcut-db.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744564,
+      "blocks": [
+        570
+      ]
+    },
+    {
+      "file_name": "fat32-file-df.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744564,
+      "blocks": [
+        8193,
+        8194,
+        8195,
+        8196,
+        8197,
+        8198,
+        8199,
+        8200
+      ]
+    },
+    {
+      "file_name": "fat32-shortcut-dl.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744564,
+      "blocks": [
+        8210
+      ]
+    },
+    {
+      "file_name": "fat32-file-db.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744565,
+      "blocks": [
+        8211,
+        8212,
+        8213,
+        8214,
+        8215,
+        8216,
+        8217,
+        8218
+      ]
+    },
+    {
+      "file_name": "fat32-shortcut-db.lnk",
+      "file_size": 237,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1326744566,
+      "changed_timestamp": 0,
+      "accessed_timestamp": 1326672000,
+      "created_timestamp": 1326744565,
+      "blocks": [
+        8220
+      ]
+    }
+  ]
+}

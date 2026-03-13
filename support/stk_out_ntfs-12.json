@@ -1,0 +1,137 @@
+{
+  "base_test_case": "DFR-12/ntfs-12",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "files": [
+    {
+      "file_name": "Ursa_Major/Alcor.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850320,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266520,
+      "created_timestamp": 1322165666,
+      "blocks": [
+        531240,
+        531241,
+        559912,
+        559913
+      ]
+    },
+    {
+      "file_name": "Ursa_Major/Mizar.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850380,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266580,
+      "created_timestamp": 1322165666,
+      "blocks": [
+        539432,
+        539433,
+        555818,
+        555819
+      ]
+    },
+    {
+      "file_name": "Ursa_Major/Dubhe.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850440,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266640,
+      "created_timestamp": 1322165666,
+      "blocks": [
+        547624,
+        547625,
+        551722,
+        551723
+      ]
+    },
+    {
+      "file_name": "Draco/Rastaban.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850320,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266520,
+      "created_timestamp": 1322165666,
+      "blocks": [
+        527144,
+        527145,
+        527146,
+        527147
+      ]
+    },
+    {
+      "file_name": "Draco/Thuban.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850380,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266580,
+      "created_timestamp": 1322165666,
+      "blocks": [
+        535336,
+        535337,
+        535338,
+        535339
+      ]
+    },
+    {
+      "file_name": "Draco/Tyl.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850440,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266640,
+      "created_timestamp": 1322165666,
+      "blocks": [
+        543528,
+        543529,
+        543530,
+        543531
+      ]
+    },
+    {
+      "file_name": "Orion/Rigel.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850320,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266520,
+      "created_timestamp": 1322167978,
+      "blocks": [
+        555816,
+        555817
+      ]
+    },
+    {
+      "file_name": "Orion/Mintaka.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850380,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266580,
+      "created_timestamp": 1322167978,
+      "blocks": [
+        551720,
+        551721
+      ]
+    },
+    {
+      "file_name": "Orion/Betelguese.txt",
+      "file_size": 2048,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 951850440,
+      "changed_timestamp": 1322168164,
+      "accessed_timestamp": 915266640,
+      "created_timestamp": 1322167978,
+      "blocks": [
+        559914,
+        559915
+      ]
+    }
+  ]
+}

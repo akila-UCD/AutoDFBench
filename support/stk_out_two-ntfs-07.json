@@ -1,0 +1,20 @@
+{
+  "base_test_case": "DFR-07/ntfs-07-two",
+  "tool_used": "The Sleuth Kit ver 3.2.2",
+  "check_meta": false,
+  "file_system": "NTFS",
+  "files": [
+    {
+      "file_name": "Castor.txt",
+      "file_size": 4096,
+      "deleted_timestamp": 0,
+      "modified_timestamp": 1322238159,
+      "changed_timestamp": 1322238159,
+      "accessed_timestamp": 1322239019,
+      "created_timestamp": 1322238159,
+      "blocks": [
+        138928
+      ]
+    }
+  ]
+}

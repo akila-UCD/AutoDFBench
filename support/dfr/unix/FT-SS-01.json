@@ -1,0 +1,25 @@
+
+{
+"base_test_case": "FT-SS-01",
+"ss_line_count": 8,
+"tool_used": "NIST",
+"os": "Unix",
+"string_search_cases": [
+{
+"search_term": "DireWolf",
+"active_ss_lines": [
+"ASCII ====> DireWolf 0904 <==== ext4 KingCrab SEA, Creek? Ocean tu",
+"ASCII ====> DireWolf 0906 <==== osxj pond. Brook, Bay SHARK Creek",
+"ASCII ====> DireWolf 0908 <==== osxc Brook HARBOR? Island KingCrab.Blu",
+"ASCII ====> DireWolf 0910 <==== apfs Creek. BlueCrab SEA.Ocea"
+],
+"deleted_ss_lines": [
+"ASCII ====> DireWolf 0905 <==== ext4 Brook. Squid SHARK RIVER. Bay Ocean. B",
+"ASCII ====> DireWolf 0907 <==== osxj KingCrab Ocean! Creek SHAR",
+"ASCII ====> DireWolf 0909 <==== osxc LAKE pond.BlueGill Carp Bay Bay Brook.",
+"ASCII ====> DireWolf 0911 <==== apfs HARBOR, Squid Ocean.tuna.Bay. Ocean, Br"
+],
+"unallocated_ss_lines": []
+}
+]
+}
