@@ -1,3 +1,7 @@
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Paper](https://img.shields.io/badge/paper-DFDS%202025-orange)](https://dl.acm.org/doi/abs/10.1145/3712716.3712718)
+[![arXiv](https://img.shields.io/badge/arXiv-2512.16965-b31b1b.svg)](https://arxiv.org/abs/2512.16965)
+
 <img width="150px" src="https://github.com/akila-UCD/AutoDFBench/blob/main/autoDfBench_logoV2.png?raw=true" alt="AutoDFBench Logo">
 
 # AutoDFBench 1.0
@@ -182,11 +186,21 @@ The AutoDFBench Score is calculated as the average of the F1 scores across all e
 
 This allows fair comparison between forensic tools, scripts, and AI-generated solutions.
 
-##Citation
+## Citation
 
 If you use AutoDFBench in academic work, please cite the following publications.
 
-### AutoDFBench Framework
+## Publications
+
+AutoDFBench is described in the following peer-reviewed publications.
+
+### AutoDFBench (DFDS 2025)
+
+Akila Wickramasekara, Alanna Densmore, Frank Breitinger, Hudan Studiawan, and Mark Scanlon.  
+**AutoDFBench: A Framework for AI Generated Digital Forensic Code and Tool Testing and Evaluation.**  
+Digital Forensics Doctoral Symposium (DFDS), 2025.
+
+Paper: https://dl.acm.org/doi/abs/10.1145/3712716.3712718
 
 ```bibtex
 @inproceedings{wickramasekara2025AutoDFBench,
@@ -201,6 +215,12 @@ doi={10.1145/3712716.3712718}
 }
 ```
 ### AutoDFBench 1.0
+
+Akila Wickramasekara, Tharusha Mihiranga, Aruna Withanage, Buddhima Weerasinghe, Frank Breitinger, John Sheppard, and Mark Scanlon.
+**AutoDFBench 1.0: A Benchmarking Framework for Digital Forensic Tool Testing and Generated Code Evaluation.**
+
+Paper: https://arxiv.org/abs/2512.16965
+
 ```bibtex
 @article{Wickramasekara2026AutoDFBench1.0,
 title = {AutoDFBench 1.0: A Benchmarking Framework for Digital Forensic Tool Testing and Generated Code Evaluation},
@@ -214,3 +234,15 @@ keywords = {Digital Forensics, Tool Testing and Validation, Generated Code Valid
 abstract = {The National Institute of Standards and Technology (NIST) Computer Forensic Tool Testing (CFTT) programme has become the de facto standard for providing digital forensic tool testing and validation. However to date, no comprehensive framework exists to automate benchmarking across the diverse forensic tasks included in the programme. This gap results in inconsistent validation, challenges in comparing tools, and limited validation reproducibility. This paper introduces AutoDFBench 1.0, a modular benchmarking framework that supports the evaluation of both conventional DF tools and scripts, as well as AI-generated code and agentic approaches. The framework integrates five areas defined by the CFTT programme: string search, deleted file recovery, file carving, Windows registry recovery, and SQLite data recovery. AutoDFBench 1.0 includes ground truth data comprising of 63 test cases and 10,968 unique test scenarios, and execute evaluations through a RESTful API that produces structured JSON outputs with standardised metrics, including precision, recall, and F1 score for each test case, and the average of these F1 scores becomes the AutoDFBench Score. The benchmarking framework is validated against CFTT datasets. The framework enables fair and reproducible comparison across tools and forensic scripts, establishing the first unified, automated, and extensible benchmarking framework for digital forensic tool testing and validation. AutoDFBench 1.0 supports tool vendors, researchers, practitioners, and standardisation bodies by facilitating transparent, reproducible, and comparable assessments of DF technologies.}
 }
 ```
+
+## License
+
+AutoDFBench is released as open-source software under the Apache License 2.0.
+
+The framework is publicly available via the GitHub repository:
+
+https://github.com/akila-UCD/AutoDFBench
+
+The Apache 2.0 license permits use, modification, and distribution of the software while requiring preservation of the copyright notice and license terms.
+
+See the LICENSE file for the full license text.
