@@ -1,0 +1,2 @@
+base_test_case,tool_used,task_id,file_name,sqlite_table_name,extracted_data_json
+SFT-01-UTF8-WAL,sqlite_tool,SFT01,sft-01_utf8_wal_android.sqlite,,"{""page_size"": ""4096"", ""journal_mode"": ""WAL"", ""number_of_pages"": null, ""encoding"": ""UTF-8"", ""sqlite_md5_hash"": ""f2af4866f3b413331e2271c0ff7bd27e"", ""sqlite_sha1_hash"": ""55b5b0c1686ca97d80772d234f5db479f7e63584""}"

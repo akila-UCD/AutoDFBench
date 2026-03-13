@@ -1,0 +1,69 @@
+name: autodfbench
+channels:
+  - conda-forge
+dependencies:
+  # Use Python 3.10 for much better wheel / binary availability in DF tooling
+  - python=3.10
+  - pip
+
+  # Core scientific stack
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - scikit-image
+  - statsmodels
+  - seaborn
+
+  # Web / API
+  - flask
+
+  # MySQL connector (prefer conda)
+  - mysql-connector-python
+
+  # DFIR / Plaso ecosystem (prefer conda-forge binaries)
+  - plaso
+  - dfvfs
+  - dfdatetime
+  - dfwinreg
+  - dtfabric
+  - acstore
+  - artifacts
+  - pytsk3
+
+  # Useful system/python libs often needed
+  - pyyaml
+  - requests
+  - tqdm
+  - pillow
+  - psutil
+  - pyzmq
+  - lz4
+  - zstd
+  - python-dateutil
+  - pytz
+  - tzdata
+
+  # If you use YARA + volatility
+  - yara-python
+  - volatility3
+
+  # Keep pip for packages that are commonly pip-only
+  - pip:
+      - python-dotenv==1.0.1
+      - openai==1.40.6
+      - anthropic==0.33.1
+      - llm==0.15
+      - llm-claude-3==0.4
+      - huggingface-hub==0.24.5
+      - tokenizers==0.20.0
+      - opensearch-py==2.6.0
+      - redis==5.0.7
+      - sqlalchemy==2.0.31
+      - csvkit==2.0.1
+      - openpyxl==3.1.5
+      - xlsxwriter==3.2.0
+      - xlrd==2.0.1
+      - pefile==2023.2.7
+      - pyudev==0.24.3
+      - xattr==1.1.0
