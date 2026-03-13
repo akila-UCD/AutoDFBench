@@ -1,8 +1,12 @@
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-[![Paper](https://img.shields.io/badge/paper-DFDS%202025-orange)](https://dl.acm.org/doi/abs/10.1145/3712716.3712718)
-[![arXiv](https://img.shields.io/badge/arXiv-2512.16965-b31b1b.svg)](https://arxiv.org/abs/2512.16965)
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
+  <a href="https://dl.acm.org/doi/abs/10.1145/3712716.3712718"><img src="https://img.shields.io/badge/Paper-DFDS%202025-orange.svg" alt="Paper"></a>
+  <a href="https://arxiv.org/abs/2512.16965"><img src="https://img.shields.io/badge/arXiv-2512.16965-b31b1b.svg" alt="arXiv"></a>
+</p>
 
-<img width="150px" src="https://github.com/akila-UCD/AutoDFBench/blob/main/autoDfBench_logoV2.png?raw=true" alt="AutoDFBench Logo">
+<p align="center">
+  <img width="150" src="https://github.com/akila-UCD/AutoDFBench/blob/main/autoDfBench_logoV2.png?raw=true" alt="AutoDFBench Logo">
+</p>
 
 # AutoDFBench 1.0
 
@@ -56,6 +60,12 @@ The **recommended way to run AutoDFBench 1.0 is using Docker**, as the Docker en
 
 ```bash
 docker network create autodfbench-net
+```
+
+## 2 Pull the docker and follow the instrctions in docker hub
+https://hub.docker.com/r/akila1989/autodfbench-api
+
+
 ```
 # GitHub Setup
 
