@@ -21,8 +21,5 @@ numpy
 opencv-python-headless
 python-magic
 exifread
-cv2
-skimage
+scikit-image
 scipy
-magic
-exifread
