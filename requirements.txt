@@ -21,3 +21,8 @@ numpy
 opencv-python-headless
 python-magic
 exifread
+cv2
+skimage
+scipy
+magic
+exifread
