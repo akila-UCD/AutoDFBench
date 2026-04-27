@@ -18,3 +18,4 @@ xattr==1.1.0
 mysql-connector-python
 Pillow
 Pillow
+Pillow
