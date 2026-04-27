@@ -97,7 +97,7 @@ class WindowsRegistryHandler(BaseHTTPRequestHandler):
             return self.send_error_json(500, f"Internal server error: {e}")
 
 
-def run(port: int = 8000):
+def run(port=int(os.getenv("API_PORT", 8000))):
     print(f"Starting Windows Registry API on port {port}...")
     httpd = HTTPServer(("", port), WindowsRegistryHandler)
     httpd.serve_forever()

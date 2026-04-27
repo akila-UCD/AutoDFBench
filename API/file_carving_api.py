@@ -201,7 +201,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                         pass
 
 
-def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port: int = 8000):
+def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=int(os.getenv("API_PORT", 8000))):
     httpd = server_class(("", port), handler_class)
     print(f"Starting file carving API on port {port}…")
     httpd.serve_forever()
