@@ -57,7 +57,8 @@ class SQLiteRecoveryHandler(BaseHTTPRequestHandler):
 
 
 def run(port: int = 8001):
-    server_address = ("", port=int(os.getenv("API_PORT", 8000)))
+    port = int(os.getenv("API_PORT", port))
+    server_address = ("", port)
     httpd = HTTPServer(server_address, SQLiteRecoveryHandler)
     print(f"SQLite Forensic Evaluation Server running on port {port}")
     httpd.serve_forever()
