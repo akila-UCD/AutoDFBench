@@ -16,3 +16,5 @@ pefile==2023.2.7
 pyudev==0.24.3
 xattr==1.1.0
 mysql-connector-python
+Pillow
+Pillow
