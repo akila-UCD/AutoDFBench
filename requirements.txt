@@ -17,5 +17,7 @@ pyudev==0.24.3
 xattr==1.1.0
 mysql-connector-python
 Pillow
-Pillow
-Pillow
+numpy
+opencv-python-headless
+python-magic
+exifread
