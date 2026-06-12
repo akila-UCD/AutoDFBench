@@ -2,6 +2,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from dotenv import load_dotenv
+import os
 
 from autodfbench.eval.sqlite_recovery import evaluate_sqlite_recovery
 
@@ -56,6 +57,7 @@ class SQLiteRecoveryHandler(BaseHTTPRequestHandler):
 
 
 def run(port: int = 8001):
+    port = int(os.getenv("API_PORT", port))
     server_address = ("", port)
     httpd = HTTPServer(server_address, SQLiteRecoveryHandler)
     print(f"SQLite Forensic Evaluation Server running on port {port}")

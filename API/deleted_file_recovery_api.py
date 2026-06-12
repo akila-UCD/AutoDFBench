@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import os
 
 from autodfbench.eval.deleted_file_recovery import evaluate_deleted_file_recovery
 
@@ -36,7 +37,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(resp, indent=2, ensure_ascii=False).encode("utf-8"))
 
 
-def run(port=8000):
+def run(port=int(os.getenv("API_PORT", 8000))):
     httpd = HTTPServer(("", port), SimpleHTTPRequestHandler)
     print(f"Starting server on port {port}...")
     httpd.serve_forever()

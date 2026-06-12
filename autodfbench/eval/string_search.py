@@ -24,7 +24,7 @@ def evaluate_string_search(payload: dict) -> dict:
         raise ValueError("Missing 'os'")
 
     # Extract 4-digit line numbers
-    line_re = re.compile(r"\b(\d{4})\b")
+    line_re = re.compile(r"(?<![0-9\-])(\d{4})(?![0-9\-])")
     submitted = set()
     for s in found_list:
         if isinstance(s, str):

@@ -233,7 +233,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     #     self.wfile.write(json.dumps(resp, indent=2).encode("utf-8"))
 
 # -------------------- RUN --------------------
-def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=8000):
+def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=int(os.getenv("API_PORT", 8000))):
     httpd = server_class(('', port), handler_class)
     print(f"Starting server on port {port}…")
     httpd.serve_forever()
