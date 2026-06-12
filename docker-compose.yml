@@ -22,7 +22,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile
-    image: akila1989/autodfbench-api:1.1
+    image: akila1989/autodfbench-api:1.2
     container_name: autodfbench-api
     depends_on:
       mysql:
