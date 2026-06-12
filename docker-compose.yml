@@ -19,6 +19,9 @@ services:
       retries: 20
 
   autodfbench-api:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
     image: akila1989/autodfbench-api:1.1
     container_name: autodfbench-api
     depends_on:
