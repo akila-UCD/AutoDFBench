@@ -89,7 +89,7 @@ print(response.json())
 > **Sub test case** is `—` when the base test case is the direct evaluation target (no sub-group applies).
 
 | CFTT test case | base test case | Search keyword / target |
-|---|---|---|---|---|
+|---|---|---|
 | FT-SS-01 | FT-SS-01 | DireWolf |
 | FT-SS-02 | FT-SS-02 | WOLF |
 | FT-SS-02 | FT-SS-02 | wolf | 
