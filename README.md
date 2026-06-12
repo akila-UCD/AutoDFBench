@@ -41,7 +41,9 @@ The framework includes **63 test cases and 10,968 unique test scenarios** derive
 
 ## API Documentation
 
-Detailed API documentation is available here: docs/API.md
+Detailed API documentation is available here:
+- String Search API -> docs/AutoDFBench_StringSearch_Evaluation_API.md
+- File Carving API -> docs/AutoDFBench_File_Carving_Evaluation_API.md
 
 ## Ground Truth Data
 
