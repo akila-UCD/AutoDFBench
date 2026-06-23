@@ -106,6 +106,7 @@ Follow the instructions on Docker Hub:
 
 ## GitHub Setup
 
+Step by step Guide: [autodfbench-install-guide.md](autodfbench-install-guide.md)
 ### 1. Clone
 
 ```bash
