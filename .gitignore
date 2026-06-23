@@ -53,7 +53,6 @@ docker-compose.override.yml
 # ================================
 # Databases
 # ================================
-*.sql
 *.dump
 *.bak
 mysql-data/
@@ -150,3 +149,4 @@ notebooks/
 *.tar
 *.tar.gz
 *.7z
+docker/mysql/init/AutoDFBench3.0.sql

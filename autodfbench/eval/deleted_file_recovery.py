@@ -6,6 +6,9 @@ import json
 import sys
 import unicodedata
 from pathlib import Path
+import logging
+
+logger = logging.getLogger(__name__)
 
 from autodfbench.db_dfr import get_ground_truth_paths, insert_result_to_db
 
@@ -279,6 +282,27 @@ def find_mac_row(mod_ts: int, acc_ts: int, chg_ts: int, gt_rows: list, matched_g
             return r
     return None
 
+def find_best_mac_row(mod_ts, acc_ts, chg_ts, gt_rows, matched_gt_names, w_mod, w_acc, w_chg):
+    best_row = None
+    best_score = 0.0
+
+    for r in gt_rows:
+        if r["filename"] in matched_gt_names:
+            continue
+
+        score = 0.0
+        if mod_ts is not None and r["modified_timestamp"] is not None and r["modified_timestamp"] == mod_ts:
+            score += w_mod
+        if acc_ts is not None and r["accessed_timestamp"] is not None and r["accessed_timestamp"] == acc_ts:
+            score += w_acc
+        if chg_ts is not None and r["changed_timestamp"] is not None and r["changed_timestamp"] == chg_ts:
+            score += w_chg
+
+        if score > best_score:
+            best_score = score
+            best_row = r
+
+    return best_row, best_score
 
 # -------------------- Evaluator entry point --------------------
 def evaluate_deleted_file_recovery(payload: dict) -> dict:
@@ -298,7 +322,12 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
       - write_db: bool (default True)
       - write_reports: bool (default True)
       - results_dir: str (override)
+      - debug: bool
     """
+    debug_mode = bool(payload.get("debug", False))
+    debug_gt_rows = []
+    debug_sub_rows = []
+
     base_test_case = payload.get("base_test_case")
     tool_used = payload.get("tool_used")
     files = payload.get("files", [])
@@ -332,7 +361,6 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
     if sector_size <= 0:
         sector_size = 512
 
-    # Diagnostic weights input (ordering only)
     w_conf = payload.get("weights") or {}
     try:
         w_full = float(w_conf.get("full", 0.33))
@@ -343,9 +371,10 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
     w_sum = w_full + w_name + w_size
     if w_sum <= 0:
         w_full, w_name, w_size, w_sum = 0.33, 0.33, 0.33, 0.99
-    w_full /= w_sum; w_name /= w_sum; w_size /= w_sum
+    w_full /= w_sum
+    w_name /= w_sum
+    w_size /= w_sum
 
-    # MAC-time weights (diagnostics)
     try:
         w_mod = float(w_conf.get("modify_time_stamp", 1.0/3.0))
         w_acc = float(w_conf.get("access_time_stamp", 1.0/3.0))
@@ -355,22 +384,22 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
     w_mac_sum = w_mod + w_acc + w_chg
     if w_mac_sum <= 0:
         w_mod, w_acc, w_chg, w_mac_sum = 1.0, 1.0, 1.0, 3.0
-    w_mod /= w_mac_sum; w_acc /= w_mac_sum; w_chg /= w_mac_sum
+    w_mod /= w_mac_sum
+    w_acc /= w_mac_sum
+    w_chg /= w_mac_sum
 
-    # Logic flags
     test_set_key = test_set_raw
     test_set_used = test_set_key
 
-    is_pure_size_f1_case       = (test_set_key == "FILE_SIZE_TESTS")
-    is_mac_time_case           = (test_set_key == "MAC_TIME_TESTS")
-    is_non_latin_case          = (test_set_key == "NON_LATIN_CHAR_TETS")
-    is_special_ntfs_case       = (test_set_key == "SPECAIL_NTFS_TEST")
-    is_special_objects_case    = (test_set_key == "SPECAIL_OBJECTS_TESTS")
-    is_name_size_case          = (is_special_ntfs_case or is_special_objects_case)
+    is_pure_size_f1_case = (test_set_key == "FILE_SIZE_TESTS")
+    is_mac_time_case = (test_set_key == "MAC_TIME_TESTS")
+    is_non_latin_case = (test_set_key == "NON_LATIN_CHAR_TETS")
+    is_special_ntfs_case = (test_set_key == "SPECAIL_NTFS_TEST")
+    is_special_objects_case = (test_set_key == "SPECAIL_OBJECTS_TESTS")
+    is_name_size_case = (is_special_ntfs_case or is_special_objects_case)
     is_default_full_match_case = (test_set_key in {"NO_OVERWITE_TESTS", "OVERWITE_TESTS", "RECYCLE_DEL_TESTS"})
     is_size_validation = (test_set_key == "FILE_SIZE_TESTS")
 
-    # Validate submissions
     seen_filenames = set()
     for file_entry in files:
         file_name = file_entry.get("file_name")
@@ -391,14 +420,12 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
             raise ValueError(f"Duplicate file_name detected: {file_name}")
         seen_filenames.add(file_name)
 
-    # Ground truth
     gt_entries = get_ground_truth_paths(base_test_case)
     if gt_entries is None:
         raise ValueError("Ground truth query failed.")
     if not gt_entries:
         raise ValueError("No ground truth data found.")
 
-    # Build GT rows and indices
     gt_rows = []
     gt_first_blocks_set = set()
     gt_blocks_set_map = {}
@@ -411,12 +438,24 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         gt_set = set(numeric_nonzero_unique_blocks(gt_tokens_exp))
         gt_first = first_min_nonzero_block(gt_tokens_exp)
 
+        if debug_mode:
+            debug_gt_rows.append({
+                "raw_row": list(row),
+                "filename": fname,
+                "gt_blocks_raw": row[7],
+                "gt_tokens_raw": gt_tokens_raw,
+                "gt_tokens_exp": gt_tokens_exp,
+                "gt_set": sorted(gt_set),
+                "gt_first": gt_first,
+                "size": int(row[6]) if row[6] not in (None, "", "NULL") else None,
+            })
+
         r = {
             "filename": fname,
             "deleted_timestamp": int(row[1]) if row[1] not in (None, "", "NULL") else None,
             "modified_timestamp": int(row[2]) if row[2] not in (None, "", "NULL") else None,
             "accessed_timestamp": int(row[3]) if row[3] not in (None, "", "NULL") else None,
-            "changed_timestamp":  int(row[4]) if row[4] not in (None, "", "NULL") else None,
+            "changed_timestamp": int(row[4]) if row[4] not in (None, "", "NULL") else None,
             "fbks": row[5],
             "size": int(row[6]) if row[6] not in (None, "", "NULL") else None,
             "blocks_tokens": gt_tokens_exp,
@@ -424,9 +463,11 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
             "blocks_first": gt_first,
         }
         gt_rows.append(r)
+
         if gt_first is not None:
             gt_first_blocks_set.add(gt_first)
             first_block_map.setdefault(gt_first, []).append(r)
+
         fs = frozenset(gt_set)
         if fs and fs not in gt_blocks_set_map:
             gt_blocks_set_map[fs] = r
@@ -434,14 +475,12 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
     gt_count = len(gt_rows)
     all_gt_have_blocks = all(len(r["blocks_tokens"]) > 0 for r in gt_rows)
 
-    # Metrics counters
     SS = Full = First = Match = Over = Multi = Size_match = 0
     matched_gt_names = set()
     FP_count = 0
     details = []
     total_submitted = len(files)
 
-    # Iterate submissions
     for file_entry in files:
         filename = file_entry.get("file_name")
         filesize_i = to_int(file_entry.get("file_size"))
@@ -472,7 +511,6 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         if first_match:
             First += 1
 
-        # candidates for diagnostics
         pairing_candidates = []
         if name_row is not None:
             pairing_candidates.append(name_row)
@@ -489,7 +527,6 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
                 uniq_candidates.append(cand)
                 seen_fn.add(fn)
 
-        # Size_match
         got_SizeMatch = False
         if filesize_i is not None:
             if is_pure_size_f1_case:
@@ -511,7 +548,6 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         if got_SizeMatch:
             Size_match += 1
 
-        # Over
         got_Over = False
         if has_blocks and uniq_candidates:
             for cand in uniq_candidates:
@@ -522,7 +558,6 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         if got_Over:
             Over += 1
 
-        # Multi
         got_Multi = False
         if first_match and not full_match and has_blocks:
             if name_row is not None and name_row["blocks_first"] == sub_first_i:
@@ -539,13 +574,14 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         if got_Multi:
             Multi += 1
 
-        # F1 mapping
         ns_row = None
         mapped_gt_name = None
 
         if is_mac_time_case:
-            mac_row = find_mac_row(mod_i, acc_i, chg_i, gt_rows, matched_gt_names)
-            if mac_row is not None:
+            mac_row, mac_score = find_best_mac_row(
+                mod_i, acc_i, chg_i, gt_rows, matched_gt_names, w_mod, w_acc, w_chg
+            )
+            if mac_row is not None and mac_score > 0:
                 mapped_gt_name = mac_row["filename"]
         elif is_pure_size_f1_case:
             size_row = find_size_row(filesize_i, gt_rows, matched_gt_names)
@@ -576,6 +612,22 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
             FP_count += 1
             meets_f1_mapped = False
 
+        if debug_mode:
+            debug_sub_rows.append({
+                "submitted_file": filename,
+                "submitted_blocks_raw": file_entry.get("blocks"),
+                "submitted_tokens_raw": sub_tokens_raw,
+                "submitted_tokens_exp": sub_tokens_exp,
+                "submitted_set": sorted(sub_set),
+                "submitted_first": sub_first_i,
+                "submitted_size": filesize_i,
+                "name_row": name_row["filename"] if name_row is not None else None,
+                "full_match": full_match,
+                "first_match": first_match,
+                "mapped_gt_name": mapped_gt_name,
+                "gt_map_keys": [sorted(list(k)) for k in gt_blocks_set_map.keys()],
+            })
+
         flags_dict = {
             "Match": name_row is not None,
             "SS": has_blocks,
@@ -586,7 +638,6 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
             "Size_match": got_SizeMatch,
         }
 
-        # details meets_f1
         if is_non_latin_case:
             meets_f1_detail = (name_row is not None)
             mapped_detail = name_row["filename"] if name_row is not None else None
@@ -604,7 +655,6 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
             "flags": flags_dict,
         })
 
-    # Final F1
     if is_non_latin_case:
         TP = Match
         FP = max(0, total_submitted - TP)
@@ -615,8 +665,8 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         FP = max(0, FP_count)
 
     precision = TP / (TP + FP) if (TP + FP) > 0 else 0.0
-    recall    = TP / (TP + FN) if (TP + FN) > 0 else 0.0
-    f1_score  = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
+    recall = TP / (TP + FN) if (TP + FN) > 0 else 0.0
+    f1_score = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
 
     testcase = f"{base_test_case}_{tool_used}"
     if write_db:
@@ -648,8 +698,14 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         "Size_match": Size_match,
         "GT_COUNT": gt_count,
         "details": details,
-        "weighted_selected_pairs": [],  # kept for API compatibility; you can re-add later if needed
+        "weighted_selected_pairs": [],
     }
+
+    if debug_mode:
+        response["debug"] = {
+            "gt_rows": debug_gt_rows,
+            "submitted_rows": debug_sub_rows,
+        }
 
     if write_reports:
         _save_response_json(results_dir, testcase, response)
