@@ -150,4 +150,3 @@ notebooks/
 *.tar.gz
 *.7z
 
-docker/mysql/init/AutoDFBench3.0.sql
