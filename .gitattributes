@@ -1,0 +1,1 @@
+docker/mysql/init/AutoDFBench3.0.sql filter=lfs diff=lfs merge=lfs -text
