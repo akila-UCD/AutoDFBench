@@ -85,22 +85,6 @@ Detailed API documentation is available in the `docs/` folder:
 
 Details about datasets and evaluation data: `docs/Data.md`
 
----
-
-## Recommended Setup (Docker)
-
-The **recommended way to run AutoDFBench 1.0 is using Docker**, as the Docker environment already contains all required dependencies and configurations.
-
-### 1. Create Docker Network
-
-```bash
-docker network create autodfbench-net
-```
-
-### 2. Pull the Docker Image
-
-Follow the instructions on Docker Hub:
-[https://hub.docker.com/r/akila1989/autodfbench-api](https://hub.docker.com/r/akila1989/autodfbench-api)
 
 ---
 
