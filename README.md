@@ -80,10 +80,13 @@ Detailed API documentation is available in the `docs/` folder:
 |---|---|
 | String Search | `docs/AutoDFBench_StringSearch_Evaluation_API.md` |
 | File Carving | `docs/AutoDFBench_File_Carving_Evaluation_API.md` |
+| Deleted File Recovery | `docs/AutoDFBench_Deleted_File_Recovery_Test_Cases.md` |
 
 ### Ground Truth Data
 
 Details about datasets and evaluation data: `docs/Data.md`
+
+The ground truth database dump (`AutoDFBench1.3.sql`) is in `docker/mysql/init/` and is loaded automatically when the MySQL container is first created.
 
 
 ---
