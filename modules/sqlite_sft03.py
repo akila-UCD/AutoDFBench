@@ -1,39 +1,40 @@
+def _norm(val):
+    """Normalise a row id so 253, "253" and 253.0 compare equal."""
+    if val is None:
+        return None
+    s = str(val).strip()
+    if s == "":
+        return None
+    try:
+        f = float(s)
+        return str(int(f)) if f.is_integer() else str(f)
+    except ValueError:
+        return s.lower()
 
 
 def content_recovery(input_data, ground_truth_rows):
     """
-    Compare extracted SQLite attributes (input_data) against ground_truth rows.
-    ground_truth_rows is a list of dicts from DB (each row).
-    input_data is a list of values (like [253, 1285, 1154,...]).
+    Compare recovered SQLite row ids (input_data["file_line"]) against the
+    ground truth rows for the same file.
+
+    Matching is set based: order does not matter, each ground-truth row can be
+    matched once, and duplicate predictions count as false positives.
+      TP = predicted ids found in the ground truth
+      FP = predicted ids not in the ground truth (or repeated)
+      FN = ground-truth ids that were not predicted
     """
-
-    tp = fp = fn = 0
-    detailed_matches = []
-
-    # --- Extract all file_line values from DB rows ---
-    # Assuming ground_truth_rows is a list of dicts with a column "file_line"
     expected_file_lines = [row.get("file_line") for row in ground_truth_rows]
+    expected = {_norm(v) for v in expected_file_lines} - {None}
 
-    # --- Compare input_data list to file_line values ---
+    matched = set()
+    detailed_matches = []
+    tp = fp = 0
+
     for idx, predicted_val in enumerate(input_data["file_line"]):
-        if idx < len(expected_file_lines):
-            expected_val = expected_file_lines[idx]
-        else:
-            expected_val = None  # no corresponding DB row
-
-        match = False
-        if expected_val is None or str(expected_val).strip() == "":
-            tp += 1
-            match = True
-        else:
-            # numeric comparison
-            try:
-                match = float(predicted_val) == float(expected_val)
-            except (ValueError, TypeError):
-                # string comparison ignoring case
-                match = str(expected_val).lower() in str(predicted_val).lower()
-
+        key = _norm(predicted_val)
+        match = key is not None and key in expected and key not in matched
         if match:
+            matched.add(key)
             tp += 1
         else:
             fp += 1
@@ -41,22 +42,24 @@ def content_recovery(input_data, ground_truth_rows):
         detailed_matches.append({
             "index": idx,
             "predicted": predicted_val,
-            "expected": expected_val,
             "match": match
         })
 
-    # FN = total predictions minus TP
-    fn = len(input_data["file_line"]) - tp
+    fn = len(expected - matched)
 
     precision = tp / (tp + fp) if (tp + fp) else 0.0
     recall = tp / (tp + fn) if (tp + fn) else 0.0
     f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
 
     return {
+        "TP": tp,
+        "FP": fp,
+        "FN": fn,
         "Precision": precision,
         "Recall": recall,
         "F1-Score": f1,
         "input_data": input_data,
         "expected_file_lines": expected_file_lines,
+        "missed_file_lines": sorted(expected - matched, key=lambda x: (len(x), x)),
         "detailed_matches": detailed_matches
     }
