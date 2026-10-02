@@ -86,7 +86,7 @@ Detailed API documentation is available in the `docs/` folder:
 
 Details about datasets and evaluation data: `docs/Data.md`
 
-The ground truth database dump (`AutoDFBench1.3.sql`) is in `docker/mysql/init/` and is loaded automatically when the MySQL container is first created.
+The ground truth database dump (`AutoDFBench3.1.sql`) is in `docker/mysql/init/` and is loaded automatically when the MySQL container is first created.
 
 
 ---
