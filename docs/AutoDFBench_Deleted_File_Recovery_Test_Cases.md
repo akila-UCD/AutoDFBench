@@ -30,7 +30,7 @@ The matching disk images are named `DFR-<NN>/dfr-<NN>[-<variant>]-<fs>.dd`, for 
 
 A single disk image can be evaluated under different **test sets**. The test set decides what a tool must recover and how a recovered file is matched to the ground truth.
 
-> **Important:** pass the test set names to the API **exactly as written below**, including their original spellings (for example `NO_OVERWITE_TESTS`, `NON_LATIN_CHAR_TETS`, `SPECAIL_OBJECTS_TESTS`). Any other spelling is rejected.
+> **Important:** pass the test set names to the API **exactly as written below**. Some names keep their original spellings (`NO_OVERWITE_TESTS`, `OVERWITE_TESTS`, `NON_LATIN_CHAR_TETS`). The older spellings `SPECAIL_NTFS_TEST` and `SPECAIL_OBJECTS_TESTS` are still accepted and are treated as `SPECIAL_NTFS_TEST` and `SPECIAL_OBJECTS_TESTS`.
 
 | Test set | What it evaluates | Matching rule (a submitted file is a TP when…) | Required per-file fields |
 |---|---|---|---|
@@ -40,8 +40,8 @@ A single disk image can be evaluated under different **test sets**. The test set
 | `FILE_SIZE_TESTS` | Correct **file size** reporting for recovered files | its `file_size` equals the size of an unmatched ground-truth file | `file_name`, `file_size` |
 | `MAC_TIME_TESTS` | Correct **MAC timestamps** (modified / accessed / changed) | its timestamps give the best weighted match against an unmatched ground-truth file | `file_name`; with `check_meta=true`: `deleted_timestamp`, `modified_timestamp`, `accessed_timestamp`, `changed_timestamp` (epoch **int**) |
 | `NON_LATIN_CHAR_TETS` | Recovery of files with **non-Latin (Unicode) file names** | its name matches a ground-truth file name (Unicode-normalised comparison) | `file_name` |
-| `SPECAIL_NTFS_TEST` | NTFS special cases: **compressed** files and **MFT-resident** files | both its name **and** size match a ground-truth file | `file_name`, `file_size` |
-| `SPECAIL_OBJECTS_TESTS` | **Special file-system objects** (for example links and their targets) | both its name **and** size match a ground-truth file | `file_name`, `file_size` |
+| `SPECIAL_NTFS_TEST` | NTFS special cases: **compressed** files and **MFT-resident** files | both its name **and** size match a ground-truth file | `file_name`, `file_size` |
+| `SPECIAL_OBJECTS_TESTS` | **Special file-system objects** (for example links and their targets) | both its name **and** size match a ground-truth file | `file_name`, `file_size` |
 
 Each ground-truth file can be matched at most once. Duplicate `file_name` values in a submission are rejected.
 
@@ -67,10 +67,10 @@ This is the set of DFR runs used to evaluate the DFR helper script. It covers ev
 | DFR-05 | `DFR-05/{ext,fat,ntfs}-05-nest` | `NO_OVERWITE_TESTS` | false | `DFR-05/dfr-05-nest-{fs}.dd` |
 | DFR-07 | `DFR-07/{ext,fat,ntfs}-07` | `OVERWITE_TESTS` | false | `DFR-07/dfr-07-{fs}.dd` |
 | DFR-11 | `DFR-11/{ext,fat,ntfs}-11` | `NO_OVERWITE_TESTS` | false | `DFR-11/dfr-11-{fs}.dd` |
-| DFR-11 | `DFR-11/ntfs-11-compress` | `SPECAIL_NTFS_TEST` | true | `DFR-11/dfr-11-compress-ntfs.dd` |
-| DFR-11 | `DFR-11/ntfs-11-mft` | `SPECAIL_NTFS_TEST` | true | `DFR-11/dfr-11-mft-ntfs.dd` |
+| DFR-11 | `DFR-11/ntfs-11-compress` | `SPECIAL_NTFS_TEST` | true | `DFR-11/dfr-11-compress-ntfs.dd` |
+| DFR-11 | `DFR-11/ntfs-11-mft` | `SPECIAL_NTFS_TEST` | true | `DFR-11/dfr-11-mft-ntfs.dd` |
 | DFR-12 | `DFR-12/{ext,fat,ntfs}-12` | `OVERWITE_TESTS` | false | `DFR-12/dfr-12-{fs}.dd` |
-| DFR-14 | `DFR-14/{ext,fat,ntfs}-14` | `SPECAIL_OBJECTS_TESTS` | true | `DFR-14/dfr-14-{fs}.dd` |
+| DFR-14 | `DFR-14/{ext,fat,ntfs}-14` | `SPECIAL_OBJECTS_TESTS` | true | `DFR-14/dfr-14-{fs}.dd` |
 
 `{ext,fat,ntfs}` means one run per file system: 14 rows × 3 file systems + 2 NTFS-only rows = **44 runs**.
 
@@ -168,7 +168,7 @@ curl -X POST http://localhost:8001/api/v1/deleted_file_recovery/evaluate \
 {
   "tool_used": "The Sleuth Kit ver 3.2.2",
   "base_test_case": "DFR-14/ext-14",
-  "test_set_used": "SPECAIL_OBJECTS_TESTS",
+  "test_set_used": "SPECIAL_OBJECTS_TESTS",
   "total_ground_truth_files": 6,
   "total_submitted_files": 22,
   "true_positives": 0,
