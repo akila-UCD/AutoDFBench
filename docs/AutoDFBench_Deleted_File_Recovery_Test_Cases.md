@@ -76,7 +76,7 @@ This is the set of DFR runs used to evaluate the DFR helper script. It covers ev
 
 ### 3.2 Ground-truth file counts (FAT / NTFS / EXT)
 
-These are the number of deleted files recorded in the ground truth for each case (database `AutoDFBench3.1.sql`).
+These are the number of deleted files recorded in the ground truth for each case (database `AutoDFBenchV3.2.sql`).
 
 | Base case | FAT | NTFS | EXT |
 |---|---:|---:|---:|
