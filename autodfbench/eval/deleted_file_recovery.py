@@ -53,9 +53,9 @@ NON_LATIN_CHAR_TETS = ["DFR-04/fat-04","DFR-04/ext-04","DFR-04/ntfs-04"]
 
 RECYCLE_DEL_TESTS = ["DFR-01/ext-01-recycle","DFR-01/fat-01-recycle","DFR-01/ntfs-01-recycle"]
 
-SPECAIL_NTFS_TEST = ["DFR-11/ntfs-11-compress","DFR-11/ntfs-11-mft"]
+SPECIAL_NTFS_TEST = ["DFR-11/ntfs-11-compress","DFR-11/ntfs-11-mft"]
 
-SPECAIL_OBJECTS_TESTS = ["DFR-14/fat-14","DFR-14/ntfs-14","DFR-14/ext-14"]
+SPECIAL_OBJECTS_TESTS = ["DFR-14/fat-14","DFR-14/ntfs-14","DFR-14/ext-14"]
 
 
 # -------------------- Report helpers (optional) --------------------
@@ -335,14 +335,20 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
     check_meta = bool(payload.get("check_meta", False))
 
     test_set_raw = (payload.get("test_set") or "").strip().upper()
+    # Old misspelt names are still accepted for backward compatibility
+    LEGACY_TEST_SET_NAMES = {
+        "SPECAIL_OBJECTS_TESTS": "SPECIAL_OBJECTS_TESTS",
+        "SPECAIL_NTFS_TEST": "SPECIAL_NTFS_TEST",
+    }
+    test_set_raw = LEGACY_TEST_SET_NAMES.get(test_set_raw, test_set_raw)
     ALLOWED_TEST_SETS = {
         "NO_OVERWITE_TESTS",
         "OVERWITE_TESTS",
         "FILE_SIZE_TESTS",
         "MAC_TIME_TESTS",
-        "SPECAIL_OBJECTS_TESTS",
+        "SPECIAL_OBJECTS_TESTS",
         "NON_LATIN_CHAR_TETS",
-        "SPECAIL_NTFS_TEST",
+        "SPECIAL_NTFS_TEST",
         "RECYCLE_DEL_TESTS",
     }
     if not test_set_raw:
@@ -394,8 +400,8 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
     is_pure_size_f1_case = (test_set_key == "FILE_SIZE_TESTS")
     is_mac_time_case = (test_set_key == "MAC_TIME_TESTS")
     is_non_latin_case = (test_set_key == "NON_LATIN_CHAR_TETS")
-    is_special_ntfs_case = (test_set_key == "SPECAIL_NTFS_TEST")
-    is_special_objects_case = (test_set_key == "SPECAIL_OBJECTS_TESTS")
+    is_special_ntfs_case = (test_set_key == "SPECIAL_NTFS_TEST")
+    is_special_objects_case = (test_set_key == "SPECIAL_OBJECTS_TESTS")
     is_name_size_case = (is_special_ntfs_case or is_special_objects_case)
     is_default_full_match_case = (test_set_key in {"NO_OVERWITE_TESTS", "OVERWITE_TESTS", "RECYCLE_DEL_TESTS"})
     is_size_validation = (test_set_key == "FILE_SIZE_TESTS")
@@ -408,7 +414,7 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
 
         if is_size_validation or is_name_size_case:
             if file_entry.get("file_size") in (None, "", "NULL"):
-                raise ValueError("file_size is required for FILE_SIZE_TESTS and SPECAIL_* tests")
+                raise ValueError("file_size is required for FILE_SIZE_TESTS and SPECIAL_* tests")
 
         if is_mac_time_case and check_meta:
             for fld in ("deleted_timestamp", "modified_timestamp", "accessed_timestamp", "changed_timestamp"):
