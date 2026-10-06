@@ -13,11 +13,12 @@ from functools import lru_cache
 import numpy as np
 from PIL import Image as PILImage
 
+# HEIC/HEIF support for Pillow (decode check and pHash of carved HEIC files and originals)
 try:
-    _popcount = int.bit_count
-except AttributeError:  # pragma: no cover
-    def _popcount(n: int) -> int:
-        return bin(n).count("1")
+    import pillow_heif
+    pillow_heif.register_heif_opener()
+except ImportError:  # pragma: no cover
+    print("[ImageCheck] pillow-heif not installed: HEIC files cannot be opened")
 
 @dataclass
 class _Block:
@@ -201,36 +202,35 @@ def _coverage_unique_bytes(matches: List[_Match]) -> Tuple[int, int]:
 
 # --------------------------- BER + sequential bytes ---------------------------
 
-def _bit_error_rate(orig_path: str, carved_path: str, best_off: int, chunk: int = 1 << 20) -> Tuple[int, int, float]:
+# Vectorised with numpy; results are identical to the former byte-by-byte loops.
+_POPCOUNT = np.array([bin(i).count("1") for i in range(256)], dtype=np.uint8)
+
+
+def _read_overlap(orig_path, carved_path, o_start, c_start, overlap):
+    a = np.fromfile(orig_path, dtype=np.uint8, count=overlap, offset=o_start)
+    b = np.fromfile(carved_path, dtype=np.uint8, count=overlap, offset=c_start)
+    n = min(len(a), len(b))
+    return a[:n], b[:n]
+
+
+def _bit_error_rate(orig_path, carved_path, best_off, chunk=1 << 20):
     o_size = os.path.getsize(orig_path)
     c_size = os.path.getsize(carved_path)
     if best_off >= 0:
         c_start, o_start = 0, best_off
     else:
         c_start, o_start = -best_off, 0
-    o_tail = max(0, o_size - o_start)
-    c_tail = max(0, c_size - c_start)
-    overlap = min(o_tail, c_tail)
+    overlap = min(max(0, o_size - o_start), max(0, c_size - c_start))
     if overlap <= 0:
         return (0, 0, 0.0)
-    diff_bits = 0
-    total_bits = 0
-    with open(orig_path, "rb") as fo, open(carved_path, "rb") as fc:
-        fo.seek(o_start); fc.seek(c_start)
-        left = overlap
-        while left > 0:
-            n = min(chunk, left)
-            a = fo.read(n); b = fc.read(n)
-            if not a or not b:
-                break
-            for x, y in zip(a, b):
-                total_bits += 8
-                diff_bits += _popcount(x ^ y)
-            left -= n
+    a, b = _read_overlap(orig_path, carved_path, o_start, c_start, overlap)
+    diff_bits = int(_POPCOUNT[a ^ b].sum(dtype=np.int64))
+    total_bits = 8 * len(a)
     rate = (diff_bits / total_bits) if total_bits else 0.0
     return diff_bits, total_bits, rate
 
-def _sequential_byte_compare(orig_path: str, carved_path: str, align_off: int, chunk: int = 1 << 20):
+
+def _sequential_byte_compare(orig_path, carved_path, align_off, chunk=1 << 20):
     o_size = os.path.getsize(orig_path)
     c_size = os.path.getsize(carved_path)
     if align_off >= 0:
@@ -243,64 +243,37 @@ def _sequential_byte_compare(orig_path: str, carved_path: str, align_off: int, c
     overlap = min(o_tail, c_tail)
     if total_bytes == 0:
         return {
-            "alignment_offset_bytes": align_off,
-            "diff_bytes": 0,
-            "total_bytes": 0,
-            "byte_similarity": 1.0,
-            "first_diff_rel": None,
-            "first_diff_orig_abs": None,
-            "first_diff_carved_abs": None,
-            "longest_equal_run": 0,
-            "longest_equal_run_fraction": None,
-            "orig_start": o_start,
-            "carved_start": c_start,
+            "alignment_offset_bytes": align_off, "diff_bytes": 0, "total_bytes": 0, "byte_similarity": 1.0,
+            "first_diff_rel": None, "first_diff_orig_abs": None, "first_diff_carved_abs": None,
+            "longest_equal_run": 0, "longest_equal_run_fraction": None,
+            "orig_start": o_start, "carved_start": c_start,
         }
-    diff_overlap = 0
-    first_diff_rel = None
-    longest_equal_run = 0
-    cur_equal_run = 0
-    with open(orig_path, "rb") as fo, open(carved_path, "rb") as fc:
-        fo.seek(o_start); fc.seek(c_start)
-        left = overlap; rel_off = 0
-        while left > 0:
-            n = min(chunk, left)
-            a = fo.read(n); b = fc.read(n)
-            if not a or not b:
-                break
-            for i in range(n):
-                if a[i] == b[i]:
-                    cur_equal_run += 1
-                else:
-                    diff_overlap += 1
-                    if first_diff_rel is None:
-                        first_diff_rel = rel_off + i
-                    longest_equal_run = max(longest_equal_run, cur_equal_run)
-                    cur_equal_run = 0
-            rel_off += n
-            left -= n
-    longest_equal_run = max(longest_equal_run, cur_equal_run)
+    diff_overlap, first_diff_rel, longest_equal_run = 0, None, 0
+    if overlap > 0:
+        a, b = _read_overlap(orig_path, carved_path, o_start, c_start, overlap)
+        diff_idx = np.flatnonzero(a != b)
+        diff_overlap = int(diff_idx.size)
+        if diff_overlap:
+            first_diff_rel = int(diff_idx[0])
+            bounds = np.concatenate(([-1], diff_idx, [len(a)]))
+            longest_equal_run = int((np.diff(bounds) - 1).max())
+        else:
+            longest_equal_run = len(a)
     trailing = total_bytes - overlap
     diff_bytes = diff_overlap + trailing
     if first_diff_rel is None and trailing > 0:
         first_diff_rel = overlap
     byte_similarity = 1.0 - (diff_bytes / total_bytes)
-    longest_equal_run_fraction = (None if total_bytes == 0 else (longest_equal_run / total_bytes))
-    if first_diff_rel is not None:
-        first_diff_orig_abs = o_start + first_diff_rel
-        first_diff_carved_abs = c_start + first_diff_rel
-    else:
-        first_diff_orig_abs = None
-        first_diff_carved_abs = None
     return {
         "alignment_offset_bytes": align_off,
         "diff_bytes": diff_bytes,
         "total_bytes": total_bytes,
         "byte_similarity": byte_similarity,
         "first_diff_rel": first_diff_rel,
-        "first_diff_orig_abs": first_diff_orig_abs,
-        "first_diff_carved_abs": first_diff_carved_abs,
+        "first_diff_orig_abs": None if first_diff_rel is None else o_start + first_diff_rel,
+        "first_diff_carved_abs": None if first_diff_rel is None else c_start + first_diff_rel,
         "longest_equal_run": longest_equal_run,
-        "longest_equal_run_fraction": longest_equal_run_fraction,
+        "longest_equal_run_fraction": longest_equal_run / total_bytes,
         "orig_start": o_start,
         "carved_start": c_start,
     }

@@ -13,6 +13,7 @@ from pathlib import Path
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import cgi
 import json
+import tempfile
 
 from dotenv import load_dotenv
 
@@ -133,15 +134,18 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if not files:
             return self._json_error(400, "No files were uploaded")
 
-        # Save uploads to disk (as API did before)
+        # Save uploads to disk: one directory per request and one sub-directory per file, so files
+        # with the same name (in this or a concurrent request) never overwrite each other.
         saved_paths: list[Path] = []
+        request_dir = Path(tempfile.mkdtemp(prefix="carving-", dir=UPLOAD_DIR))
         try:
-            for file_item in files:
+            for i, file_item in enumerate(files):
                 filename = _safe_filename(getattr(file_item, "filename", "") or "")
                 if not filename:
                     continue
 
-                file_path = UPLOAD_DIR / filename
+                file_path = request_dir / str(i) / filename
+                file_path.parent.mkdir()
                 with open(file_path, "wb") as f:
                     shutil.copyfileobj(file_item.file, f)
                 saved_paths.append(file_path)
@@ -187,18 +191,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             return self._json_error(500, f"Internal error: {e}")
         finally:
             if cleanup_uploads:
-                for p in saved_paths:
-                    try:
-                        p.unlink(missing_ok=True)  # Python 3.8+: on 3.8, missing_ok exists? (3.8 yes)
-                    except TypeError:
-                        # fallback for older versions
-                        try:
-                            if p.exists():
-                                p.unlink()
-                        except Exception:
-                            pass
-                    except Exception:
-                        pass
+                shutil.rmtree(request_dir, ignore_errors=True)
 
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler, port=int(os.getenv("API_PORT", 8000))):

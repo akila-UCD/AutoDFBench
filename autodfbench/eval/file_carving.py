@@ -139,17 +139,24 @@ def evaluate_file_carving(payload: Dict[str, Any]) -> Dict[str, Any]:
         except Exception:
             gt_filenames.append(str(row[-1]))
 
+    missing_sources = [n for n in gt_filenames if not (source_dir / n).is_file()]
+    if missing_sources:
+        raise ValueError(
+            f"Ground-truth source files not found in {source_dir} (set CARVING_SOURCE_DIR): "
+            + ", ".join(missing_sources)
+        )
+
     details = []
-    tp = fp = 0
+    qualifying = []  # (byte_similarity, detail) for submissions that meet the TP criteria
 
     for sub_path_str in carved_files:
         sub_path = Path(str(sub_path_str))
         sub_name = sub_path.name
         if not sub_path.exists():
-            fp += 1
             details.append({
                 "submitted_file": sub_name,
                 "error": f"file not found: {sub_path}",
+                "counted_as": "FP",
             })
             continue
 
@@ -234,11 +241,8 @@ def evaluate_file_carving(payload: Dict[str, Any]) -> Dict[str, Any]:
         quality_sim = byte_similarity_algn if byte_similarity_algn is not None else byte_similarity_lock
         quality = _quality_label_bytes(decodes, quality_sim, q_major_pct, q_complete_pct)
 
-        # TP logic: decodes + lockstep similarity > threshold
-        if decodes and (byte_similarity_lock is not None) and (byte_similarity_lock > byte_sim_threshold):
-            tp += 1
-        else:
-            fp += 1
+        # TP criteria: decodes + lockstep similarity > threshold (each original is credited once, below)
+        meets_tp = bool(decodes and (byte_similarity_lock is not None) and (byte_similarity_lock > byte_sim_threshold))
 
         metrics = None
         if compare_report:
@@ -258,9 +262,10 @@ def evaluate_file_carving(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "aligned_diff_byte_count": seq_al.get("diff_byte_count"),
             }
 
-        details.append({
+        detail = {
             "submitted_file": sub_name,
             "matched_gt_file": best_gt_name,
+            "counted_as": "FP",
             "selected_by": selected_by,
             "byte_similarity_threshold": byte_sim_threshold,
             "quality_by": "aligned" if byte_similarity_algn is not None else "lockstep",
@@ -277,7 +282,22 @@ def evaluate_file_carving(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "highfreq": phash_highfreq,
                 "hamming_distance": phash_distance,
             },
-        })
+        }
+        details.append(detail)
+        if meets_tp:
+            qualifying.append((byte_similarity_lock, detail))
+
+    # One TP per ground-truth file: the most similar qualifying submission is the TP,
+    # further submissions matching the same original are FPs (duplicates).
+    credited = set()
+    for _, detail in sorted(qualifying, key=lambda x: -x[0]):
+        if detail["matched_gt_file"] in credited:
+            detail["counted_as"] = "FP (duplicate of an already matched ground-truth file)"
+        else:
+            credited.add(detail["matched_gt_file"])
+            detail["counted_as"] = "TP"
+    tp = len(credited)
+    fp = len(carved_files) - tp
 
     fn = max(len(gt_filenames) - tp, 0)
     precision = _safe_div(tp, tp + fp)
