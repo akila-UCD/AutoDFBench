@@ -86,81 +86,51 @@ Detailed API documentation is available in the `docs/` folder:
 
 Details about datasets and evaluation data: `docs/Data.md`
 
-The ground truth database dump (`AutoDFBenchV3.2.sql`) is in `docker/mysql/init/` and is loaded automatically when the MySQL container is first created.
+The ground truth ships with the repository as a SQLite file: `ground_truth/autodfbench_gt.sqlite` (checksum in `ground_truth/autodfbench_gt.sqlite.sha256`). No database server is needed. It is ground truth V3.2 (`docker/mysql/init/AutoDFBenchV3.2.sql`) with corrected `dfr_blocks` for 20 deleted-file-recovery rows.
+
+Evaluation results (`write_db: true`) are stored in `results/autodfbench_results.sqlite`. Set `AUTODFBENCH_GT_DB` / `AUTODFBENCH_RESULTS_DB` to use other paths.
+
+Maintainers who edit the ground truth in MySQL can regenerate the SQLite file with `tools/build_gt_sqlite.py`.
 
 
 ---
 
-## GitHub Setup
+## Quick Start
 
-Step by step Guide: [autodfbench-install-guide.md](autodfbench-install-guide.md)
-### 1. Clone
+Step by step guide: [autodfbench-install-guide.md](autodfbench-install-guide.md)
+
+### Docker (one container)
 
 ```bash
 git clone https://github.com/akila-UCD/AutoDFBench.git
 cd AutoDFBench
+docker compose up -d --build
 ```
 
-### 2. Configure Environment Variables
+### Without Docker
 
-Copy the example environment file:
+Requires Python 3.10–3.12.
 
 ```bash
-cp .env.example .env
+git clone https://github.com/akila-UCD/AutoDFBench.git
+cd AutoDFBench
+pip install -r requirements-api.txt
+python serve.py
 ```
 
-Edit `.env` if necessary. Example configuration:
+Either way, the APIs listen on:
 
-```bash
-CONDA_EXECUTE_ENV='/opt/conda/bin/python'
-DISK_IMAGE_SOURCE_FOLDER='DD_IMAGES/'
-DISK_IMAGE_DESTINATION_FOLDER='/DD_IMAGES'
-WINDOWS_DATA_CSV_PATH='Data/Evaluation-Matrix-String-Searching-Windows-DataSets.csv'
-UNIX_DATA_CSV_PATH='Data/Evaluation-Matrix-String-Searching-Unix-DataSets.csv'
-DELETED_FILE_DATA_CSV_PATH='Data/Evaluation_prompts_deleted_file.recovery.csv'
-```
+| Port | API | Endpoint |
+|---|---|---|
+| 8000 | String Search | `POST /api/v1/string-search/evaluate` |
+| 8001 | Deleted File Recovery | `POST /api/v1/deleted_file_recovery/evaluate` |
+| 8002 | File Carving | see `docs/AutoDFBench_File_Carving_Evaluation_API.md` |
+| 8003 | Windows Registry | |
+| 8004 | SQLite Recovery | |
 
-### 3. Start AutoDFBench Services
+`python serve.py --base-port 9000` moves them to 9000–9004. A single API can still be started on its own, e.g. `API_PORT=8001 python -m API.deleted_file_recovery_api`.
 
-```bash
-docker compose up -d
-```
-
-This will start:
-
-- AutoDFBench services
-- MySQL database
-- Evaluation environment
-
----
-
-## Running AutoDFBench APIs
-
-AutoDFBench exposes task-specific APIs that process evaluation requests and produce structured JSON outputs.
-
-### String Search API
-
-```bash
-python3 -m API.string_search_api
-```
-
-### Deleted File Recovery API
-
-```bash
-python3 -m API.deleted_file_recovery_api
-```
-
-### SQLite Recovery API
-
-```bash
-python3 -m API.sqlite_recovery_api
-```
-
-### File Carving API
-
-```bash
-python3 -m API.file_carving_api
-```
+File carving and Windows registry evaluation read their source files from `Data/` (mounted read-only into the container; without Docker, run from the repository root and set `MAIN_PATH` to it for the registry API).
 
 ---
 
@@ -197,36 +167,6 @@ python3 csv_eval.py windows_registry WR-BATCH-01 testWINREG_CSV.csv tests/win_re
 ```bash
 python3 csv_eval.py sqlite_recovery SQLITE-SFT01-BATCH tests/sqlite_recovery_test.csv sqlite_results.csv --include-summary
 ```
-
----
-
-## Running Without Docker (Advanced)
-
-Advanced users may run AutoDFBench 1.0 directly from the repository.
-
-**Requirements:**
-
-- Python 3.10+
-- MySQL or MariaDB
-- Miniconda or Anaconda
-- Git
-
-### Clone Repository
-
-```bash
-git clone https://github.com/akila-UCD/AutoDFBench.git
-cd AutoDFBench
-```
-
-### Configure Environment
-
-Rename the example file:
-
-```bash
-cp .env.example .env
-```
-
-Modify environment variables according to your setup.
 
 ---
 

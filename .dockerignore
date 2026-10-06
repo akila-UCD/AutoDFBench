@@ -1,0 +1,15 @@
+.git
+.env
+.env.*
+Data/
+database/
+results/
+reports/
+tests/
+dfr_tests/
+dfr_json_files/
+docker/mysql/
+**/__pycache__
+*.sql
+*.tar.gz
+*.zip

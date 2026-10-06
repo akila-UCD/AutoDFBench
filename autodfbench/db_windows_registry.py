@@ -1,6 +1,6 @@
 # autodfbench/db_windows_registry.py
 import os
-import mysql.connector
+from autodfbench.database import get_db_connection as _storage_connection, Error as DBError
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,26 +12,9 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 
 def get_db_connection():
-    """Establish database connection"""
-    try:
-        kwargs = dict(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME
-        )
-        # Optional port parsing (robust)
-        if DB_PORT is not None:
-            s = str(DB_PORT).strip()
-            if s and s.lower() != "none":
-                kwargs["port"] = int(s)
-        return mysql.connector.connect(**kwargs)
-    except mysql.connector.Error as err:
-        print(f"Database connection error: {err}")
-        return None
-    except Exception as err:
-        print(f"Database connection error: {err}")
-        return None
+    """SQLite storage (see autodfbench/database.py)."""
+    return _storage_connection()
+
 
 def get_configs(conf_value):
     """Get configuration value from config table"""
@@ -46,7 +29,7 @@ def get_configs(conf_value):
         cursor.close()
         conn.close()
         return results[0] if results else None
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"Config query error: {err}")
         return None
 
@@ -66,7 +49,7 @@ def get_ground_truth_paths(base_test_case):
         cursor.close()
         conn.close()
         return results
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"Ground truth query error: {err}")
         return None
 
@@ -87,7 +70,7 @@ def insert_result_to_db(base_test_case, testcase, job_id, tp, fp, fn, precision,
         cursor.close()
         conn.close()
         return True
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"Database insert error: {err}")
         return False
 
@@ -108,7 +91,7 @@ def get_all_test_results():
         cursor.close()
         conn.close()
         return results
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"Test results query error: {err}")
         return None
 
@@ -130,6 +113,6 @@ def get_test_results_by_base_case(base_test_case):
         cursor.close()
         conn.close()
         return results
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"Test results by base case query error: {err}")
         return None

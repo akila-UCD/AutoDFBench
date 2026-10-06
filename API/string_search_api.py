@@ -5,7 +5,7 @@ import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from autodfbench.eval.string_search import evaluate_string_search
 
-import mysql.connector
+from autodfbench.database import get_db_connection as _storage_connection, Error as DBError
 from dotenv import load_dotenv
 
 # -------------------- ENV --------------------
@@ -18,17 +18,9 @@ DB_PASSWORD = os.getenv('DB_PASSWORD')
 
 # -------------------- DB HELPERS --------------------
 def get_db_connection():
-    try:
-        return mysql.connector.connect(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME,
-            port=int(DB_PORT) if DB_PORT else None,
-        )
-    except mysql.connector.Error as err:
-        print(f"[DB] Error: {err}")
-        return None
+    """SQLite storage (see autodfbench/database.py)."""
+    return _storage_connection()
+
 
 def insert_result_to_db(base_test_case, test_case, tp, fp, fn, precision, recall, f1):
     try:
@@ -46,7 +38,7 @@ def insert_result_to_db(base_test_case, test_case, tp, fp, fn, precision, recall
         conn.commit()
         cur.close()
         conn.close()
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"[DB] Insert Error: {err}")
 
 def get_gt_map(base_test_case,os_type):
@@ -71,7 +63,7 @@ def get_gt_map(base_test_case,os_type):
         rows = cur.fetchall()
         cur.close()
         conn.close()
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"[DB] Query Error: {err}")
         return set(), {}
 

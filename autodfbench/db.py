@@ -1,7 +1,7 @@
 # autodfbench/db.py
 
 import os
-import mysql.connector
+from autodfbench.database import get_db_connection as _storage_connection, Error as DBError
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,33 +13,8 @@ DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 
 def get_db_connection():
-    try:
-        port = None
-        if DB_PORT is not None:
-            s = str(DB_PORT).strip()
-            if s and s.lower() != "none":
-                port = int(s)
-
-        kwargs = dict(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME,
-        )
-        if port is not None:
-            kwargs["port"] = port
-
-        return mysql.connector.connect(**kwargs)
-
-    except (ValueError, TypeError) as e:
-        print(f"[DB] Invalid DB_PORT={DB_PORT!r}: {e}")
-        return None
-    except mysql.connector.Error as err:
-        print(DB_HOST)
-        print(DB_USER)
-        print(DB_PASSWORD)
-        print(f"[DB] Error: {err}")
-        return None
+    """SQLite storage (see autodfbench/database.py)."""
+    return _storage_connection()
 
 
 def insert_result_to_db(base_test_case, test_case, tp, fp, fn, precision, recall, f1):
@@ -58,7 +33,7 @@ def insert_result_to_db(base_test_case, test_case, tp, fp, fn, precision, recall
         conn.commit()
         cur.close()
         conn.close()
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"[DB] Insert Error: {err}")
 
 def get_ss_gt_map(base_test_case, os_type):
@@ -77,7 +52,7 @@ def get_ss_gt_map(base_test_case, os_type):
         rows = cur.fetchall()
         cur.close()
         conn.close()
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"[DB] Query Error: {err}")
         return set(), {}
 
