@@ -1,20 +1,12 @@
 import os
-import mysql.connector
+from autodfbench.database import get_db_connection as _storage_connection, Error as DBError
 from dotenv import load_dotenv
 
 load_dotenv()
 
 def get_db_connection():
-    try:
-        return mysql.connector.connect(
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_NAME")
-        )
-    except mysql.connector.Error as err:
-        print(f"DB error: {err}")
-        return None
+    """SQLite storage (see autodfbench/database.py)."""
+    return _storage_connection()
 
 
 def get_ground_truth(
@@ -56,6 +48,6 @@ def get_ground_truth(
         conn.close()
         return result
 
-    except mysql.connector.Error as err:
+    except DBError as err:
         print(f"Query error: {err}")
         return None

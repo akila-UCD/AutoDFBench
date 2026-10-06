@@ -1,7 +1,7 @@
 # autodfbench/db_dfr.py
 import os
 import sys
-import mysql.connector
+from autodfbench.database import get_db_connection as _storage_connection, Error as DBError
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,39 +14,8 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 
 
 def get_db_connection():
-    """
-    Robust connection: supports DB_PORT missing or "None".
-    """
-    try:
-        port = None
-        if DB_PORT is not None:
-            s = str(DB_PORT).strip()
-            if s and s.lower() != "none":
-                port = int(s)
-
-        kwargs = dict(
-            host=DB_HOST,
-            user=DB_USER,
-            password=DB_PASSWORD,
-            database=DB_NAME,
-        )
-        if port is not None:
-            kwargs["port"] = port
-
-        return mysql.connector.connect(**kwargs)
-
-    except (ValueError, TypeError) as e:
-        try:
-            sys.stderr.write(f"[DB] Invalid DB_PORT={DB_PORT!r}: {e}\n")
-        except Exception:
-            pass
-        return None
-    except mysql.connector.Error as err:
-        try:
-            sys.stderr.write(f"[DB] Error: {err}\n")
-        except Exception:
-            pass
-        return None
+    """SQLite storage (see autodfbench/database.py)."""
+    return _storage_connection()
 
 
 def insert_result_to_db(base_test_case, testcase, tp, fp, fn, precision, recall, f1):
@@ -64,7 +33,7 @@ def insert_result_to_db(base_test_case, testcase, tp, fp, fn, precision, recall,
         conn.commit()
         cursor.close()
         conn.close()
-    except mysql.connector.Error:
+    except DBError:
         try:
             conn.close()
         except Exception:
@@ -95,7 +64,7 @@ def get_ground_truth_paths(base_test_case):
         cursor.close()
         conn.close()
         return results
-    except mysql.connector.Error:
+    except DBError:
         try:
             conn.close()
         except Exception:

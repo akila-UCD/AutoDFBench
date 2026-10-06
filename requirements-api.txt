@@ -1,0 +1,4 @@
+# Runtime dependencies of the evaluation APIs (serve.py). requirements.txt holds the full research toolchain.
+python-dotenv==1.0.1
+numpy
+Pillow
