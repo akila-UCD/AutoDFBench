@@ -21,10 +21,10 @@ docker compose version
 ```bash
 git clone https://github.com/akila-UCD/AutoDFBench.git
 cd AutoDFBench
-docker compose up -d --build
+docker compose up -d
 ```
 
-The first build downloads the Python base image and takes a few minutes. No `.env` file is needed.
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1` from Docker Hub (about 80 MB). To build it from the source instead, use `docker compose up -d --build`. No `.env` file is needed.
 
 ### 3. Check it is running
 
@@ -47,7 +47,7 @@ A JSON response with `total_gt_lines` means the API and ground truth are working
 
 ```bash
 docker compose down                        # stop
-git pull && docker compose up -d --build   # update to a newer version
+git pull && docker compose pull && docker compose up -d   # update to a newer version
 ```
 
 Results written with `write_db: true` are kept in `results/autodfbench_results.sqlite` on the host.
