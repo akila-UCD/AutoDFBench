@@ -1,97 +1,94 @@
 # autodfbench/eval/windows_registry.py
 import os
+import shutil
+import tempfile
 from pathlib import Path
-import json
 
-from autodfbench.db_windows_registry import (
-    get_configs, get_ground_truth_paths, insert_result_to_db
-)
+import pandas as pd
+
+from autodfbench.db_windows_registry import get_ground_truth_paths, insert_result_to_db
+
+METADATA_ROWS = "FILE_INFO|PROCESSING_SUMMARY"
+
+
+def _read_registry_csv(path, label):
+    """Read a registry CSV (all columns as text) and check it has PATH and VALUE columns."""
+    try:
+        df = pd.read_csv(path, dtype=str, keep_default_na=False)
+    except Exception as e:
+        raise ValueError(f"Cannot read {label} CSV: {e}")
+    df.columns = df.columns.str.strip()
+    missing = [c for c in ("PATH", "VALUE") if c not in df.columns]
+    if missing:
+        raise ValueError(f"{label} CSV is missing column(s) {', '.join(missing)}; found: {', '.join(df.columns)}")
+    return df
+
 
 def compare_csv_files_detailed(submitted_csv_path, gt_file_path):
     """
-    Compare CSV files based on PATH and VALUE columns only.
-    (Same logic as api_v2.py)
+    Compare CSV files based on PATH and VALUE columns only (AutoDFBench 1.0 paper, section 4.6.4).
+    Each row becomes the string "PATH|VALUE"; rows in both files are TP, rows only in the
+    submission are FP, rows only in the ground truth are FN.
+    Raises ValueError with the reason when a file cannot be compared.
     """
-    try:
-        import pandas as pd
+    submitted_df = _read_registry_csv(submitted_csv_path, "Submitted")
+    gt_df = _read_registry_csv(gt_file_path, "Ground truth")
 
-        # Read CSV files with robust error handling
+    # Clean data - remove metadata and summary rows
+    submitted_clean = submitted_df[
+        ~submitted_df['PATH'].str.contains(METADATA_ROWS, na=False, case=False, regex=True)
+    ].copy()
+
+    gt_clean = gt_df[
+        ~gt_df['PATH'].str.contains(METADATA_ROWS, na=False, case=False, regex=True)
+    ].copy()
+
+    def create_comparison_key(row):
         try:
-            submitted_df = pd.read_csv(submitted_csv_path, dtype=str, keep_default_na=False)
+            path = str(row['PATH']).strip() if pd.notna(row['PATH']) else ""
+            value = str(row['VALUE']).strip() if pd.notna(row['VALUE']) else ""
+            return f"{path}|{value}"
         except Exception:
-            return None
+            return ""
 
-        try:
-            gt_df = pd.read_csv(gt_file_path, dtype=str, keep_default_na=False)
-        except Exception:
-            return None
+    submitted_keys = set()
+    for _, row in submitted_clean.iterrows():
+        key = create_comparison_key(row)
+        if key:
+            submitted_keys.add(key)
 
-        # Normalize column names (strip whitespace)
-        submitted_df.columns = submitted_df.columns.str.strip()
-        gt_df.columns = gt_df.columns.str.strip()
+    gt_keys = set()
+    for _, row in gt_clean.iterrows():
+        key = create_comparison_key(row)
+        if key:
+            gt_keys.add(key)
 
-        required_columns = ['PATH', 'VALUE']
-        for col in required_columns:
-            if col not in submitted_df.columns:
-                return None
-            if col not in gt_df.columns:
-                return None
+    if not gt_keys:
+        raise ValueError(f"Ground truth {Path(gt_file_path).name} has no registry entries; this test case cannot be scored")
 
-        # Clean data - remove metadata and summary rows
-        submitted_clean = submitted_df[
-            ~submitted_df['PATH'].str.contains('FILE_INFO|PROCESSING_SUMMARY', na=False, case=False, regex=True)
-        ].copy()
+    intersection = submitted_keys & gt_keys
+    true_positives = len(intersection)
+    false_positives = len(submitted_keys - gt_keys)
+    false_negatives = len(gt_keys - submitted_keys)
 
-        gt_clean = gt_df[
-            ~gt_df['PATH'].str.contains('FILE_INFO|PROCESSING_SUMMARY', na=False, case=False, regex=True)
-        ].copy()
+    precision = true_positives / len(submitted_keys) if len(submitted_keys) > 0 else 0.0
+    recall = true_positives / len(gt_keys) if len(gt_keys) > 0 else 0.0
+    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
 
-        def create_comparison_key(row):
-            try:
-                path = str(row['PATH']).strip() if pd.notna(row['PATH']) else ""
-                value = str(row['VALUE']).strip() if pd.notna(row['VALUE']) else ""
-                return f"{path}|{value}"
-            except Exception:
-                return ""
+    union_size = len(submitted_keys | gt_keys)
+    similarity_score = true_positives / union_size if union_size > 0 else 0.0
 
-        submitted_keys = set()
-        for _, row in submitted_clean.iterrows():
-            key = create_comparison_key(row)
-            if key:
-                submitted_keys.add(key)
-
-        gt_keys = set()
-        for _, row in gt_clean.iterrows():
-            key = create_comparison_key(row)
-            if key:
-                gt_keys.add(key)
-
-        intersection = submitted_keys & gt_keys
-        true_positives = len(intersection)
-        false_positives = len(submitted_keys - gt_keys)
-        false_negatives = len(gt_keys - submitted_keys)
-
-        precision = true_positives / len(submitted_keys) if len(submitted_keys) > 0 else 0.0
-        recall = true_positives / len(gt_keys) if len(gt_keys) > 0 else 0.0
-        f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
-
-        union_size = len(submitted_keys | gt_keys)
-        similarity_score = true_positives / union_size if union_size > 0 else 0.0
-
-        return {
-            'true_positives': true_positives,
-            'false_positives': false_positives,
-            'false_negatives': false_negatives,
-            'total_submitted': len(submitted_clean),
-            'total_ground_truth': len(gt_clean),
-            'precision': precision,
-            'recall': recall,
-            'f1_score': f1_score,
-            'similarity_score': similarity_score
-        }
-
-    except Exception:
-        return None
+    return {
+        'true_positives': true_positives,
+        'false_positives': false_positives,
+        'false_negatives': false_negatives,
+        'total_submitted': len(submitted_clean),
+        'total_ground_truth': len(gt_clean),
+        'precision': precision,
+        'recall': recall,
+        'f1_score': f1_score,
+        'similarity_score': similarity_score
+    }
 
 
 def evaluate_windows_registry(payload: dict) -> dict:
@@ -130,12 +127,13 @@ def evaluate_windows_registry(payload: dict) -> dict:
     if not ground_truth_paths:
         raise ValueError(f"Invalid Test Case: {base_test_case}")
     if len(ground_truth_paths) != 1:
-        raise ValueError("Exactly one ground truth file expected per test case")
+        names = ", ".join(str(r[6]) for r in ground_truth_paths)
+        raise ValueError(f"Test case {base_test_case} has {len(ground_truth_paths)} ground truth files ({names}); "
+                         "exactly one is expected per test case")
 
     gt_file_name = ground_truth_paths[0][6]  # file_name column
-    
+
     gt_file_path = Path(registry_source_config) / gt_file_name
-    print(gt_file_path)
     if not gt_file_path.exists():
         raise ValueError(f"Ground truth file not found: {gt_file_name}")
 
@@ -143,7 +141,7 @@ def evaluate_windows_registry(payload: dict) -> dict:
 
     # Save submitted CSV (from bytes or path)
     submitted_csv_path = None
-    cleanup_after = False
+    request_dir = None
 
     if payload.get("submitted_csv_path"):
         submitted_csv_path = Path(payload["submitted_csv_path"])
@@ -157,24 +155,27 @@ def evaluate_windows_registry(payload: dict) -> dict:
         if not str(submitted_filename).lower().endswith(".csv"):
             raise ValueError("Only CSV files are allowed")
 
-        submitted_csv_path = upload_dir / os.path.basename(str(submitted_filename))
+        # One directory per request, so uploads with the same name never overwrite each other
+        request_dir = Path(tempfile.mkdtemp(prefix="registry-", dir=upload_dir))
+        submitted_csv_path = request_dir / os.path.basename(str(submitted_filename))
         with open(submitted_csv_path, "wb") as f:
             f.write(submitted_bytes)
-        cleanup_after = True
 
-    # Basic CSV validation: must contain PATH header
     try:
-        with open(submitted_csv_path, "r", encoding="utf-8") as f:
-            first_line = f.readline().strip()
-            if not first_line or "PATH" not in first_line:
-                raise ValueError("Invalid CSV format. Expected headers including PATH column")
-    except Exception as e:
-        raise ValueError(f"Cannot read CSV file: {e}")
+        # Basic CSV validation: must contain PATH header
+        try:
+            with open(submitted_csv_path, "r", encoding="utf-8") as f:
+                first_line = f.readline().strip()
+        except Exception as e:
+            raise ValueError(f"Cannot read CSV file: {e}")
+        if not first_line or "PATH" not in first_line:
+            raise ValueError("Invalid CSV format. Expected headers including PATH column")
 
-    # Compare
-    comparison_result = compare_csv_files_detailed(submitted_csv_path, gt_file_path)
-    if not comparison_result:
-        raise ValueError("CSV comparison failed - see server logs for details")
+        # Compare
+        comparison_result = compare_csv_files_detailed(submitted_csv_path, gt_file_path)
+    finally:
+        if request_dir is not None:
+            shutil.rmtree(request_dir, ignore_errors=True)
 
     tp = comparison_result["true_positives"]
     fp = comparison_result["false_positives"]
@@ -199,13 +200,6 @@ def evaluate_windows_registry(payload: dict) -> dict:
     if write_db:
         try:
             insert_result_to_db(base_test_case, test_case, job_id, tp, fp, fn, precision, recall, f1_score)
-        except Exception:
-            pass
-
-    # Cleanup temp
-    if cleanup_after:
-        try:
-            os.remove(submitted_csv_path)
         except Exception:
             pass
 
