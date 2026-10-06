@@ -304,6 +304,13 @@ def find_best_mac_row(mod_ts, acc_ts, chg_ts, gt_rows, matched_gt_names, w_mod, 
 
     return best_row, best_score
 
+def _first_unmatched(rows, matched_gt_names):
+    """First GT row of a shared block set that has not been matched yet (else the first row)."""
+    for r in rows:
+        if r["filename"] not in matched_gt_names:
+            return r
+    return rows[0]
+
 # -------------------- Evaluator entry point --------------------
 def evaluate_deleted_file_recovery(payload: dict) -> dict:
     """
@@ -475,8 +482,10 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
             first_block_map.setdefault(gt_first, []).append(r)
 
         fs = frozenset(gt_set)
-        if fs and fs not in gt_blocks_set_map:
-            gt_blocks_set_map[fs] = r
+        if fs:
+            # several GT files can share one block set (overwritten files, or files in different
+            # partitions with the same partition-relative blocks): keep all of them
+            gt_blocks_set_map.setdefault(fs, []).append(r)
 
     gt_count = len(gt_rows)
     all_gt_have_blocks = all(len(r["blocks_tokens"]) > 0 for r in gt_rows)
@@ -521,7 +530,7 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
         if name_row is not None:
             pairing_candidates.append(name_row)
         if full_match:
-            pairing_candidates.append(gt_blocks_set_map[fs])
+            pairing_candidates.extend(gt_blocks_set_map[fs])
         if first_match:
             pairing_candidates.extend(first_block_map.get(sub_first_i, []))
 
@@ -542,7 +551,7 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
                 if name_row is not None and name_row["size"] is not None and name_row["size"] == filesize_i:
                     got_SizeMatch = True
                 elif full_match:
-                    rg = gt_blocks_set_map[fs]
+                    rg = _first_unmatched(gt_blocks_set_map[fs], matched_gt_names)
                     if rg["size"] is not None and rg["size"] == filesize_i:
                         got_SizeMatch = True
                 elif first_match:
@@ -606,10 +615,10 @@ def evaluate_deleted_file_recovery(payload: dict) -> dict:
                 mapped_gt_name = ns_row["filename"]
         elif is_default_full_match_case:
             if full_match:
-                mapped_gt_name = gt_blocks_set_map[fs]["filename"]
+                mapped_gt_name = _first_unmatched(gt_blocks_set_map[fs], matched_gt_names)["filename"]
         else:
             if full_match:
-                mapped_gt_name = gt_blocks_set_map[fs]["filename"]
+                mapped_gt_name = _first_unmatched(gt_blocks_set_map[fs], matched_gt_names)["filename"]
 
         if mapped_gt_name is not None:
             matched_gt_names.add(mapped_gt_name)

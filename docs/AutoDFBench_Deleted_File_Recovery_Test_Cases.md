@@ -196,6 +196,7 @@ A full sample response is in `dfr_tests/DFR-14_ext-14_The_Sleuth_Kit_ver_3.2.2.j
 - **TP / FP / FN** follow the matching rule of the selected test set (Section 2). A submitted file that cannot be matched is a **FP**. Ground-truth files that were never matched are **FN**.
 - **Precision** = TP / (TP + FP), **Recall** = TP / (TP + FN), **F1** = harmonic mean.
 - `AutoDFBench_score` for a single run is its F1. The overall AutoDFBench DFR score is the **mean F1 across all executed runs**.
+- **Shared block sets.** Block numbers are partition-relative, so two ground-truth files can have the same block set: files in different partitions of one image (e.g. `DFR-01/ext-01`: ext2 `Bellatrix.txt` and ext3 `Bunda.txt` are both at block 3585), or overwritten files whose blocks were reused (DFR-07). A submitted block set is matched to the first ground-truth file with that set that has not been matched yet, so each of those files can be found.
 
 ### Diagnostic counters
 
