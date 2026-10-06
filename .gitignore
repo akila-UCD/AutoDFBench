@@ -38,6 +38,7 @@ ehthumbs.db
 # ================================
 .env
 .env.*
+!.env.example
 *.env
 secrets/
 config/local/

@@ -22,6 +22,8 @@ import sys
 import time
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 ROOT = Path(__file__).resolve().parent
 
 APIS = [
@@ -34,6 +36,7 @@ APIS = [
 
 
 def main():
+    load_dotenv(ROOT / ".env")
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--base-port", type=int, default=int(os.getenv("AUTODFBENCH_BASE_PORT", 8000)))
     args = ap.parse_args()

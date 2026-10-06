@@ -16,6 +16,10 @@ import sqlite3
 from pathlib import Path
 from urllib.parse import quote
 
+from dotenv import load_dotenv
+
+load_dotenv()  # settings may come from a .env file (see .env.example)
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 GT_DB = Path(os.getenv("AUTODFBENCH_GT_DB", PROJECT_ROOT / "ground_truth" / "autodfbench_gt.sqlite"))
 RESULTS_DB = Path(os.getenv("AUTODFBENCH_RESULTS_DB", PROJECT_ROOT / "results" / "autodfbench_results.sqlite"))
