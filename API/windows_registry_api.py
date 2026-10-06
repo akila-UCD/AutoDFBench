@@ -87,7 +87,7 @@ class WindowsRegistryHandler(BaseHTTPRequestHandler):
                 "submitted_filename": filename,
                 "submitted_csv_bytes": content,
                 "upload_dir": str(UPLOAD_DIR),
-                "write_db": True,   # API default
+                "write_db": str(form_data.get("write_db", "true")).strip().lower() in ("1", "true", "yes", "y", "on"),
             })
             return self.send_json(200, resp)
 

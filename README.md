@@ -102,6 +102,7 @@ Detailed API documentation is available in the `docs/` folder:
 | String Search | `docs/AutoDFBench_StringSearch_Evaluation_API.md` |
 | File Carving | `docs/AutoDFBench_File_Carving_Evaluation_API.md` |
 | Deleted File Recovery | `docs/AutoDFBench_Deleted_File_Recovery_Test_Cases.md` |
+| Windows Registry | `docs/AutoDFBench_Windows_Registry_Evaluation_API.md` |
 
 ### Ground Truth Data
 
