@@ -86,7 +86,7 @@ Detailed API documentation is available in the `docs/` folder:
 
 Details about datasets and evaluation data: `docs/Data.md`
 
-The ground truth ships with the repository as a SQLite file: `ground_truth/autodfbench_gt.sqlite` (checksum in `ground_truth/autodfbench_gt.sqlite.sha256`). No database server is needed. It is ground truth V3.2 (`docker/mysql/init/AutoDFBenchV3.2.sql`) with corrected `dfr_blocks` for 20 deleted-file-recovery rows.
+The ground truth ships with the repository as a SQLite file: `ground_truth/autodfbench_gt.sqlite` (checksum in `ground_truth/autodfbench_gt.sqlite.sha256`). No database server is needed. It is ground truth V3.2 (`docker/mysql/init/AutoDFBenchV3.2.sql`) with corrected `dfr_blocks` for 20 deleted-file-recovery rows and the missing deleted file `Grumium.txt` added to DFR-07/ntfs-07.
 
 Evaluation results (`write_db: true`) are stored in `results/autodfbench_results.sqlite`. Set `AUTODFBENCH_GT_DB` / `AUTODFBENCH_RESULTS_DB` to use other paths.
 
