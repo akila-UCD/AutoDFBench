@@ -24,7 +24,7 @@ cd AutoDFBench
 docker compose up -d
 ```
 
-This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub (about 85 MB). To build it from the source instead, use `docker compose up -d --build`.
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub (about 106 MB). To build it from the source instead, use `docker compose up -d --build`.
 
 No `.env` file and no database credentials are needed. The MySQL settings used before 1.1 (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, …) are no longer read, so you can delete them from an old `.env`.
 

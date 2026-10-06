@@ -31,6 +31,8 @@ AutoDFBench enables **reproducible and comparable benchmarking** for:
   - Uploaded files with the same name no longer overwrite each other.
   - Comparison is about 12× faster.
   - Scores can differ from 1.1 for HEIC cases and for submissions with duplicates.
+- **Windows registry API works again:** pandas was missing from the 1.1 image.
+- **Settings:** none are required. The leftover MySQL settings were removed, and `.env.example` lists the optional ones (see [Configuration](#configuration-optional)).
 
 ## What's New in 1.1
 
