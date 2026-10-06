@@ -8,7 +8,7 @@
   <img width="150" src="https://github.com/akila-UCD/AutoDFBench/blob/main/autoDfBench_logoV2.png?raw=true" alt="AutoDFBench Logo">
 </p>
 
-# AutoDFBench 1.1
+# AutoDFBench 1.1.1
 
 **AutoDFBench** is an automated benchmarking framework for evaluating **digital forensic tools, scripts, and AI-generated code** against the **NIST Computer Forensics Tool Testing (CFTT) programme**.
 
@@ -22,6 +22,15 @@ AutoDFBench enables **reproducible and comparable benchmarking** for:
 - Agent-based forensic systems
 
 ---
+
+## What's New in 1.1.1
+
+- **File carving scoring fixes:**
+  - HEIC files can now be opened (`pillow-heif`), so the HEIC test cases can be scored.
+  - Each ground-truth file is credited once; extra matches count as false positives.
+  - Uploaded files with the same name no longer overwrite each other.
+  - Comparison is about 12× faster.
+  - Scores can differ from 1.1 for HEIC cases and for submissions with duplicates.
 
 ## What's New in 1.1
 
@@ -117,7 +126,7 @@ cd AutoDFBench
 docker compose up -d
 ```
 
-This pulls the prebuilt image `akila1989/autodfbench-api:1.1` from Docker Hub. Use `docker compose up -d --build` to build it from the source instead.
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub. Use `docker compose up -d --build` to build it from the source instead.
 
 ### Without Docker
 

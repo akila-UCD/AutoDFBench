@@ -24,7 +24,7 @@ cd AutoDFBench
 docker compose up -d
 ```
 
-This pulls the prebuilt image `akila1989/autodfbench-api:1.1` from Docker Hub (about 80 MB). To build it from the source instead, use `docker compose up -d --build`. No `.env` file is needed.
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub (about 80 MB). To build it from the source instead, use `docker compose up -d --build`. No `.env` file is needed.
 
 ### 3. Check it is running
 
