@@ -118,9 +118,9 @@ Maintainers who edit the ground truth in MySQL can regenerate the SQLite file wi
 
 ## Quick Start
 
-Step by step guide: [autodfbench-install-guide.md](autodfbench-install-guide.md)
-
 ### Docker (one container)
+
+Requires Docker: Docker Desktop on Windows/macOS, or Docker Engine with the Compose plugin on Linux. Check with `docker --version` and `docker compose version`.
 
 ```bash
 git clone https://github.com/akila-UCD/AutoDFBench.git
@@ -128,7 +128,7 @@ cd AutoDFBench
 docker compose up -d
 ```
 
-This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub. Use `docker compose up -d --build` to build it from the source instead.
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub (about 106 MB). Use `docker compose up -d --build` to build it from the source instead.
 
 ### Without Docker
 
@@ -155,6 +155,25 @@ Either way, the APIs listen on:
 
 File carving and Windows registry evaluation read their source files from `Data/`, which is not part of the repository. Docker mounts it into the container read-only.
 
+### Check it is running
+
+```bash
+curl -s -X POST http://localhost:8000/api/v1/string-search/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{"base_test_case":"FT-SS-01","file_contents_found":[""],"os":"windows","tool_used":"test","write_db":false}'
+```
+
+A JSON response with `total_gt_lines` means the API and the ground truth are working. With Docker, `docker compose logs autodfbench` lists the five APIs.
+
+### Stop and update
+
+```bash
+docker compose down                                       # stop
+git pull && docker compose pull && docker compose up -d   # update to a newer version
+```
+
+Results written with `write_db: true` stay in `results/autodfbench_results.sqlite`.
+
 ---
 
 ## Configuration (optional)
@@ -175,6 +194,18 @@ To change one:
 | `TEMP_FILE_UPLOAD_PATH` | `/tmp` | Uploaded files are stored here while being scored |
 
 `.env.example` also lists the file carving scoring parameters (`GT_SELECT_STRATEGY`, `PHASH_*`, `Q_SIM_*`).
+
+---
+
+## Troubleshooting
+
+| Message | Cause and fix |
+|---|---|
+| `Ground-truth database not found` | `ground_truth/autodfbench_gt.sqlite` is missing or incomplete. Check the clone with `git status` and `cd ground_truth && sha256sum -c autodfbench_gt.sqlite.sha256` |
+| `Invalid test case or no GT …` | The API is reachable, but the `base_test_case` does not exist for that task. See the test case names in `docs/` |
+| `Ground-truth source files not found` (file carving) | Put the `source` folder of the CFReDS "File Carving Graphic Files" (2023) data set in `Data/source` |
+| `Ground truth file not found` (Windows registry) | Put the registry ground-truth CSVs in `Data/windows_registry` |
+| Port already in use | Change the left-hand side of `ports` in `docker-compose.yml` (e.g. `"9000-9004:8000-8004"`), or run `python serve.py --base-port 9000` |
 
 ---
 
