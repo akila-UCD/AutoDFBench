@@ -8,7 +8,7 @@
   <img width="150" src="https://github.com/akila-UCD/AutoDFBench/blob/main/autoDfBench_logoV2.png?raw=true" alt="AutoDFBench Logo">
 </p>
 
-# AutoDFBench 1.0
+# AutoDFBench 1.1
 
 **AutoDFBench** is an automated benchmarking framework for evaluating **digital forensic tools, scripts, and AI-generated code** against the **NIST Computer Forensics Tool Testing (CFTT) programme**.
 
@@ -20,6 +20,16 @@ AutoDFBench enables **reproducible and comparable benchmarking** for:
 - DF scripts
 - AI-generated forensic code
 - Agent-based forensic systems
+
+---
+
+## What's New in 1.1
+
+- **One container, no database server.** The ground truth ships with the repository as a SQLite file (`ground_truth/autodfbench_gt.sqlite`). MySQL, phpMyAdmin and `.env` credentials are no longer needed. See [Quick Start](#quick-start).
+- **Smaller image:** 235 MB (previously about 8 GB).
+- **Run without Docker** with `pip install -r requirements-api.txt && python serve.py`.
+- **Ground-truth corrections** for deleted file recovery: corrected `dfr_blocks` for 20 rows; `Grumium.txt` added to DFR-07/ntfs-07.
+- **Scorer fix** for deleted files that share the same block set.
 
 ---
 
@@ -137,6 +147,8 @@ File carving and Windows registry evaluation read their source files from `Data/
 ## Batch Evaluation Using CSV
 
 AutoDFBench allows automated batch benchmarking using CSV input files. Each CSV contains test parameters and expected outputs.
+
+Run these from the repository root after `pip install -r requirements-api.txt`.
 
 ### String Search Evaluation
 
