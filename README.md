@@ -68,7 +68,7 @@ AutoDFBench evaluates **both conventional digital forensic tools and AI-generate
 
 ## Supported Digital Forensic Tasks
 
-AutoDFBench 1.0 currently supports benchmarking for the following **CFTT forensic domains**:
+AutoDFBench supports benchmarking for the following **CFTT forensic domains**:
 
 - String Search
 - Deleted File Recovery
@@ -114,8 +114,10 @@ Step by step guide: [autodfbench-install-guide.md](autodfbench-install-guide.md)
 ```bash
 git clone https://github.com/akila-UCD/AutoDFBench.git
 cd AutoDFBench
-docker compose up -d --build
+docker compose up -d
 ```
+
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1` from Docker Hub. Use `docker compose up -d --build` to build it from the source instead.
 
 ### Without Docker
 
@@ -134,9 +136,9 @@ Either way, the APIs listen on:
 |---|---|---|
 | 8000 | String Search | `POST /api/v1/string-search/evaluate` |
 | 8001 | Deleted File Recovery | `POST /api/v1/deleted_file_recovery/evaluate` |
-| 8002 | File Carving | see `docs/AutoDFBench_File_Carving_Evaluation_API.md` |
-| 8003 | Windows Registry | |
-| 8004 | SQLite Recovery | |
+| 8002 | File Carving | `POST /api/v1/file-carving/evaluate` |
+| 8003 | Windows Registry | `POST /api/v1/windows-registry/evaluate` |
+| 8004 | SQLite Recovery | `POST /api/v1/sqlite-recovery/evaluate` |
 
 `python serve.py --base-port 9000` moves them to 9000–9004. A single API can still be started on its own, e.g. `API_PORT=8001 python -m API.deleted_file_recovery_api`.
 
@@ -146,39 +148,31 @@ File carving and Windows registry evaluation read their source files from `Data/
 
 ## Batch Evaluation Using CSV
 
-AutoDFBench allows automated batch benchmarking using CSV input files. Each CSV contains test parameters and expected outputs.
-
-Run these from the repository root after `pip install -r requirements-api.txt`.
-
-### String Search Evaluation
+`csv_eval.py` scores many tool outputs at once without the API. Each CSV row is one submission, and `--include-summary` adds the AutoDFBench suite score (mean F1).
 
 ```bash
-python3 csv_eval.py string_search FT_SS-01 testSS_CSV.csv tests/ss/ss_results.csv --include-summary
+python3 csv_eval.py <test_suite> <batch_label> <input.csv> <output.csv> --include-summary
 ```
 
-### Deleted File Recovery Evaluation
+Run it from the repository root after `pip install -r requirements-api.txt`. Ready-to-run examples:
 
 ```bash
-python3 csv_eval.py deleted_file_recovery DFR-BATCH-01 input_dfr.csv out/dfr_results.csv --include-summary
+python3 csv_eval.py string_search EXAMPLE examples/string_search.csv out/ss_results.csv --include-summary
+python3 csv_eval.py deleted_file_recovery EXAMPLE examples/deleted_file_recovery.csv out/dfr_results.csv --include-summary
+python3 csv_eval.py sqlite_recovery EXAMPLE tests/sqlite_recovery_test.csv out/sqlite_results.csv --include-summary
 ```
 
-### File Carving Evaluation
+Input columns per test suite (JSON columns hold a JSON list or object):
 
-```bash
-python3 csv_eval.py file_carving FC-BATCH-01 testFileCarv_CSV.csv tests/dfr_tests/out/file_carving_results.csv --include-summary
-```
+| `test_suite` | Columns |
+|---|---|
+| `string_search` | `base_test_case`, `tool_used`, `os`, `file_contents_found` (JSON list of lines found) |
+| `deleted_file_recovery` (or `dfr`) | `base_test_case`, `tool_used`, `file_system`, `test_set`, `sector_size`, `check_meta`, `files_json` (JSON list of `{file_name, file_size, blocks}`) |
+| `file_carving` | `base_test_case`, `tool_used`, `files_json` (JSON list of carved file paths) |
+| `windows_registry` (or `wr`) | `base_test_case`, `tool_used`, `submitted_csv_path`, `job_id` |
+| `sqlite_recovery` (or `sqlite`) | `base_test_case`, `tool_used`, `task_id`, `file_name`, `sqlite_table_name`, `extracted_data_json` |
 
-### Windows Registry Evaluation
-
-```bash
-python3 csv_eval.py windows_registry WR-BATCH-01 testWINREG_CSV.csv tests/win_reg/windows_registry_results.csv --include-summary
-```
-
-### SQLite Recovery Evaluation
-
-```bash
-python3 csv_eval.py sqlite_recovery SQLITE-SFT01-BATCH tests/sqlite_recovery_test.csv sqlite_results.csv --include-summary
-```
+File carving and Windows registry also need their source data in `Data/`.
 
 ---
 
