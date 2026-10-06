@@ -8,7 +8,7 @@
   <img width="150" src="https://github.com/akila-UCD/AutoDFBench/blob/main/autoDfBench_logoV2.png?raw=true" alt="AutoDFBench Logo">
 </p>
 
-# AutoDFBench 1.1
+# AutoDFBench 1.1.1
 
 **AutoDFBench** is an automated benchmarking framework for evaluating **digital forensic tools, scripts, and AI-generated code** against the **NIST Computer Forensics Tool Testing (CFTT) programme**.
 
@@ -22,6 +22,17 @@ AutoDFBench enables **reproducible and comparable benchmarking** for:
 - Agent-based forensic systems
 
 ---
+
+## What's New in 1.1.1
+
+- **File carving scoring fixes:**
+  - HEIC files can now be opened (`pillow-heif`), so the HEIC test cases can be scored.
+  - Each ground-truth file is credited once; extra matches count as false positives.
+  - Uploaded files with the same name no longer overwrite each other.
+  - Comparison is about 12× faster.
+  - Scores can differ from 1.1 for HEIC cases and for submissions with duplicates.
+- **Windows registry API works again:** pandas was missing from the 1.1 image.
+- **Settings:** none are required. The leftover MySQL settings were removed, and `.env.example` lists the optional ones (see [Configuration](#configuration-optional)).
 
 ## What's New in 1.1
 
@@ -117,7 +128,7 @@ cd AutoDFBench
 docker compose up -d
 ```
 
-This pulls the prebuilt image `akila1989/autodfbench-api:1.1` from Docker Hub. Use `docker compose up -d --build` to build it from the source instead.
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub. Use `docker compose up -d --build` to build it from the source instead.
 
 ### Without Docker
 
@@ -142,7 +153,28 @@ Either way, the APIs listen on:
 
 `python serve.py --base-port 9000` moves them to 9000–9004. A single API can still be started on its own, e.g. `API_PORT=8001 python -m API.deleted_file_recovery_api`.
 
-File carving and Windows registry evaluation read their source files from `Data/` (mounted read-only into the container; without Docker, run from the repository root and set `MAIN_PATH` to it for the registry API).
+File carving and Windows registry evaluation read their source files from `Data/`, which is not part of the repository. Docker mounts it into the container read-only.
+
+---
+
+## Configuration (optional)
+
+AutoDFBench needs **no `.env` file and no database credentials**: the MySQL settings used before 1.1 (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, …) are no longer read. All settings have working defaults.
+
+To change one:
+- **Without Docker:** copy `.env.example` to `.env` in the repository root, then edit it.
+- **With Docker:** add the variable under `environment:` in `docker-compose.yml`.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `AUTODFBENCH_GT_DB` | `ground_truth/autodfbench_gt.sqlite` | Ground-truth database (read-only) |
+| `AUTODFBENCH_RESULTS_DB` | `results/autodfbench_results.sqlite` | Results written when a request sets `write_db: true` |
+| `AUTODFBENCH_BASE_PORT` | `8000` | `serve.py` starts the five APIs on this port and the next four |
+| `CARVING_SOURCE_DIR` | `Data/source` | Original files for file carving: the `source` folder of the CFReDS "File Carving Graphic Files" (2023) data set |
+| `MAIN_PATH` | repository root | Windows registry ground-truth CSVs are read from `<MAIN_PATH>/Data/windows_registry` |
+| `TEMP_FILE_UPLOAD_PATH` | `/tmp` | Uploaded files are stored here while being scored |
+
+`.env.example` also lists the file carving scoring parameters (`GT_SELECT_STRATEGY`, `PHASH_*`, `Q_SIM_*`).
 
 ---
 

@@ -120,11 +120,9 @@ def evaluate_windows_registry(payload: dict) -> dict:
 
     # Config: registry source path
     # registry_source_config = get_configs('windows_registry_source_path')
-    main_path = os.getenv("MAIN_PATH", "/")
-    registry_source_config = main_path + '/Data/windows_registry'
-    if not registry_source_config:
-        raise ValueError("Registry source path not configured")
-    registry_source_path = registry_source_config[2]  # value column
+    # Registry ground-truth CSVs live in <MAIN_PATH>/Data/windows_registry (default: repository root)
+    main_path = os.getenv("MAIN_PATH") or str(Path(__file__).resolve().parents[2])
+    registry_source_config = os.path.join(main_path, "Data", "windows_registry")
 
     # GT: exactly one GT CSV expected
     ground_truth_paths = get_ground_truth_paths(base_test_case)

@@ -24,7 +24,9 @@ cd AutoDFBench
 docker compose up -d
 ```
 
-This pulls the prebuilt image `akila1989/autodfbench-api:1.1` from Docker Hub (about 80 MB). To build it from the source instead, use `docker compose up -d --build`. No `.env` file is needed.
+This pulls the prebuilt image `akila1989/autodfbench-api:1.1.1` from Docker Hub (about 106 MB). To build it from the source instead, use `docker compose up -d --build`.
+
+No `.env` file and no database credentials are needed. The MySQL settings used before 1.1 (`DB_HOST`, `DB_USER`, `DB_PASSWORD`, …) are no longer read, so you can delete them from an old `.env`.
 
 ### 3. Check it is running
 
@@ -78,6 +80,21 @@ Stop with Ctrl+C.
 | 8004 | SQLite Recovery |
 
 If a port is already in use, change the left-hand side of `ports` in `docker-compose.yml` (e.g. `"9000-9004:8000-8004"`) or use `python serve.py --base-port 9000`.
+
+## Settings (optional)
+
+All settings have working defaults; see the Configuration section of the README for the full list.
+- **Without Docker:** copy `.env.example` to `.env` in the project folder and edit it.
+- **With Docker:** add variables under `environment:` in `docker-compose.yml`.
+
+Example, keeping results in another folder:
+
+```yaml
+services:
+  autodfbench:
+    environment:
+      AUTODFBENCH_RESULTS_DB: /app/results/my_results.sqlite
+```
 
 ## Troubleshooting
 

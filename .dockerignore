@@ -1,6 +1,6 @@
 .git
-.env
-.env.*
+**/.env
+**/.env.*
 Data/
 database/
 results/
