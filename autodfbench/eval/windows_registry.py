@@ -7,6 +7,7 @@ from pathlib import Path
 import pandas as pd
 
 from autodfbench.db_windows_registry import get_ground_truth_paths, insert_result_to_db
+from autodfbench.registry_gt_sets import DEFAULT_GT_SET, resolve_gt_file
 
 METADATA_ROWS = "FILE_INFO|PROCESSING_SUMMARY"
 
@@ -102,6 +103,7 @@ def evaluate_windows_registry(payload: dict) -> dict:
       - submitted_csv_bytes (bytes) OR submitted_csv_path (str)
       - upload_dir (optional Path/str)
       - write_db (optional bool, default True)
+      - gt_set (optional str, default "1.0": the ground truth used for the AutoDFBench 1.0 paper)
     """
     base_test_case = payload.get("base_test_case")
     tool_used = payload.get("tool_used")
@@ -133,11 +135,12 @@ def evaluate_windows_registry(payload: dict) -> dict:
 
     gt_file_name = ground_truth_paths[0][6]  # file_name column
 
-    gt_file_path = Path(registry_source_config) / gt_file_name
-    if not gt_file_path.exists():
-        raise ValueError(f"Ground truth file not found: {gt_file_name}")
+    gt_set = str(payload.get("gt_set") or DEFAULT_GT_SET).strip()
+    gt_file_path = resolve_gt_file(registry_source_config, gt_file_name, gt_set)
 
     test_case = f"{base_test_case}_{tool_used}"
+    if gt_set != DEFAULT_GT_SET:
+        test_case += f"_gt{gt_set}"
 
     # Save submitted CSV (from bytes or path)
     submitted_csv_path = None
@@ -193,7 +196,8 @@ def evaluate_windows_registry(payload: dict) -> dict:
         "total_submitted_entries": comparison_result["total_submitted"],
         "total_ground_truth_entries": comparison_result["total_ground_truth"],
         "similarity_score": comparison_result["similarity_score"],
-        "matched_gt_file": gt_file_name
+        "matched_gt_file": gt_file_name,
+        "gt_set": gt_set
     }]
 
     # Insert DB (same behaviour as api_v2.py: do not fail request if insert fails)
@@ -211,6 +215,7 @@ def evaluate_windows_registry(payload: dict) -> dict:
         "api_version": "v1_modular",
         "input_format": "csv",
         "comparison_method": "path_value_only",
+        "gt_set": gt_set,
         "total_ground_truth_files": 1,
         "total_submitted_files": 1,
         "true_positives": tp,

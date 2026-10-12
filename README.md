@@ -206,6 +206,7 @@ To change one:
 | `Invalid test case or no GT …` | The API is reachable, but the `base_test_case` does not exist for that task. See the test case names in `docs/` |
 | `Ground-truth source files not found` (file carving) | Put the `source` folder of the CFReDS "File Carving Graphic Files" (2023) data set in `Data/source` |
 | `Ground truth file not found` (Windows registry) | Put the registry ground-truth CSVs in `Data/windows_registry` |
+| `Ground truth file not found: windows_registry_v1.1/...` | Build ground-truth set 1.1: `python tools/build_registry_gt.py --hives /path/to/win_REG` |
 | Port already in use | Change the left-hand side of `ports` in `docker-compose.yml` (e.g. `"9000-9004:8000-8004"`), or run `python serve.py --base-port 9000` |
 
 ---
@@ -233,7 +234,7 @@ Input columns per test suite (JSON columns hold a JSON list or object):
 | `string_search` | `base_test_case`, `tool_used`, `os`, `file_contents_found` (JSON list of lines found) |
 | `deleted_file_recovery` (or `dfr`) | `base_test_case`, `tool_used`, `file_system`, `test_set`, `sector_size`, `check_meta`, `files_json` (JSON list of `{file_name, file_size, blocks}`) |
 | `file_carving` | `base_test_case`, `tool_used`, `files_json` (JSON list of carved file paths) |
-| `windows_registry` (or `wr`) | `base_test_case`, `tool_used`, `submitted_csv_path`, `job_id` |
+| `windows_registry` (or `wr`) | `base_test_case`, `tool_used`, `submitted_csv_path`, `job_id`, optional `gt_set` (`1.0` default, or `1.1`) |
 | `sqlite_recovery` (or `sqlite`) | `base_test_case`, `tool_used`, `task_id`, `file_name`, `sqlite_table_name`, `extracted_data_json` |
 
 File carving and Windows registry also need their source data in `Data/`.
