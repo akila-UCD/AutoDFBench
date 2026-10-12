@@ -9,6 +9,7 @@ from autodfbench.db_sqlite_recovery import get_ground_truth
 from modules.sqlite_sft01 import parse_sqlite_header
 from modules.sqlite_sft02 import content_of_sqlite_compair
 from modules.sqlite_sft03 import content_recovery
+from modules.sqlite_sft04 import source_file_check
 from modules.sqlite_sft05 import table_statements
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]  # .../AutoDFBench
@@ -57,6 +58,12 @@ def evaluate_sqlite_recovery(payload: dict) -> dict:
             fetch_many=True
         )
         result = content_recovery(extracted_data, ground_truth)
+
+    elif task_id == "SFT04":
+        ground_truth = get_ground_truth(base_test_case, file_name)
+        if not ground_truth:
+            raise LookupError("Ground truth not found")
+        result = source_file_check(extracted_data, ground_truth)
 
     elif task_id == "SFT05":
         ground_truth = get_ground_truth(

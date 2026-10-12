@@ -108,7 +108,7 @@ Detailed API documentation is available in the `docs/` folder:
 
 Details about datasets and evaluation data: `docs/Data.md`
 
-The ground truth ships with the repository as a SQLite file: `ground_truth/autodfbench_gt.sqlite` (checksum in `ground_truth/autodfbench_gt.sqlite.sha256`). No database server is needed. It is ground truth V3.2 (`docker/mysql/init/AutoDFBenchV3.2.sql`) with corrected `dfr_blocks` for 20 deleted-file-recovery rows and the missing deleted file `Grumium.txt` added to DFR-07/ntfs-07.
+The ground truth ships with the repository as a SQLite file: `ground_truth/autodfbench_gt.sqlite` (checksum in `ground_truth/autodfbench_gt.sqlite.sha256`). No database server is needed. It is ground truth V3.2 (`docker/mysql/init/AutoDFBenchV3.2.sql`) with corrected `dfr_blocks` for 20 deleted-file-recovery rows and the missing deleted file `Grumium.txt` added to DFR-07/ntfs-07, and SQLite SFT-04 ground truth: the source file of the recovered rows for each SFT-03 database (`-journal` for PERSIST, the database file for WAL). SQLite SFT-01 also holds the header write/read version (`sqlite_write_read_version`: `1/1` rollback journal, `2/2` WAL) and the hashes of the PERSIST `-journal` files, and SFT-03-WAL uses NIST's file names (`sft-03-WAL_<os>.sqlite`).
 
 Evaluation results (`write_db: true`) are stored in `results/autodfbench_results.sqlite`. Set `AUTODFBENCH_GT_DB` / `AUTODFBENCH_RESULTS_DB` to use other paths.
 

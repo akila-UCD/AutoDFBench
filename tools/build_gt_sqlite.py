@@ -44,6 +44,7 @@ GROUND_TRUTH_COLUMNS = [
     ("gt_file", "TEXT COLLATE NOCASE"),
     ("page_size", "INTEGER"),
     ("journal_mode", "TEXT COLLATE NOCASE"),
+    ("sqlite_write_read_version", "TEXT COLLATE NOCASE"),
     ("number_of_pages", "INTEGER"),
     ("encoding", "TEXT COLLATE NOCASE"),
     ("sqlite_md5_hash", "TEXT COLLATE NOCASE"),
