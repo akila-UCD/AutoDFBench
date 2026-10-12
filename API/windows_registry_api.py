@@ -88,6 +88,7 @@ class WindowsRegistryHandler(BaseHTTPRequestHandler):
                 "submitted_csv_bytes": content,
                 "upload_dir": str(UPLOAD_DIR),
                 "write_db": str(form_data.get("write_db", "true")).strip().lower() in ("1", "true", "yes", "y", "on"),
+                "gt_set": form_data.get("gt_set"),
             })
             return self.send_json(200, resp)
 

@@ -257,6 +257,7 @@ def main():
                     "job_id": job_id,
                     "submitted_csv_path": submitted_csv_path,
                     "write_db": parse_bool(r.get("write_db"), default=False),
+                    "gt_set": (r.get("gt_set") or "").strip() or None,
                 }
 
                 result = evaluate_windows_registry(payload)
