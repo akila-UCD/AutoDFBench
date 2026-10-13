@@ -62,10 +62,10 @@ AutoDFBench evaluates **both conventional digital forensic tools and AI-generate
 ## How It Works
 
 <p align="center">
-  <img src="docs/autodfbench_overview.svg" width="900" alt="How AutoDFBench works: the tool under test runs on the NIST test data and sends its output to one of five task APIs; each API compares it with the ground truth, built from the same NIST data, and returns TP, FP, FN, precision, recall and F1, which give the AutoDFBench Score">
+  <img src="docs/autodfbench_overview.svg" width="900" alt="How AutoDFBench works: the tool under test runs the AutoDFBench test cases and sends its output to one of five task APIs; each API compares it with the ground truth, which is built from the NIST test data, and returns TP, FP, FN, precision, recall and F1, which give the AutoDFBench Score">
 </p>
 
-1. The tool under test runs on the NIST test data for one test case.
+1. The tool under test runs one of the AutoDFBench test cases (each one uses NIST CFTT / CFReDS test data).
 2. Its output is sent to the API of that task (or scored in bulk with [`csv_eval.py`](#batch-evaluation-using-csv)).
 3. The API compares the output with the ground truth and returns TP, FP, FN, precision, recall and F1 as JSON.
 4. The AutoDFBench Score of a run is the average F1 over its test cases.
