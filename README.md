@@ -61,21 +61,9 @@ AutoDFBench evaluates **both conventional digital forensic tools and AI-generate
 
 ## How It Works
 
-```mermaid
-flowchart TD
-    T["Tool under test<br/>conventional DF tool, script,<br/>LLM-generated code or agent"]
-    D[("NIST CFTT / CFReDS<br/>test data")]
-    D --> T
-    T -->|"strings found"| SS["String Search API<br/>port 8000"]
-    T -->|"deleted files: names,<br/>sizes, blocks, times"| DFR["Deleted File Recovery API<br/>port 8001"]
-    T -->|"carved files"| FC["File Carving API<br/>port 8002"]
-    T -->|"registry keys (CSV)"| WR["Windows Registry API<br/>port 8003"]
-    T -->|"header, schema,<br/>recovered rows"| SQ["SQLite Recovery API<br/>port 8004"]
-    GT[("Ground truth<br/>ground_truth/autodfbench_gt.sqlite<br/>Data/ (carving, registry)")]
-    SS & DFR & FC & WR & SQ --> M["Compare with the ground truth:<br/>TP, FP, FN, precision, recall, F1"]
-    GT --> M
-    M --> S["AutoDFBench Score<br/>(average F1)"]
-```
+<p align="center">
+  <img src="docs/autodfbench_overview.svg" width="900" alt="How AutoDFBench works: the tool under test runs on the NIST test data and sends its output to one of five task APIs; each API compares it with the ground truth, built from the same NIST data, and returns TP, FP, FN, precision, recall and F1, which give the AutoDFBench Score">
+</p>
 
 1. The tool under test runs on the NIST test data for one test case.
 2. Its output is sent to the API of that task (or scored in bulk with [`csv_eval.py`](#batch-evaluation-using-csv)).
