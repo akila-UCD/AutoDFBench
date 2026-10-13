@@ -23,6 +23,13 @@ AutoDFBench enables **reproducible and comparable benchmarking** for:
 
 ---
 
+## Changes Since 1.1.1 (not yet released)
+
+- **Windows registry:**
+  - API fixes: `write_db` is honoured, each upload gets its own folder, and errors say what is wrong.
+  - Ground-truth set 1.1 corrects MR-08 and NR-03-3. Set 1.0, used in the AutoDFBench 1.0 paper, stays the default (see the [registry API doc](docs/AutoDFBench_Windows_Registry_Evaluation_API.md)).
+- **SQLite recovery:** SFT-04 ground truth and scorer; SFT-01 ground truth completed; SFT-03-WAL uses NIST's file names.
+
 ## What's New in 1.1.1
 
 - **File carving scoring fixes:**
@@ -48,46 +55,51 @@ AutoDFBench enables **reproducible and comparable benchmarking** for:
 
 AutoDFBench evaluates **both conventional digital forensic tools and AI-generated forensic code** against NIST CFTT ground-truth test cases, producing standardised precision, recall, and F1 scores.
 
-> **It is not a tool that performs forensic searches itself — it is a scoring and comparison framework.**
+> **It is not a tool that performs forensic searches itself: it is a scoring and comparison framework.**
 
 ---
 
 ## How It Works
 
-```
-┌─────────────────────────┐        ┌──────────────────────────────┐
-│  Conventional DF Tool   │        │  LLM-Generated Python/Bash   │
-│  (IPED, Autopsy, etc.)  │        │  Script (via GPT-4, Claude…) │
-└────────────┬────────────┘        └──────────────┬───────────────┘
-             │  run on CFTT dataset               │  run on CFTT dataset
-             ▼                                    ▼
-     Recovered strings / hits          Recovered strings / hits
-             │                                    │
-             └──────────────┬─────────────────────┘
-                            ▼
-          POST /api/v1/string-search/evaluate
-                  (AutoDFBench REST API)
-                            │
-                            ▼
-            Precision · Recall · F1 · AutoDFBench Score
+```mermaid
+flowchart TD
+    T["Tool under test<br/>conventional DF tool, script,<br/>LLM-generated code or agent"]
+    D[("NIST CFTT / CFReDS<br/>test data")]
+    D --> T
+    T -->|"strings found"| SS["String Search API<br/>port 8000"]
+    T -->|"deleted files: names,<br/>sizes, blocks, times"| DFR["Deleted File Recovery API<br/>port 8001"]
+    T -->|"carved files"| FC["File Carving API<br/>port 8002"]
+    T -->|"registry keys (CSV)"| WR["Windows Registry API<br/>port 8003"]
+    T -->|"header, schema,<br/>recovered rows"| SQ["SQLite Recovery API<br/>port 8004"]
+    GT[("Ground truth<br/>ground_truth/autodfbench_gt.sqlite<br/>Data/ (carving, registry)")]
+    SS & DFR & FC & WR & SQ --> M["Compare with the ground truth:<br/>TP, FP, FN, precision, recall, F1"]
+    GT --> M
+    M --> S["AutoDFBench Score<br/>(average F1)"]
 ```
 
-> **Note on LLMs:** LLMs are used as *code generators*, not as direct search engines.
+1. The tool under test runs on the NIST test data for one test case.
+2. Its output is sent to the API of that task (or scored in bulk with [`csv_eval.py`](#batch-evaluation-using-csv)).
+3. The API compares the output with the ground truth and returns TP, FP, FN, precision, recall and F1 as JSON.
+4. The AutoDFBench Score of a run is the average F1 over its test cases.
+
+> **Note on LLMs:** LLMs are used as *code generators* or agents, not as direct search engines.
 > The generated code is executed in an isolated environment; its output is then submitted to the API for scoring.
 
 ---
 
 ## Supported Digital Forensic Tasks
 
-AutoDFBench supports benchmarking for the following **CFTT forensic domains**:
+AutoDFBench covers the five areas of the NIST CFTT programme:
 
-- String Search
-- Deleted File Recovery
-- File Carving
-- Windows Registry Recovery
-- SQLite Data Recovery
+| Task | What the tool must do | NIST test data | Test case names (examples) |
+|---|---|---|---|
+| String Search | Find every occurrence of a string in a disk image: exact, ignore case, whole word, Boolean, Unicode, personal data, text in documents, fragments and file names | CFTT string search images (Windows and Linux) | `FT-SS-01`, `FT-SS-07-g1` |
+| Deleted File Recovery | Recover deleted files: names, sizes, data blocks and MAC times | CFTT deleted file recovery images (FAT, NTFS, EXT) | `DFR-01/ntfs-01` |
+| File Carving | Carve graphic files (JPEG, PNG, GIF, BMP, TIFF, HEIC) from images without a file system | CFReDS "File Carving Graphic Files" (2023) | `carv-frag-jpg` |
+| Windows Registry Recovery | List the keys of a registry hive, including manipulated and corrupted hives | CFReDS Windows registry hives (2017) | `NR-02-1`, `MR-08`, `CR-02` |
+| SQLite Data Recovery | Report the database header and schema, recover deleted and changed rows, and name their source file | CFTT SQLite Data Recovery (v1.0) | `SFT-01-UTF8-WAL`, `SFT-03-WAL` |
 
-The framework includes **63 test cases and 10,968 unique test scenarios** derived from CFTT datasets.
+The AutoDFBench 1.0 paper describes **63 test cases and 10,968 unique test scenarios** derived from CFTT datasets.
 
 ---
 
@@ -101,18 +113,25 @@ Detailed API documentation is available in the `docs/` folder:
 |---|---|
 | String Search | `docs/AutoDFBench_StringSearch_Evaluation_API.md` |
 | File Carving | `docs/AutoDFBench_File_Carving_Evaluation_API.md` |
-| Deleted File Recovery | `docs/AutoDFBench_Deleted_File_Recovery_Test_Cases.md` |
+| Deleted File Recovery | `docs/AutoDFBench_Deleted_File_Recovery_Test_Cases.md` (test cases and API) |
 | Windows Registry | `docs/AutoDFBench_Windows_Registry_Evaluation_API.md` |
+| SQLite Recovery | `docs/AutoDFBench_SQLite_Recovery_Evaluation_API.md` |
 
 ### Ground Truth Data
 
 Details about datasets and evaluation data: `docs/Data.md`
 
-The ground truth ships with the repository as a SQLite file: `ground_truth/autodfbench_gt.sqlite` (checksum in `ground_truth/autodfbench_gt.sqlite.sha256`). No database server is needed. It is ground truth V3.2 (`docker/mysql/init/AutoDFBenchV3.2.sql`) with corrected `dfr_blocks` for 20 deleted-file-recovery rows and the missing deleted file `Grumium.txt` added to DFR-07/ntfs-07, and SQLite SFT-04 ground truth: the source file of the recovered rows for each SFT-03 database (`-journal` for PERSIST, the database file for WAL). SQLite SFT-01 also holds the header write/read version (`sqlite_write_read_version`: `1/1` rollback journal, `2/2` WAL) and the hashes of the PERSIST `-journal` files, and SFT-03-WAL uses NIST's file names (`sft-03-WAL_<os>.sqlite`).
+| Task | Ground truth | Ships with the repository |
+|---|---|---|
+| String Search, Deleted File Recovery, SQLite Recovery | `ground_truth/autodfbench_gt.sqlite` | Yes |
+| File Carving | `ground_truth/autodfbench_gt.sqlite`, plus the original files in `Data/source` | Database only |
+| Windows Registry | One CSV per test case in `Data/windows_registry` (set 1.0); corrected files of set 1.1 in `Data/windows_registry_v1.1` | No |
+
+`ground_truth/autodfbench_gt.sqlite` (checksum in `ground_truth/autodfbench_gt.sqlite.sha256`) needs no database server. It is ground truth V3.2 (`docker/mysql/init/AutoDFBenchV3.2.sql`) with later corrections: 20 deleted-file-recovery `dfr_blocks` rows, the deleted file `Grumium.txt` in DFR-07/ntfs-07, and the SQLite SFT-01, SFT-03-WAL and SFT-04 changes listed above.
 
 Evaluation results (`write_db: true`) are stored in `results/autodfbench_results.sqlite`. Set `AUTODFBENCH_GT_DB` / `AUTODFBENCH_RESULTS_DB` to use other paths.
 
-Maintainers who edit the ground truth in MySQL can regenerate the SQLite file with `tools/build_gt_sqlite.py`.
+Maintainers who edit the ground truth in MySQL can regenerate the SQLite file with `tools/build_gt_sqlite.py`. Registry ground-truth set 1.1 is built from the NIST hives with `tools/build_registry_gt.py`.
 
 
 ---
